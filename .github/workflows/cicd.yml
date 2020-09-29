@@ -1,0 +1,52 @@
+name: Continuous Integration Continuous Deployment
+
+on:
+  push:
+    branches: [ main, dev, release]
+  pull_request:
+    branches: [ main, dev, release ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Branch name policy
+        uses: deepakputhraya/action-branch-name@master
+          with:
+            regex: '([a-z])+\/([a-z])+' # Regex the branch should match. This example enforces grouping
+            allowed_prefixes: 'feature,release,hotfix,fix' # All branches should start with the given prefix
+            ignore: main,dev # Ignore exactly matching branch names from convention
+            min_length: 5 # Min length of the branch name
+            max_length: 100 # Max length of the branch name
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+          with:
+            node-version: 12.x
+      - name: Install packages
+        run: npm ci
+      - name: Run ESLint
+        run: eslint . --ext .js,.vue
+      - name: Run tests
+        run: npm test
+      - name: Build
+        run: npm run build
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          name: dist
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@main
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
