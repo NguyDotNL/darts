@@ -1,5 +1,6 @@
 const process = require('process')
 
-let myArgs = process.argv.slice(2)
+const params = require('minimist')(process.argv.slice(2))
+const branch = params.branch
 
-console.log(myArgs[0])
+console.log(branch)
