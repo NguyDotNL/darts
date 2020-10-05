@@ -28,7 +28,7 @@ jobs:
       - name: Install packages
         run: npm ci
       - name: Run ESLint
-        run: eslint . --ext .js,.vue
+        run: npm run lint
       - name: Run tests
         run: npm test
       - name: Run versioning scripts
