@@ -49,7 +49,15 @@ jobs:
           path: dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
+        if: startsWith(github.ref, 'refs/heads/dev')
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting:darts-dev
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        if: startsWith(github.ref, 'refs/heads/main')
+        with:
+          args: deploy --only hosting:darts-prod
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
