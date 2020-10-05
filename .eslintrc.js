@@ -1,9 +1,9 @@
 module.exports = {
   root: true,
-  plugins: ["jest"],
+  plugins: ['jest'],
   env: {
     node: true,
-    "jest/globals": true
+    'jest/globals': true,
   },
   'extends': [
     'plugin:vue/recommended',
@@ -15,7 +15,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'eol-last': ['error', 'always'],
+    'eol-last': ['warn', 'always'],
     'no-var': 'error',
     'indent': ['error', 2],
     'quotes': ['warn', 'single'],
