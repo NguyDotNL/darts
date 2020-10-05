@@ -35,6 +35,11 @@ jobs:
         run: node ./scripts/test-pipeline.js --branch $GITHUB_REF
       - name: Build
         run: npm run build
+      - name: Archive Build Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: dist
+          path: dist
   deploy:
     needs: [build]
     name: Deploy
@@ -42,6 +47,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@main
+        with:
+          name: dist
+          path: dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
