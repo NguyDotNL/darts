@@ -2,7 +2,7 @@ name: Continuous Integration Continuous Deployment
 
 on:
   push:
-    branches: [ feature/*, main, dev, release]
+    branches: [ main, dev, release]
   pull_request:
     branches: [ main, dev, release ]
 
@@ -28,49 +28,26 @@ jobs:
       - name: Install packages
         run: npm ci
       - name: Run ESLint
-        run: npm run lint
+        run: eslint . --ext .js,.vue
       - name: Run tests
-        run: npm run test:ci
+        run: npm test
       - name: Build
         run: npm run build
-      - name: Archive Build Artifact
-        if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/qa') || startsWith(github.ref, 'refs/heads/main')
-        uses: actions/upload-artifact@main
-        with:
-          name: dist
-          path: dist
-          
   deploy:
     needs: [build]
     name: Deploy
-    if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/qa') || startsWith(github.ref, 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Download Artifact
-        uses: actions/download-artifact@main
+        uses: actions/download-artifact@master
         with:
           name: dist
           path: dist
-      - name: Deploy to Development
-        if: startsWith(github.ref, 'refs/heads/main')
-        uses: w9jds/firebase-action@master
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@main
         with:
-          args: deploy --only hosting:darts-dev
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      - name: Deploy to QA
-        if: startsWith(github.ref, 'refs/heads/release/')
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting:darts-qa
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      - name: Deploy to Production
-        if: startsWith(github.ref, 'refs/heads/main')
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting:darts-prod
+          args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
