@@ -30,7 +30,7 @@ jobs:
       - name: Run ESLint
         run: npm run lint
       - name: Run tests
-        run: npm test
+        run: npm run test:ci
       - name: Run versioning scripts
         run: node ./scripts/test-pipeline.js --branch $GITHUB_REF
       - name: Build
