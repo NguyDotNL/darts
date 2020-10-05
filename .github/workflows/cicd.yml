@@ -35,14 +35,20 @@ jobs:
         run: node ./scripts/test-pipeline.js --branch $GITHUB_REF
       - name: Build
         run: npm run build
+      - name: Check for deployment
+        if: !(startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/qa') || startsWith(github.ref, 'refs/heads/main'))
+        run: exit 0
       - name: Archive Build Artifact
+        if: 
         uses: actions/upload-artifact@main
         with:
           name: dist
           path: dist
+          
   deploy:
     needs: [build]
     name: Deploy
+    if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/qa') || startsWith(github.ref, 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -52,15 +58,23 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Deploy to Firebase
+      - name: Deploy to Development
+        if: startsWith(github.ref, 'refs/heads/main')
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting:darts-dev
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      - name: Deploy to Firebase
+      - name: Deploy to QA
+        if: startsWith(github.ref, 'refs/heads/release/')
         uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting:darts-qa
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Deploy to Production
         if: startsWith(github.ref, 'refs/heads/main')
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting:darts-prod
         env:
