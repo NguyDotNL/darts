@@ -1,4 +1,4 @@
-import { render } from 'testing-library/vue'
+import { render } from '@testing-library/vue'
 
 import Vue from 'vue'
 import Vuetify from 'vuetify'
@@ -19,6 +19,6 @@ const renderWithVuetify = (component, options, cb) => {
   )
 }
 
-export * from 'testing-library/vue'
+export * from '@testing-library/vue'
 
 export { renderWithVuetify as render }

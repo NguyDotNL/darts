@@ -1,8 +1,6 @@
 import { render } from '@/test/test-wrapper'
 import AppBar from './app-drawer.vue'
 
-
-
 test('Drawer renders when open prop is true', async () => {
   const { queryByTestId } = render(AppBar, { props: { open: false }})
 

@@ -51,6 +51,9 @@
     "transform": {
       "^.+\\.js$": "babel-jest",
       ".*\\.vue$": "<rootDir>/node_modules/vue-jest"
+    },
+    "moduleNameMapper": {
+      "@/(.*)$": "<rootDir>/src/$1"
     }
   }
 }
