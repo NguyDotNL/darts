@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue'
-
+import '@testing-library/jest-dom'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 

@@ -1,14 +1,15 @@
 import { render } from '@/test/test-wrapper'
-import AppBar from './app-drawer.vue'
 
-test('Drawer renders when open prop is true', async () => {
-  const { queryByTestId } = render(AppBar, { props: { open: false }})
+import AppDrawer from './app-drawer.vue'
 
-  expect(queryByTestId('app-drawer')).toBe(null)
+test('Drawer is closed', async () => {
+  const { getByTestId } = render(AppDrawer, { props: { open: false }})
+
+  expect(getByTestId('app-drawer')).not.toHaveClass('v-navigation-drawer--open')
 })
 
-test('Drawer renders when open prop is false', async () => {
-  const { queryByTestId } = render(AppBar, { props: { open: true }})
+test('Drawer is open', async () => {
+  const { getByTestId } = render(AppDrawer, { props: { open: true }})
   
-  expect(queryByTestId('app-drawer')).toBe(null)
+  expect(getByTestId('app-drawer')).toHaveClass('v-navigation-drawer--open')
 })    

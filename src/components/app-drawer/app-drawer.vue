@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    datatest-id="app-drawer"
+    data-testid="app-drawer"
     :value="open"
     absolute
     bottom
