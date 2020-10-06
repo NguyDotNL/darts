@@ -21,10 +21,13 @@
     "firebase": "^7.22.0",
     "jest": "^26.4.2",
     "minimist": "^1.2.5",
+    "moment": "^2.29.1",
     "npm-check": "^5.9.2",
     "tailwindcss": "^1.8.10",
+    "tailwindcss-plugins": "^0.3.0",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",
+    "vue-moment": "^4.1.0",
     "vue-router": "^3.2.0",
     "vuetify": "^2.2.11"
   },
