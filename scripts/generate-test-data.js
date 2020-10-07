@@ -35,7 +35,7 @@ const getRandomPlayer = (except = null) => {
 }
 
 // Generate matches
-for(let i = 0; i < 1; i++) {
+for(let i = 0; i < 1000; i++) {
   const winner = getRandomPlayer()
   const loser = getRandomPlayer(winner)
   const matchId = uuidv4()
