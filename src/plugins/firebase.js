@@ -1,5 +1,5 @@
-import * as firebase from 'firebase/app'
-import 'firebase/database'
+const firebase = require('firebase/app')
+require('firebase/database')
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_API_KEY,
@@ -21,7 +21,7 @@ const matchDetails = db.ref('matchDetails')
 const players = db.ref('players')
 
 // Export utils/refs
-export {
+module.exports = {
   db,
   matches,
   matchDetails,
