@@ -1,23 +1,30 @@
 <template>
-  <v-card>
-    <v-card-title>
-      <v-spacer />
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      />
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :items="players"
-      :search="search"
-      loading
-      loading-text="Loading... Please wait"
-    />
-  </v-card>
+  <v-row>
+    <v-col>
+      <v-row>
+        <v-col>
+          <VTextField
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <VDataTable
+            class="p-0"
+            :headers="headers"
+            :items="players"
+            :search="search"
+            loading-text="Loading... Please wait"
+          />
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

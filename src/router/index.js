@@ -15,54 +15,20 @@ const routes = [
     exact: true,
     name: 'Dashboard',
     component: Dashboard,
-    meta: {
-      breadcrumb: [
-        {
-          name: 'Dashboard',
-        },
-      ],
-    },
   },
   {
     path: '/spelers',
-    name: 'Spelers',
     component: PassThrough,
     children: [
       {
         path: '',
+        name: 'Players',
         component: Players,
-        meta: {
-          breadcrumb: [
-            {
-              name: 'Dashboard',
-              link: '/',
-            },
-            {
-              name: 'Spelers',
-              disabled: true,
-            },
-          ],
-        },
       },
       {
         path: ':name',
+        name: 'PlayerStatistic',
         component: PlayersStatistic,
-        meta: {
-          breadcrumb: [
-            {
-              name: 'Dashboard',
-              link: '/',
-            },
-            {
-              name: 'Spelers',
-              link: '/Spelers',
-            },
-            {
-              name: route => {route.name},
-              disabled: true,
-            },
-          ],
-        },
       },
     ],
   },

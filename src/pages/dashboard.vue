@@ -1,17 +1,17 @@
 <template>
   <div>
-    <Appbar />
+    <AppBar />
     <div>Home</div>
   </div>
 </template>
 
 <script>
-import Appbar from '@/components/app-bar/app-bar'
+import AppBar from '@/components/app-bar/app-bar'
 
 export default {
   name: 'Dashboard',
   components: {
-    Appbar,
+    AppBar,
   },
 }
 </script>

@@ -1,25 +1,26 @@
 <template>
   <div>
     <Appbar />
-    <v-container fluid>
-      <Breadcrumbs />
-      <h1 class="text-4xl">Spelers</h1>
-      <Table />
+    <v-container>
+      <v-row>
+        <v-col>
+          <h1 class="text-4xl">Spelers</h1>
+        </v-col>
+      </v-row>
+      <PlayersTable />
     </v-container>
   </div>
 </template>
 
 <script>
 import Appbar from '@/components/app-bar/app-bar'
-import Table from '@/components/table/table'
-import Breadcrumbs from '@/components/breadcrumbs/breadcrumbs'
+import PlayersTable from '@/components/players-table/players-table'
 
 export default {
   name: 'Players',
   components: {
     Appbar,
-    Table,
-    Breadcrumbs,
+    PlayersTable,
   },
 }
 </script>

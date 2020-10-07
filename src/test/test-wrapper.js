@@ -1,7 +1,8 @@
-import { render } from '@testing-library/vue'
-import '@testing-library/jest-dom'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import router from '../router'
+import { render } from '@testing-library/vue'
+import '@testing-library/jest-dom'
 
 Vue.use(Vuetify)
 
@@ -13,6 +14,7 @@ const renderWithVuetify = (component, options, cb) => {
     {
       container: document.body.appendChild(root),
       vuetify: new Vuetify(),
+      router,
       ...options,
     },
     cb,

@@ -1,5 +1,5 @@
 <template>
-  <v-breadcrumbs :items="breadcrumbList">
+  <v-breadcrumbs :items="breadcrumbList" class="pl-0">
     <template v-slot:item="{ item }">
       <v-breadcrumbs-item :href="item.link" :disabled="item.disabled">
         {{ item.name }}
@@ -30,7 +30,22 @@ export default {
         this.$router.push(this.breadcrumbList[Route].link)
     },
     updateBreadcrumbList() {
-      this.breadcrumbList = this.$route.meta.breadcrumb
+      let PathsArray = this.$route.path.split('/')
+      let breadcrumbLink = ''
+      PathsArray.shift()
+      PathsArray.unshift('dashboard')
+      PathsArray = PathsArray.filter((el) => { return el })
+      if(PathsArray.length == 1) PathsArray.shift()
+
+      PathsArray.map((name, id) => {
+        name = name.charAt(0).toUpperCase() + name.slice(1)
+        breadcrumbLink += id !== 0 ? `/${name}` : '' 
+        this.breadcrumbList.push({
+          name: name == 'Dashboard' ? 'Dashboard' : name,
+          link: name == 'Dashboard' ? '/' : breadcrumbLink,
+          disabled: id + 1 == PathsArray.length ? true : false,
+        })
+      })
     },
   },
 }

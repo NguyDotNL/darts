@@ -6,7 +6,7 @@ module.exports = {
   purge: [],
   target: 'relaxed',
   prefix: '',
-  important: false,
+  important: true,
   separator: ':',
   theme: {
     screens: {
@@ -21,6 +21,10 @@ module.exports = {
 
       black: '#000',
       white: '#fff',
+
+      primary: '#1867C0',
+      iconred: '#FF5D5D',
+      grey: '#3d3d3d',
 
       gray: {
         100: '#f7fafc',
