@@ -1,13 +1,12 @@
 <template>
   <div>
     <Appbar />
-    <v-container>
+    <v-container class="overflow-hidden">
       <MatchStatisticsHeader />
       <MatchStatisticsContent />
     </v-container>
   </div>
 </template>
-
 <script>
 import Appbar from '@/components/app-bar/app-bar'
 import MatchStatisticsHeader from '@/components/match/match-statistics-header'

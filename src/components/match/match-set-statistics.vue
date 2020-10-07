@@ -7,7 +7,7 @@
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="1">
+        <v-col sm="6" md="1" cols="12">
           <v-select 
             v-model="selectedSet"
             :items="items"

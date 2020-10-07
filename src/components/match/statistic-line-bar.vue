@@ -11,7 +11,7 @@
       </v-row>
       <v-row dense>
         <v-col class="pr-1 pt-0">
-          <v-progress-linear
+          <VProgressLinear
             :value="percLeft"
             color="#FF5D5D"
             background-color="#C4C4C4"
@@ -21,7 +21,7 @@
           />
         </v-col>
         <v-col class="pl-1 pt-0">
-          <v-progress-linear
+          <VProgressLinear
             :value="percRight"
             color="#5D74CF"
             background-color="#C4C4C4"

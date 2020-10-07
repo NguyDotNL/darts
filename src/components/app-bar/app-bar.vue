@@ -1,19 +1,24 @@
 <template>
   <div>
-    <v-app-bar
-      color="deep-purple accent-4"
-      dense
-      dark
-      fixed
-    >
-      <v-app-bar-nav-icon @click.stop="toggleDrawer" />
+    <div class="mb-12">
+      <v-app-bar
+        color="deep-purple accent-4"
+        class="z-50"
+        dense
+        dark
+        fixed
+      >
+        <v-app-bar-nav-icon @click.stop="toggleDrawer" />
 
-      <v-toolbar-title>Dashboard</v-toolbar-title>
+        <v-toolbar-title>Dashboard</v-toolbar-title>
 
-      <v-spacer />
-    </v-app-bar>
+        <v-spacer />
+      </v-app-bar>
+    </div>
+
     <AppDrawer
       :open="drawerOpen"
+      class="z-50"
       @toggle="toggleDrawer"
     />
   </div>

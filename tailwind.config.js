@@ -25,6 +25,7 @@ module.exports = {
       iconred: '#FF5D5D',
       danger: '#FF3939',
       success: '#339B3A',
+      grey: '#3d3d3d',
 
       gray: {
         100: '#f7fafc',

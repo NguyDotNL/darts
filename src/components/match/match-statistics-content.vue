@@ -1,9 +1,9 @@
 <template>
-  <v-row>
+  <v-row class="overflow-y-auto" style="max-height: calc(100vh - 273px)">
     <v-col>
       <MatchGeneralStatistics />
       <MatchSetStatistics :set-data="setData" />
-      <MatchLegStatistics />
+      <MatchLegStatistics :set-data="setData" />
     </v-col>
   </v-row>
 </template>
