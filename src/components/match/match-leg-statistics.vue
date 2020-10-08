@@ -34,18 +34,22 @@
       </v-row>
       <v-row>
         <v-col>
-          tableplayer 1
+          <StatisticLegTable />
         </v-col>
         <v-col>
-          tableplayer 2
+          <StatisticLegTable />
         </v-col>
       </v-row>
     </v-col>
   </v-row>
 </template>
 <script>
+import StatisticLegTable from '@/components/match/statistic-leg-table'
 export default {
   name: 'MatchLegStatistics',
+  components: {
+    StatisticLegTable,
+  },
   props: {
     setData:{
       type: Object,

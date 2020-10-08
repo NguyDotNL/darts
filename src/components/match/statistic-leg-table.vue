@@ -4,20 +4,28 @@
       <thead>
         <tr>
           <th class="text-left">
-            Name
+            Beurt
           </th>
           <th class="text-left">
-            Calories
+            Worpen
+          </th>
+          <th class="text-left">
+            Totaal
+          </th>
+          <th class="text-left">
+            Punten
           </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="item in desserts"
+          v-for="item in items"
           :key="item.name"
         >
-          <td>{{ item.name }}</td>
-          <td>{{ item.calories }}</td>
+          <td>{{ item.turn }}</td>
+          <td>worpendata</td>
+          <td>{{ item.total }}</td>
+          <td>newpoints</td>
         </tr>
       </tbody>
     </template>
