@@ -1,7 +1,7 @@
 module.exports = {
   future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
+    // removeDeprecatedGapUtilities: true,
+    // purgeLayersByDefault: true,
   },
   purge: [],
   target: 'relaxed',
@@ -21,9 +21,11 @@ module.exports = {
 
       black: '#000',
       white: '#fff',
-
+      
       primary: '#1867C0',
       iconred: '#FF5D5D',
+      danger: '#FF3939',
+      success: '#339B3A',
       grey: '#3d3d3d',
 
       gray: {
