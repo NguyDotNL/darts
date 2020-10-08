@@ -5,10 +5,10 @@
         v-model="selected"
         data-testid="match-table"
         :headers="headers"
-        :items="matchesArray"
+        :items="matchesArray || []"
         item-key="matchId"
         :show-select="matchExport"
-        :loading="loading"
+        :loading="loading || isLoadingData"
         loading-text="Bezig met het ophalen van data"
         disable-sort
         hide-default-footer
@@ -82,13 +82,17 @@
       <v-row>
         <v-spacer />
         <v-col>
-          <v-pagination
-            v-model="page"
-            :length="100"
-            :total-visible="1"
-            @next="nextPage"
-            @previous="previousPage"
-          />
+          <div class="flex">
+            <v-btn :disabled="page === 1" class="m-1" @click="previousPage">
+              previous
+            </v-btn>
+            <v-btn class="v-pagination__item v-pagination__item--active primary m-1">
+              {{ page }}
+            </v-btn>
+            <v-btn class="m-1" @click="nextPage">
+              next
+            </v-btn>
+          </div>
         </v-col>
         <v-spacer />
       </v-row>
@@ -100,6 +104,7 @@
 import moment from 'moment'
 import Match9Darter from '@/components/9-darter/match-9-darter'
 import DashboardClient from '@/clients/dashboard.client'
+import last from 'lodash/last'
 
 export default {
   name: 'MatchTable',
@@ -109,7 +114,10 @@ export default {
       type: Boolean,
       default: true,
     },
-    matches: Object,
+    matches: {
+      type: [Object, Array],
+      required: false,
+    },
     loading: Boolean,
     search: String,
   },
@@ -129,13 +137,17 @@ export default {
       pageCount: 0,
       numberOfItemsPerPage: 10,
       pageStack: [],
+      pageData: {},
+      isLoadingData: false,
     }
   },
-  created: function () {
-    const matches = Object.values(this.matches)
-    console.log(matches)
-    this.matchesArray = matches
-    this.pageStack.push(matches[matches.length - 1].date)
+  watch: {
+    matches() {
+      const matches = Object.values(this.matches)
+      this.matchesArray = matches
+      this.pageStack.push(last(matches).date)
+      this.pageData = { ...this.pageData, [this.page]: matches }
+    },
   },
   methods: {
     showDate(value) {
@@ -147,23 +159,23 @@ export default {
       // }
     },
     nextPage: async function() {
-      const matches = await DashboardClient.getMatchesPerPage(this.numberOfItemsPerPage, this.pageStack[this.pageStack.length - 1])
-        .then(data => Object.values(data).sort((a, b) => a.date - b.date))
-      this.pageStack.push(matches[this.pageStack.length - 1].date)
-      this.matchesArray = matches
+      this.isLoading = true
+      this.page = this.page + 1
+      const date = last(this.pageStack)
 
-      // this.getMatchData(this.pageStack[this.pageStack.length - 1]).then((data) => {
-      //   console.log(data.sort((a,b) => a.date < b.date))
-      //   let temp = data.sort((a,b) => a.date < b.date)
-      //   this.matchesArray = temp
-      //   this.pageStack.push(temp[temp.length - 1].date)
-      // })
+      const matches = this.pageData[this.page] != null
+        ? this.pageData[this.page]
+        : await DashboardClient.getMatchesPerPage(this.numberOfItemsPerPage, date)
+          .then(data => Object.values(data).sort((a, b) => a.date - b.date))
+      this.pageStack.push(last(matches).date)
+      this.matchesArray = matches
+      this.pageData = { ...this.pageData, [this.page]: matches }
+      this.isLoading = false
     },
     previousPage() {
+      this.page = this.page - 1
       this.pageStack.pop()
-      this.getMatchData(this.pageStack[this.pageStack.length - 1]).then((data) => {
-        this.matchesArray = data
-      })
+      this.matchesArray = Object.values(this.pageData[this.page])
     },
   },
 }

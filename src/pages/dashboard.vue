@@ -16,15 +16,10 @@
                 hide-details
               />
             </v-card-title>
-            <v-progress-circular
-              v-if="loading"
-              :value="100"
-              color="blue-grey"
-            />
             <MatchTable
-              v-else
               :matches="matches"
               :search="search"
+              :loading="loading"
             />
           </v-card>
         </v-col>
