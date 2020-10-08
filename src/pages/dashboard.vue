@@ -1,7 +1,7 @@
 <template>
   <div>
     <Appbar />
-    <v-container>
+    <v-container class="overflow-hidden">
       <v-row>
         <v-col offset="1" cols="10">
           <v-card class="shadow-none">
@@ -16,7 +16,10 @@
                 hide-details
               />
             </v-card-title>
-            <MatchTable />
+            <MatchTable 
+              :matches="matches"
+              :search="search"
+            />
           </v-card>
         </v-col>
       </v-row>
@@ -27,6 +30,7 @@
 <script>
 import Appbar from '@/components/app-bar/app-bar'
 import MatchTable from '@/components/match-table/match-table'
+import DashboardClient from '@/clients/dashboard.client'
 
 export default {
   name: 'Dashboard',
@@ -37,7 +41,16 @@ export default {
   data: function () {
     return {
       search: '',
+      matches: {},
     }
+  },
+  beforeMount() {
+    this.getMatchData()
+  },
+  methods: {
+    getMatchData:async function (){
+      DashboardClient.getMatchesPerPage(10).then((data) => { this.matches = data })
+    },
   },
 }
 </script>
