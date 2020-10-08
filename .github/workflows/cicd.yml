@@ -31,10 +31,17 @@ jobs:
         run: npm run lint
       - name: Run tests
         run: npm run test:ci
-      - name: Build
-        run: npm run build
+      - name: Build for Development
+        if: startsWith(github.ref, 'refs/heads/dev')
+        run: npm run build:dev
+      - name: Build for QA
+        if: startsWith(github.ref, 'refs/heads/release/')
+        run: npm run build:qa
+      - name: Build for Production
+        if: startsWith(github.ref, 'refs/heads/main')
+        run: npm run build:prod
       - name: Archive Build Artifact
-        if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/qa') || startsWith(github.ref, 'refs/heads/main')
+        if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/main')
         uses: actions/upload-artifact@main
         with:
           name: dist
@@ -43,7 +50,7 @@ jobs:
   deploy:
     needs: [build]
     name: Deploy
-    if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/qa') || startsWith(github.ref, 'refs/heads/main')
+    if: startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
