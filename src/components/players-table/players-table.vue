@@ -41,6 +41,7 @@
           <v-btn
             class="ml-2"
             depressed
+            :disabled="items.length < itemsPerPage"
             @click="nextPage()"
           >
             Volgende
@@ -72,9 +73,19 @@ export default {
       loading: true,
       search: '',
       items: [],
-      itemsPerPage: 20,
+      backup: {},
+      itemsPerPage: 10,
       page: 1,
     }
+  },
+  watch: {
+    items: function () {
+      if(!this.items) return
+      this.backup = {
+        FirstArrayName: this.items[0].full_name.toString(),
+        LastArrayName: this.items[this.items.length - 1].full_name.toString(), 
+      }
+    },
   },
   mounted () {
     this.getStartPage().then(obj => {
@@ -83,21 +94,22 @@ export default {
   },
   methods: {
     getStartPage: async function() {
-      return await PlayersClient.getAllPlayers(this.itemsPerPage)
+      return await PlayersClient.getFirstPlayers(this.itemsPerPage)
     },
     prevPage: async function() {
       if(this.page > 1) {
         this.page--
         this.loading = true
-        // await this.convertToArray(PlayersClient.getPlayersByNextPage(this.itemsPerPage, this.items[this.itemsPerPage - 1].full_name).then(data => { return data }))
+        await PlayersClient.getPlayersByPrevPage(this.itemsPerPage, this.backup.FirstArrayName).then(data => {
+          this.convertToArray(data)
+        })
       }
     },
     nextPage: async function() {
       if(this.page > 0) {
         this.page++
         this.loading = true
-        console.log(this.items[this.itemsPerPage - 1].full_name.toString())
-        await PlayersClient.getPlayersByNextPage(this.itemsPerPage, this.items[this.itemsPerPage - 1].full_name.toString()).then(data => {
+        await PlayersClient.getPlayersByNextPage(this.itemsPerPage, this.backup.LastArrayName).then(data => {
           this.convertToArray(data)
         })
       }
