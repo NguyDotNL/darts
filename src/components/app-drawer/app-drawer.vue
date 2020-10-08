@@ -7,35 +7,43 @@
     temporary
     @input="(value) => !value && $emit('toggle')"
   >
-    <v-list
-      nav
-      dense
-    >
-      <v-list-item-group
-        v-model="group"
-        active-class="deep-purple--text text--accent-4"
-      >
+    <v-list nav dense class="p-0">
+      <router-link to="/">
         <v-list-item>
-          <v-list-item-title>Foo</v-list-item-title>
+          <v-list-item-title>Dashboard</v-list-item-title>
         </v-list-item>
-
+      </router-link>
+      <VDivider />
+      <router-link to="/spelers">
         <v-list-item>
-          <v-list-item-title>Bar</v-list-item-title>
+          <v-list-item-title>Spelers</v-list-item-title>
         </v-list-item>
-
+      </router-link>
+      <VDivider />
+      <router-link to="/wedstrijd/toevoegen">
         <v-list-item>
-          <v-list-item-title>Fizz</v-list-item-title>
+          <v-list-item-title>Wedstrijd toevoegen</v-list-item-title>
         </v-list-item>
-
-        <v-list-item>
-          <v-list-item-title>Buzz</v-list-item-title>
-        </v-list-item>
-      </v-list-item-group>
+      </router-link>
+      <VDivider />
     </v-list>
+    <template v-slot:append>
+      <div>
+        <v-btn
+          block
+          depressed
+          tile
+          color="error"
+        >
+          Reset applicatie
+        </v-btn>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
 <script>
+
 export default {
   name: 'AppDrawer',
   props: {
