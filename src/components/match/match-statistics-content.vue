@@ -1,7 +1,7 @@
 <template>
   <v-row class="overflow-y-auto" style="max-height: calc(100vh - 273px)">
     <v-col>
-      <MatchGeneralStatistics />
+      <MatchGeneralStatistics :match-data="matchData" />
       <MatchSetStatistics :set-data="setData" />
       <MatchLegStatistics :set-data="setData" />
     </v-col>
@@ -18,6 +18,12 @@ export default {
     MatchGeneralStatistics,
     MatchSetStatistics,
     MatchLegStatistics,
+  },
+  props:{
+    matchData: {
+      type: Object,
+      required: true,
+    },
   },
   data: function () {
     return {

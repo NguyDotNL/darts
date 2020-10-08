@@ -21,10 +21,10 @@
         </v-col>
       </v-row>
 
-      <MatchStatisticsHeader v-if="!loading && matchData" />
-      <MatchStatisticsContent v-if="!loading && matchData" />
+      <MatchStatisticsHeader v-if="!loading && matchData && matchData.match && matchData.matchDetails" :match-data="matchData.match" />
+      <MatchStatisticsContent v-if="!loading && matchData && matchData.match && matchData.matchDetails" :match-data="matchData" />
 
-      <v-row v-if="!loading && !matchData" class="text-center font-weight-bold text-xl">
+      <v-row v-if="!loading && (!matchData || !matchData.match || !matchData.matchDetails)" class="text-center font-weight-bold text-xl">
         <v-col>
           Geen wedstrijd gevonden met dit ID
         </v-col>
@@ -65,7 +65,7 @@ export default {
       })
     },
     getMatchData: async function(id){
-      return await MatchClient.getMatchDetails(id)
+      return await MatchClient.getMatch(id)
     },
   },
 }
