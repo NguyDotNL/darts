@@ -42,7 +42,7 @@ export default {
         breadcrumbLink += id !== 0 ? `/${name}` : '' 
         this.breadcrumbList.push({
           name: name == 'Dashboard' ? 'Dashboard' : name,
-          link: name == 'Dashboard' ? '/' : breadcrumbLink,
+          link: name == 'Dashboard' ? '/' : breadcrumbLink.toLowerCase(),
           disabled: id + 1 == PathsArray.length ? true : false,
         })
       })
