@@ -16,7 +16,13 @@
                 hide-details
               />
             </v-card-title>
-            <MatchTable 
+            <v-progress-circular
+              v-if="loading"
+              :value="100"
+              color="blue-grey"
+            />
+            <MatchTable
+              v-else
               :matches="matches"
               :search="search"
             />
@@ -42,14 +48,18 @@ export default {
     return {
       search: '',
       matches: {},
+      loading: true,
     }
   },
   beforeMount() {
     this.getMatchData()
   },
   methods: {
-    getMatchData:async function (){
-      DashboardClient.getMatchesPerPage(10).then((data) => { this.matches = data })
+    getMatchData() {
+      DashboardClient.getMatchesPerPage(10).then((data) => { 
+        this.matches = data
+        this.loading = false
+      })
     },
   },
 }

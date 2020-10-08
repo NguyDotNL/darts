@@ -131,14 +131,14 @@ export default {
       pageStack: [],
     }
   },
-  watch:{
-    matches(value){
-      this.matchesArray = Object.values(value)
-      this.pageStack.push(this.matchesArray[this.matchesArray.length - 1].date)
-    },
+  created: function () {
+    const matches = Object.values(this.matches)
+    console.log(matches)
+    this.matchesArray = matches
+    this.pageStack.push(matches[matches.length - 1].date)
   },
   methods: {
-    showDate(value){
+    showDate(value) {
       return moment(value, 'X').format('DD-MM HH:mm')
     },
     customMatchSearch () {
@@ -146,22 +146,23 @@ export default {
       //
       // }
     },
-    nextPage(){
-      this.getMatchData(this.pageStack[this.pageStack.length - 1]).then((data) => {
-        console.log(data.sort((a,b) => a.date < b.date))
-        let temp = data.sort((a,b) => a.date < b.date)
-        this.matchesArray = temp
-        this.pageStack.push(temp[temp.length - 1].date)
-      })
+    nextPage: async function() {
+      const matches = await DashboardClient.getMatchesPerPage(this.numberOfItemsPerPage, this.pageStack[this.pageStack.length - 1])
+        .then(data => data)
+      console.log(matches)
+
+      // this.getMatchData(this.pageStack[this.pageStack.length - 1]).then((data) => {
+      //   console.log(data.sort((a,b) => a.date < b.date))
+      //   let temp = data.sort((a,b) => a.date < b.date)
+      //   this.matchesArray = temp
+      //   this.pageStack.push(temp[temp.length - 1].date)
+      // })
     },
-    previousPage(){
+    previousPage() {
       this.pageStack.pop()
       this.getMatchData(this.pageStack[this.pageStack.length - 1]).then((data) => {
         this.matchesArray = data
       })
-    },
-    getMatchData:async function (date){
-      return await DashboardClient.getMatchesPerPage(this.numberOfItemsPerPage, date).then((data) => Object.values(data))
     },
   },
 }
