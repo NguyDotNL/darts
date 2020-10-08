@@ -44,7 +44,7 @@ for(let i = 0; i < 1000; i++) {
   const winner = getRandomPlayer()
   const loser = getRandomPlayer(winner)
   const matchId = uuidv4()
-  const date = moment().add(-i, 'day').format()
+  const date = moment().add(-i, 'day').unix()
   const matchName = `WK ${i + 1}`
 
   matches[matchId] = {
@@ -69,21 +69,20 @@ for(let i = 0; i < 1000; i++) {
   matchDetails[matchId] = {
     sets: {
       0: {
-        ...matchDetailsData.sets[0],
         winner: winner.playerId,
         players: {
           [winner.playerId]: matchDetailsData.sets[0].players.player2,
           [loser.playerId]: matchDetailsData.sets[0].players.player1,
         },
+        legs: testData.legs,
       },
     },
 
   }
 
   for(let i = 0; i < 8; i++) {
-    const winnerPlaceholder = matchDetails[matchId].sets[0].legs[i].winner
+    const winnerPlaceholder = matchDetailsData.sets[0].legs[i].winner
     matchDetails[matchId].sets[0].legs[i].winner = winnerPlaceholder === 'player2' ? winner.playerId : loser.playerId
-    console.log(i)
     matchDetails[matchId].sets[0].legs[i].players[winner.playerId] = matchDetailsData.sets[0].legs[i].players.player2
     matchDetails[matchId].sets[0].legs[i].players[loser.playerId] = matchDetailsData.sets[0].legs[i].players.player1
     
@@ -93,9 +92,10 @@ for(let i = 0; i < 1000; i++) {
   playerMatches[loser.playerId].push(matchId)
 }
 
-// db.ref('matches').set(matches, error => console.log(error))
-// db.ref('players').set(players)
-// db.ref('matchDetails').set(matchDetails)
+db.ref('matches').set(matches)
+db.ref('players').set(players)
+db.ref('matchDetails').set(matchDetails)
+db.ref('playerMatches').set(playerMatches)
 
 
 

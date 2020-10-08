@@ -142,10 +142,6 @@ module.exports = {
                     1: {
                       points: 8,
                       multiplier: 1,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -229,10 +225,6 @@ module.exports = {
                     1: {
                       points: 18,
                       multiplier: 2,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -373,7 +365,7 @@ module.exports = {
                     },           
                     1: {
                       points: 0,
-                      multiplier: 1,
+                      multiplier: 0,
                     },        
                     2: {
                       points: 20,
@@ -420,15 +412,11 @@ module.exports = {
                   throws: {
                     0: {
                       points: 0,
-                      multiplier: 1,
+                      multiplier: 0,
                     },           
                     1: {
                       points: 12,
                       multiplier: 2,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -544,15 +532,11 @@ module.exports = {
                   throws: {
                     0: {
                       points: 0,
-                      multiplier: 1,
+                      multiplier: 0,
                     },           
                     1: {
                       points: 8,
                       multiplier: 2,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -849,10 +833,6 @@ module.exports = {
                     1: {
                       points: 20,
                       multiplier: 1,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -958,10 +938,6 @@ module.exports = {
                     1: {
                       points: 8,
                       multiplier: 2,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -1241,10 +1217,6 @@ module.exports = {
                     1: {
                       points: 12,
                       multiplier: 2,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -1350,10 +1322,6 @@ module.exports = {
                     1: {
                       points: 20,
                       multiplier: 1,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -1454,10 +1422,6 @@ module.exports = {
                     1: {
                       points: 20,
                       multiplier: 2,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -1562,7 +1526,7 @@ module.exports = {
                     },           
                     1: {
                       points: 0,
-                      multiplier: 1,
+                      multiplier: 0,
                     },        
                     2: {
                       points: 6,
@@ -1684,10 +1648,6 @@ module.exports = {
                     1: {
                       points: 5,
                       multiplier: 2,
-                    },        
-                    2: {
-                      points: 0,
-                      multiplier: 1,
                     },
                   },
                 },
@@ -1696,6 +1656,35 @@ module.exports = {
           },
         },
       },
+    },
+  },
+  legs: {
+    0: {
+      players: {},
+    },
+    1: {
+      players: {},
+    },
+    2: {
+      players: {},
+    },
+    3: {
+      players: {},
+    },
+    4: {
+      players: {},
+    },
+    5: {
+      players: {},
+    },
+    6: {
+      players: {},
+    },
+    7: {
+      players: {},
+    },
+    8: {
+      players: {},
     },
   },
 }
