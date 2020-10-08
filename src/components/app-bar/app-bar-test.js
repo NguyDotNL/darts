@@ -1,7 +1,7 @@
 import { render } from '@/test/test-wrapper'
 import AppDrawer from './app-drawer.vue'
 
-test('Drawer is closed', async () => {
+test('Open Drawer', async () => {
   const { getByTestId } = render(AppDrawer, { props: { open: false }})
 
   expect(getByTestId('app-drawer')).not.toHaveClass('v-navigation-drawer--open')

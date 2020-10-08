@@ -3,18 +3,39 @@ import VueRouter from 'vue-router'
 
 // Pages
 import Dashboard from '../pages/dashboard.vue'
+import PassThrough from '../pages/passthrough.vue'
+import Players from '../pages/players.vue'
+import PlayersStatistic from '../pages/player-statistics.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    exact: true,
     name: 'Dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/spelers',
+    component: PassThrough,
+    children: [
+      {
+        path: '',
+        name: 'Players',
+        component: Players,
+      },
+      {
+        path: ':name',
+        name: 'PlayerStatistic',
+        component: PlayersStatistic,
+      },
+    ],
   },
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes,
 })
 

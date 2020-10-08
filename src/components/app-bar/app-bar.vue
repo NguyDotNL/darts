@@ -1,18 +1,25 @@
 <template>
   <div>
-    <v-app-bar
-      color="deep-purple accent-4"
-      dense
-      dark
-    >
-      <v-app-bar-nav-icon @click.stop="toggleDrawer" />
+    <div class="mb-12 z-50">
+      <v-app-bar
+        class="bg-primary"
+        dense
+        dark
+        fixed
+      >
+        <VAppBarNavIcon @click.stop="toggleDrawer" />
 
-      <v-toolbar-title>Dashboard</v-toolbar-title>
+        <v-toolbar-title>Dashboard</v-toolbar-title>
 
-      <v-spacer />
-    </v-app-bar>
+        <VSpacer />
+      </v-app-bar>
+    </div>
+    <v-container>
+      <Breadcrumbs />
+    </v-container>
     <AppDrawer
       :open="drawerOpen"
+      class="z-50"
       @toggle="toggleDrawer"
     />
   </div>
@@ -20,11 +27,13 @@
 
 <script>
 import AppDrawer from '@/components/app-drawer/app-drawer'
+import Breadcrumbs from '@/components/breadcrumbs/breadcrumbs'
 
 export default {
-  name: 'Appbar',
+  name: 'AppBar',
   components: { 
     AppDrawer,
+    Breadcrumbs,
   },
   data: function () {
     return {
