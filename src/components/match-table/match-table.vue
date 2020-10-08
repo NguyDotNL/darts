@@ -166,7 +166,6 @@ export default {
       const matches = this.pageData[this.page] != null
         ? this.pageData[this.page]
         : await DashboardClient.getMatchesPerPage(this.numberOfItemsPerPage, date)
-          .then(data => Object.values(data).sort((a, b) => a.date - b.date))
       this.pageStack.push(last(matches).date)
       this.matchesArray = matches
       this.pageData = { ...this.pageData, [this.page]: matches }
