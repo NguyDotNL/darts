@@ -57,7 +57,7 @@ export default {
   methods: {
     getMatchData() {
       DashboardClient.getMatchesPerPage(10).then((data) => { 
-        this.matches = data
+        this.matches = Object.values(data).sort((a, b) => a.date - b.date)
         this.loading = false
       })
     },

@@ -148,8 +148,9 @@ export default {
     },
     nextPage: async function() {
       const matches = await DashboardClient.getMatchesPerPage(this.numberOfItemsPerPage, this.pageStack[this.pageStack.length - 1])
-        .then(data => data)
-      console.log(matches)
+        .then(data => Object.values(data).sort((a, b) => a.date - b.date))
+      this.pageStack.push(matches[this.pageStack.length - 1].date)
+      this.matchesArray = matches
 
       // this.getMatchData(this.pageStack[this.pageStack.length - 1]).then((data) => {
       //   console.log(data.sort((a,b) => a.date < b.date))
