@@ -1,7 +1,7 @@
 <template>
-  <v-row>
+  <v-row dense>
     <v-col>
-      <v-row>
+      <v-row dense>
         <v-col class="text-end">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">

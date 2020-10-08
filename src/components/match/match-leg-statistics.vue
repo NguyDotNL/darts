@@ -34,10 +34,10 @@
       </v-row>
       <v-row>
         <v-col>
-          <StatisticLegTable />
+          <StatisticLegTable :items="{}" />
         </v-col>
         <v-col>
-          <StatisticLegTable />
+          <StatisticLegTable :items="{}" />
         </v-col>
       </v-row>
     </v-col>
