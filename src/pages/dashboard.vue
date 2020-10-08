@@ -5,7 +5,7 @@
       <v-row>
         <v-col offset="1" cols="10">
           <v-card class="shadow-none">
-            <v-card-title>
+            <v-card-title class="px-0">
               Wedstrijden
               <VSpacer />
               <VTextField
@@ -16,6 +16,36 @@
                 hide-details
               />
             </v-card-title>
+            <v-row>
+              <v-col cols="2" class="pr-0">
+                <VBtn
+                  class="bg-primary rounded-0"
+                  dark
+                  block
+                  depressed
+                >
+                  Import
+                </VBtn>
+              </v-col>
+              <v-col cols="2" class="pl-0">
+                <VBtn
+                  class="bg-buttongray rounded-0"
+                  dark
+                  block
+                  depressed
+                >
+                  Export
+                </VBtn>
+              </v-col>
+              <VSpacer />
+              <router-link to="/wedstrijd/toevoegen">
+                <VIcon
+                  x-large
+                >
+                  mdi-plus
+                </VIcon>
+              </router-link>
+            </v-row>
             <MatchTable 
               :matches="matches"
               :search="search"

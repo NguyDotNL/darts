@@ -16,7 +16,7 @@
         :items-per-page.sync="numberOfItemsPerPage"
         :custom-filter="customMatchSearch"
         class="overflow-y-auto"
-        style="max-height: 650px"
+        style="max-height: 600px"
         @page-count="pageCount = $event"
       >
         <template v-slot:item="row">
@@ -28,53 +28,63 @@
               />
             </td>
             <td>
-              <span class="block">{{ row.item.matchName }}</span>
-              <span>{{ showDate(row.item.date) }}</span>
+              <router-link :to="/wedstrijd/ + row.item.matchId ">
+                <span class="block">{{ row.item.matchName }}</span>
+                <span>{{ showDate(row.item.date) }}</span>
+              </router-link>
             </td>
             <td>
-              <ul>
-                <li
-                  v-for="(player, key) in row.item.players"
-                  :key="key"
-                  class="font-medium flex"
-                  style="align-items: center"
-                  :class="key === row.item.winner ? 'text-success' : 'text-danger'"
-                >
-                  <span style="margin-right: 1px;">{{ player.playerName }}</span>
-                  <Match9Darter
-                    v-if="player.statistics['9Dart'] >= 1"
-                    width="15"
-                    height="16"
-                  />
-                </li>
-              </ul>
+              <router-link :to="/wedstrijd/ + row.item.matchId ">
+                <ul>
+                  <li
+                    v-for="(player, key) in row.item.players"
+                    :key="key"
+                    class="font-medium flex"
+                    style="align-items: center"
+                    :class="key === row.item.winner ? 'text-success' : 'text-danger'"
+                  >
+                    <span style="margin-right: 1px;">{{ player.playerName }}</span>
+                    <Match9Darter
+                      v-if="player.statistics['9Dart'] >= 1"
+                      width="15"
+                      height="16"
+                    />
+                  </li>
+                </ul>
+              </router-link>
             </td>
             <td>
-              <ul v-if="row.item.bestOfSets !== 1">
-                <li
-                  v-for="(player, key) in row.item.players"
-                  :key="key"
-                  class="font-medium"
-                  :class="key === row.item.winner ? 'text-success' : 'text-danger'"
-                >
-                  {{ player.statistics.setsWon }}
-                </li>
-              </ul>
+              <router-link :to="/wedstrijd/ + row.item.matchId ">
+                <ul v-if="row.item.bestOfSets !== 1">
+                  <li
+                    v-for="(player, key) in row.item.players"
+                    :key="key"
+                    class="font-medium"
+                    :class="key === row.item.winner ? 'text-success' : 'text-danger'"
+                  >
+                    {{ player.statistics.setsWon }}
+                  </li>
+                </ul>
+              </router-link>
             </td>
             <td>
-              <ul v-if="row.item.bestOfSets === 1">
-                <li
-                  v-for="(player, key) in row.item.players"
-                  :key="key"
-                  class="font-medium"
-                  :class="key === row.item.winner ? 'text-success' : 'text-danger'"
-                >
-                  {{ player.statistics.legsWon }}
-                </li>
-              </ul>
+              <router-link :to="/wedstrijd/ + row.item.matchId ">
+                <ul v-if="row.item.bestOfSets === 1">
+                  <li
+                    v-for="(player, key) in row.item.players"
+                    :key="key"
+                    class="font-medium"
+                    :class="key === row.item.winner ? 'text-success' : 'text-danger'"
+                  >
+                    {{ player.statistics.legsWon }}
+                  </li>
+                </ul>
+              </router-link>
             </td>
             <td>
-              <span>{{ row.item.bestOfSets !== 1 ? row.item.bestOfSets + ' Sets' : row.item.bestOfLegs + ' Legs' }}</span>
+              <router-link :to="/wedstrijd/ + row.item.matchId ">
+                <span>{{ row.item.bestOfSets !== 1 ? row.item.bestOfSets + ' Sets' : row.item.bestOfLegs + ' Legs' }}</span>
+              </router-link>
             </td>
           </tr>
         </template>
