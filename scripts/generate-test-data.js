@@ -40,7 +40,7 @@ const getRandomPlayer = (except = null) => {
 }
 
 // Generate matches
-for(let i = 0; i < 1000; i++) {
+for(let i = 0; i < 100; i++) {
   const winner = getRandomPlayer()
   const loser = getRandomPlayer(winner)
   const matchId = uuidv4()
@@ -92,10 +92,14 @@ for(let i = 0; i < 1000; i++) {
   playerMatches[loser.playerId].push(matchId)
 }
 
-db.ref('matches').set(matches)
-db.ref('players').set(players)
-db.ref('matchDetails').set(matchDetails)
-db.ref('playerMatches').set(playerMatches)
+const test = async () => {
+  await db.ref('matches').set(matches)
+  await db.ref('players').set(players)
+  await db.ref('matchDetails').set(matchDetails)
+  await db.ref('playerMatches').set(playerMatches)
+}
+
+test()
 
 
 
