@@ -96,7 +96,7 @@ export default {
         multiText = 'Bull'
         break
       case 5:
-        multiText = 'Bull eye'
+        multiText = 'Bullseye'
         break
       }
       return multiText
