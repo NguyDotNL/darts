@@ -1670,31 +1670,31 @@ module.exports = {
   },
   legs: {
     0: {
-      players: {},
+
     },
     1: {
-      players: {},
+
     },
     2: {
-      players: {},
+
     },
     3: {
-      players: {},
+
     },
     4: {
-      players: {},
+
     },
     5: {
-      players: {},
+
     },
     6: {
-      players: {},
+
     },
     7: {
-      players: {},
+
     },
     8: {
-      players: {},
+
     },
   },
 }
