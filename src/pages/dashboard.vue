@@ -1,7 +1,7 @@
 <template>
   <div>
     <Appbar />
-    <v-container class="overflow-hidden">
+    <v-container>
       <v-row>
         <v-col offset="1" cols="10">
           <v-card class="shadow-none">
