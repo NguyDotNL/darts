@@ -14,6 +14,7 @@ const totalNames = testData.names.length
 let players = {}
 let matches = {}
 let matchDetails = {}
+let playerMatches = {}
 
 // Generate players
 for(let i = 0; i < totalNames; i++) {
@@ -21,9 +22,13 @@ for(let i = 0; i < totalNames; i++) {
   players[playerId] = {
     playerId,
     playerName: testData.names[i],
-    matches: [],
   }
 }
+
+// Generate player matches
+Object.values(players).map(player => {
+  playerMatches[player.playerId] = []
+})
 
 const getRandomPlayer = (except = null) => {
   let keys = Object.keys(players)
@@ -35,11 +40,11 @@ const getRandomPlayer = (except = null) => {
 }
 
 // Generate matches
-for(let i = 0; i < 1000; i++) {
+for(let i = 0; i < 100; i++) {
   const winner = getRandomPlayer()
   const loser = getRandomPlayer(winner)
   const matchId = uuidv4()
-  const date = moment().format()
+  const date = moment().add(-i, 'day').unix()
   const matchName = `WK ${i + 1}`
 
   matches[matchId] = {
@@ -62,26 +67,39 @@ for(let i = 0; i < 1000; i++) {
   }
 
   matchDetails[matchId] = {
-    ...matchDetailsData,
-    winner: winner.playerId,
-    players: {
-      [winner.playerId]: matchDetailsData.set1.players.player2,
-      [loser.playerId]: matchDetailsData.set1.players.player1,
+    sets: {
+      0: {
+        winner: winner.playerId,
+        players: {
+          [winner.playerId]: matchDetailsData.sets[0].players.player2,
+          [loser.playerId]: matchDetailsData.sets[0].players.player1,
+        },
+        legs: testData.legs,
+      },
     },
+
   }
 
-  for(let i = 1; i < 9; i++) {
-    const winnerPlaceholder = matchDetails[matchId].set1[`leg${i}`].winner
-    matchDetails[matchId].set1[`leg${i}`].winner = winnerPlaceholder === 'player2' ? winner.playerId : loser.playerId
+  for(let i = 0; i < 8; i++) {
+    const winnerPlaceholder = matchDetailsData.sets[0].legs[i].winner
+    matchDetails[matchId].sets[0].legs[i].winner = winnerPlaceholder === 'player2' ? winner.playerId : loser.playerId
+    matchDetails[matchId].sets[0].legs[i].players[winner.playerId] = matchDetailsData.sets[0].legs[i].players.player2
+    matchDetails[matchId].sets[0].legs[i].players[loser.playerId] = matchDetailsData.sets[0].legs[i].players.player1
+    
   }
 
-  players[winner.playerId].matches.push(matchId)
-  players[loser.playerId].matches.push(matchId)
+  playerMatches[winner.playerId].push(matchId)
+  playerMatches[loser.playerId].push(matchId)
 }
 
-db.ref('matches').set(matches, error => console.log(error))
-db.ref('players').set(players)
-db.ref('matchDetails').set(matchDetails)
+const test = async () => {
+  await db.ref('matches').set(matches)
+  await db.ref('players').set(players)
+  await db.ref('matchDetails').set(matchDetails)
+  await db.ref('playerMatches').set(playerMatches)
+}
+
+test()
 
 
 

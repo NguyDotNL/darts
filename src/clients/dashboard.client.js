@@ -3,10 +3,14 @@ import { matches } from '@/plugins/firebase'
 const DashboardClient = {
   getAllMatches: (options) => options.iKnowThisCanBeALotOfDataThatIProbablyDontNeed === true &&
     matches.once('value').then(snapshot => snapshot.val()),
-  //startkey = matchid van laatste match die vorige keer is opgehaald (kan leeg zijn). offset = aantal matches dat moet worden opgehaald
-  getMatchesPerPage: (offset, startKey) => matches.orderByChild('date').startAt(startKey).limitToFirst(offset)
-    .once('value').then(snapshot => snapshot.val()),
-  //getSearchedMatches: (offset) =>matches.orderByChild('date').e
+  getMatchesPerPage: (offset, date = null) => {
+    const query = date == null
+      ? matches.orderByChild('date').limitToLast(offset)
+      : matches.orderByChild('date').endAt(date).limitToLast(offset)
+    return query.once('value').then(snapshot => Object.values(snapshot.val()).sort((a, b) => b.date - a.date))
+  },
+  searchMatchesByName: (queryText) => matches.orderByChild('matchName').startAt(queryText).endAt(queryText+'\uf8ff')
+    .once('value').then(snapshot => Object.values(snapshot.val()).sort((a,b) => a.matchName - b.matchName)),
 }
 
 export default DashboardClient
