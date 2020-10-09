@@ -38,6 +38,11 @@ const routes = [
     component: PassThrough,
     children: [
       {
+        path: '',
+        name: 'MatchStatistics',
+        component: MatchStatistics,
+      },
+      {
         path: ':id',
         name: 'MatchStatistics',
         component: MatchStatistics,

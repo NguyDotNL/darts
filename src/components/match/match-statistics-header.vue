@@ -1,7 +1,7 @@
 <template>
-  <v-row>
+  <v-row dense>
     <v-col>
-      <v-row>
+      <v-row dense>
         <v-col class="text-end">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -47,23 +47,38 @@
       </v-row>
       <v-row>
         <v-col class="text-center font-bold text-2xl pb-0">
-          WK 2020
+          {{ matchData.matchName }}
         </v-col>
       </v-row>
       <v-row>
         <v-col>
           <div class="block font-bold text-h6">
-            Michael van Gerwen
-            <NineDarterIcon />
+            {{ matchData.players[Object.keys(matchData.players)[0]].playerName }}
+            <NineDarterIcon v-if="matchData.players[Object.keys(matchData.players)[0]].statistics['9Dart'] > 0" />
           </div>
-          <div class="block text-uppercase text-xs font-bold">Winnaar</div>
+          <div v-if="Object.keys(matchData.players)[0] === matchData.winner" class="block text-uppercase text-xs font-bold">Winnaar</div>
         </v-col>
         <v-col class="text-center font-bold text-4xl text-no-wrap">
-          7 VS 3
+          <span v-if="matchData.bestOfSets > 1">
+            {{ matchData.players[Object.keys(matchData.players)[0]].statistics.setsWon }}
+          </span>
+          <span v-else>
+            {{ matchData.players[Object.keys(matchData.players)[0]].statistics.legsWon }}
+          </span>
+          VS
+          <span v-if="matchData.bestOfSets > 1">
+            {{ matchData.players[Object.keys(matchData.players)[1]].statistics.setsWon }}
+          </span>
+          <span v-else>
+            {{ matchData.players[Object.keys(matchData.players)[1]].statistics.legsWon }}
+          </span>
         </v-col>
         <v-col class="text-end">
-          <div class="block font-bold text-h6">Raymond van Barneveld</div>
-          <div class="block text-uppercase text-xs font-bold" />
+          <div class="block font-bold text-h6">
+            {{ matchData.players[Object.keys(matchData.players)[1]].playerName }}
+            <NineDarterIcon v-if="matchData.players[Object.keys(matchData.players)[1]].statistics['9Dart'] > 0" />
+          </div>
+          <div v-if="Object.keys(matchData.players)[1] === matchData.winner" class="block text-uppercase text-xs font-bold">Winnaar</div>
         </v-col>
       </v-row>
     </v-col>
@@ -77,6 +92,12 @@ export default {
   name: 'MatchStatisticsHeader',
   components: {
     NineDarterIcon,
+  },
+  props:{
+    matchData: {
+      type: Object,
+      required: true,
+    },
   },
   data: function () {
     return {

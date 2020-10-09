@@ -55,6 +55,10 @@ export default {
   },
   props: {
     setData:{
+      type: Array,
+      required: true,
+    },
+    matchPlayers: {
       type: Object,
       required: true,
     },
@@ -71,26 +75,30 @@ export default {
   watch: {
     selectedSet: {
       immediate: true,
-      handler (val) {
-        const set = this.setData[Object.keys(this.setData)[val-1]]
-        this.winner = set.winner
-        this.setStatistics = set.players
-        
-        const player1Stats = set.players[Object.keys(set.players)[0]].statistics
-        const player2Stats = set.players[Object.keys(set.players)[1]].statistics
-        this.statiscsObject = {
-          legSub: `${player1Stats.legsWon+player2Stats.legsWon} gewonnen legs`,
-          legTotal: player1Stats.legsWon+player2Stats.legsWon,
-          legPlayer1: player1Stats.legsWon,
-          legPlayer2: player2Stats.legsWon,
-          '180Total': player1Stats['180']+player2Stats['180'],
-          '180Player1': player1Stats['180'],
-          '180Player2': player2Stats['180'],
-          '9DartTotal': player1Stats['9dart']+player2Stats['9dart'],
-          '9DartPlayer1': player1Stats['9dart'],
-          '9DartPlayer2': player2Stats['9dart'],
-        }
-      },
+      handler: 'setStatisticsData',
+    },
+  },
+  methods: {
+    setStatisticsData() {
+      const set = this.setData[Object.keys(this.setData)[this.selectedSet-1]]
+      this.winner = this.matchPlayers[set.winner].playerName
+      this.setStatistics = set.players
+
+      const player1Stats = set.players[Object.keys(set.players)[0]]
+      const player2Stats = set.players[Object.keys(set.players)[1]]
+
+      this.statiscsObject = {
+        legSub: `${player1Stats.legsWon + player2Stats.legsWon} gewonnen legs`,
+        legTotal: player1Stats.legsWon + player2Stats.legsWon,
+        legPlayer1: player1Stats.legsWon,
+        legPlayer2: player2Stats.legsWon,
+        '180Total': player1Stats['180'] + player2Stats['180'],
+        '180Player1': player1Stats['180'],
+        '180Player2': player2Stats['180'],
+        '9DartTotal': player1Stats['9Dart'] + player2Stats['9Dart'],
+        '9DartPlayer1': player1Stats['9Dart'],
+        '9DartPlayer2': player2Stats['9Dart'],
+      }
     },
   },
 }
