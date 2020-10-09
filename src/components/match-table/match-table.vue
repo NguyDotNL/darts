@@ -22,9 +22,9 @@
           <tr>
             <td>
               <v-checkbox
-                :key="row.item.matchId"
+                :key="row.item"
                 v-model="selected"
-                :value="row.item.matchId"
+                :value="row.item"
               />
             </td>
             <td>
