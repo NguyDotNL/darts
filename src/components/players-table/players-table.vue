@@ -18,7 +18,6 @@
             class="p-0"
             :headers="headers"
             :items="items"
-            :search="search"
             :page.sync="page"
             :items-per-page="itemsPerPage"
             :loading="loading"
@@ -80,11 +79,17 @@ export default {
   },
   watch: {
     items: function () {
-      if(!this.items) return
+      if(!this.items & this.search) return
       this.backup = {
         FirstArrayName: this.items[0].full_name.toString(),
         LastArrayName: this.items[this.items.length - 1].full_name.toString(), 
       }
+    },
+    search: function() {
+      this.searchPlayer().then(data => {
+        console.log(data)
+      })
+      this.page = 1
     },
   },
   mounted () {
@@ -94,13 +99,13 @@ export default {
   },
   methods: {
     getStartPage: async function() {
-      return await PlayersClient.getFirstPlayers(this.itemsPerPage)
+      return await PlayersClient.getLoadingPlayersPage(this.itemsPerPage)
     },
     prevPage: async function() {
       if(this.page > 1) {
         this.page--
         this.loading = true
-        await PlayersClient.getPlayersByPrevPage(this.itemsPerPage, this.backup.FirstArrayName).then(data => {
+        await PlayersClient.getPrevPlayersPage(this.itemsPerPage, this.backup.FirstArrayName).then(data => {
           this.convertToArray(data)
         })
       }
@@ -109,21 +114,24 @@ export default {
       if(this.page > 0) {
         this.page++
         this.loading = true
-        await PlayersClient.getPlayersByNextPage(this.itemsPerPage, this.backup.LastArrayName).then(data => {
+        await PlayersClient.getNextPlayersPage(this.itemsPerPage, this.backup.LastArrayName).then(data => {
           this.convertToArray(data)
         })
       }
     },
+    searchPlayer: async function() {
+      console.log(this.search)
+      await PlayersClient.searchPlayers(this.search)
+    },
     convertToArray: function(data) {
-      const newItems = []
-      Object.values(data).map((player) => {
+      const newItems = Object.values(data).map((player) => {
         const full_name = player.playerName.split(' ')
-        newItems.push({
+        return {
           playerId: player.playerId,
           full_name: player.playerName,
           first_name: full_name[0],
           last_name: full_name[1] + ' ' +(full_name[2] ? full_name[2]: ''),
-        })
+        }
       })
       this.items = newItems
       this.loading = false

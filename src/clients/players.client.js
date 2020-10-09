@@ -1,7 +1,7 @@
 import { players } from '@/plugins/firebase'
 
 const PlayersClient = {
-  getFirstPlayers: (offset) => players.orderByChild('playerName').limitToFirst(offset)
+  getLoadingPlayersPage: (offset) => players.orderByChild('playerName').limitToFirst(offset)
     .once('value').then(snapshot => {
       const array = [] 
       snapshot.forEach((childSnapshot) => {
@@ -10,7 +10,7 @@ const PlayersClient = {
       })
       return array
     }),
-  getPlayersByNextPage: (offset, name) => players.orderByChild('playerName').limitToFirst(offset).startAt(name)
+  getPrevPlayersPage: (offset, name) => players.orderByChild('playerName').limitToLast(offset).endAt(name)
     .once('value').then(snapshot => {
       const array = [] 
       snapshot.forEach((childSnapshot) => {
@@ -19,7 +19,7 @@ const PlayersClient = {
       })
       return array
     }),
-  getPlayersByPrevPage: (offset, name) => players.orderByChild('playerName').limitToLast(offset).endAt(name)
+  getNextPlayersPage: (offset, name) => players.orderByChild('playerName').limitToFirst(offset).startAt(name)
     .once('value').then(snapshot => {
       const array = [] 
       snapshot.forEach((childSnapshot) => {
@@ -28,6 +28,8 @@ const PlayersClient = {
       })
       return array
     }),
+  searchPlayers: (name) => players.orderByChild('playerName').startAt(`\uf8ff${name}`).endAt(`${name}\uf8ff`)
+    .once('value').then(snapshot => console.log(snapshot.val())),
 }
 
 export default PlayersClient
