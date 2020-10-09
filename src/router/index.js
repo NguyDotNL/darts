@@ -27,7 +27,7 @@ const routes = [
         component: Players,
       },
       {
-        path: ':name',
+        path: ':player_id',
         name: 'PlayerStatistic',
         component: PlayersStatistic,
       },
