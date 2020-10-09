@@ -29,15 +29,15 @@
       </v-row>
       <v-row>
         <v-col class="font-weight-bold text-hd text-center text-3xl">
-          {{ legPoints }}
+          {{ startpoints }}
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <StatisticLegTable :items="{}" />
+          <StatisticLegTable :items="legPlayer1" :startpoints="startpoints" />
         </v-col>
         <v-col>
-          <StatisticLegTable :items="{}" />
+          <StatisticLegTable :items="legPlayer2" :startpoints="startpoints" />
         </v-col>
       </v-row>
     </v-col>
@@ -52,7 +52,15 @@ export default {
   },
   props: {
     setData:{
+      type: Array,
+      required: true,
+    },
+    matchPlayers: {
       type: Object,
+      required: true,
+    },
+    startpoints: {
+      type: Number,
       required: true,
     },
   },
@@ -62,8 +70,9 @@ export default {
       selectedLeg: 1,
       winner: '',
       setItems: [],
-      legItems: [1,2,3,4],
-      legPoints: 501,
+      legItems: [],
+      legPlayer1: {},
+      legPlayer2: {},
     }
   },
   watch: {
@@ -75,10 +84,19 @@ export default {
   methods: {
     setLegData(){
       const setDataKeys = Object.keys(this.setData)
-      const set = this.setData[setDataKeys[this.selectedSet-1]]
 
       this.setItems = [...Array(setDataKeys.length+1).keys()].slice(1)
-      this.winner = set.winner
+
+      const currentSetKey = setDataKeys[this.selectedSet-1]
+      const legDataKeys = Object.keys(this.setData[currentSetKey].legs)
+      const currentLegKey = legDataKeys[this.selectedLeg-1]
+      const currentLeg = this.setData[currentSetKey].legs[currentLegKey]
+
+      this.legItems = [...Array(legDataKeys.length+1).keys()].slice(1)
+      this.winner = currentLeg.winner
+
+      this.legPlayer1 = currentLeg.players[Object.keys(currentLeg.players)[0]]
+      this.legPlayer2 = currentLeg.players[Object.keys(currentLeg.players)[1]]
     },
   },
 }
