@@ -28,8 +28,15 @@ const PlayersClient = {
       })
       return array
     }),
-  searchPlayers: (name) => players.orderByChild('playerName').startAt(`\uf8ff${name}`).endAt(`${name}\uf8ff`)
-    .once('value').then(snapshot => console.log(snapshot.val())),
+  searchPlayers: (name) => players.orderByChild('playerName').startAt(name).endAt(`${name}\uf8ff`)
+    .once('value').then(snapshot => snapshot.val()),
+  getPlayerData: async (playerId) => {
+    const player = await players.child(playerId).once('value').then(snap => snap.val())
+    // const playerMatchesData = await playerMatches.child(playerId).on('child_added', 
+    //   async snap => await matches.child(snap.key).once('value', ca)
+    // )
+    return { playerId: player.playerId, playerName: player.playerName } // , playerMatches: playerMatchesData
+  },
 }
 
 export default PlayersClient

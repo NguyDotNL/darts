@@ -23,6 +23,7 @@
             :loading="loading"
             loading-text="Loading... Please wait"
             hide-default-footer
+            @click:row="rowLink"
           />
         </v-col>
       </v-row>
@@ -85,23 +86,21 @@ export default {
         LastArrayName: this.items[this.items.length - 1].full_name.toString(), 
       }
     },
-    search: function() {
-      this.searchPlayer().then(data => {
-        console.log(data)
-      })
-      this.page = 1
+    search: function () {
+      if(this.search.length > 0) this.searchPlayer()
+      else this.getStartPage()
     },
   },
   mounted () {
-    this.getStartPage().then(obj => {
-      this.convertToArray(obj)
-    })
+    this.getStartPage()
   },
   methods: {
-    getStartPage: async function() {
-      return await PlayersClient.getLoadingPlayersPage(this.itemsPerPage)
+    getStartPage: async function () {
+      return await PlayersClient.getLoadingPlayersPage(this.itemsPerPage).then(obj => {
+        this.convertToArray(obj)
+      })
     },
-    prevPage: async function() {
+    prevPage: async function () {
       if(this.page > 1) {
         this.page--
         this.loading = true
@@ -110,7 +109,7 @@ export default {
         })
       }
     },
-    nextPage: async function() {
+    nextPage: async function () {
       if(this.page > 0) {
         this.page++
         this.loading = true
@@ -119,11 +118,12 @@ export default {
         })
       }
     },
-    searchPlayer: async function() {
-      console.log(this.search)
-      await PlayersClient.searchPlayers(this.search)
+    searchPlayer: async function () {
+      await PlayersClient.searchPlayers(this.search).then(data => {
+        if(data) this.convertToArray(data)
+      })
     },
-    convertToArray: function(data) {
+    convertToArray: function (data) {
       const newItems = Object.values(data).map((player) => {
         const full_name = player.playerName.split(' ')
         return {
@@ -135,6 +135,9 @@ export default {
       })
       this.items = newItems
       this.loading = false
+    },
+    rowLink: function (data) {
+      this.$router.push('/spelers/' + data.playerId)
     },
   },
 }
