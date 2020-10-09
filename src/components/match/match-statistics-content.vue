@@ -1,9 +1,9 @@
 <template>
-  <v-row class="overflow-y-auto" style="max-height: calc(100vh - 273px)">
+  <v-row class="overflow-y-auto" style="max-height: calc(100vh - 306px)">
     <v-col>
-      <MatchGeneralStatistics />
-      <MatchSetStatistics :set-data="setData" />
-      <MatchLegStatistics :set-data="setData" />
+      <MatchGeneralStatistics :match-data="matchData" />
+      <MatchSetStatistics :set-data="matchData.matchDetails.sets" :match-players="matchData.match.players" />
+      <MatchLegStatistics :set-data="matchData.matchDetails.sets" :match-players="matchData.match.players" :startpoints="matchData.match.startpoints" />
     </v-col>
   </v-row>
 </template>
@@ -19,68 +19,11 @@ export default {
     MatchSetStatistics,
     MatchLegStatistics,
   },
-  data: function () {
-    return {
-      setData: {
-        '1': {
-          winner: 'Michael van Gerwen',
-          players: {
-            '1': {
-              statistics: {
-                'legsWon': 3,
-                '180': 3,
-                '9dart': 1,
-              },
-            },
-            '2': {
-              statistics: {
-                'legsWon': 1,
-                '180': 5,
-                '9dart': 0,
-              },
-            },
-          },
-        },
-        '2': {
-          winner: 'Raymond van Barneveld',
-          players: {
-            '1': {
-              statistics: {
-                'legsWon': 2,
-                '180': 6,
-                '9dart': 0,
-              },
-            },
-            '2': {
-              statistics: {
-                'legsWon': 3,
-                '180': 7,
-                '9dart': 0,
-              },
-            },
-          },
-        },
-        '3': {
-          winner: 'Michael van Gerwen',
-          players: {
-            '1': {
-              statistics: {
-                'legsWon': 3,
-                '180': 5,
-                '9dart': 0,
-              },
-            },
-            '2': {
-              statistics: {
-                'legsWon': 1,
-                '180': 3,
-                '9dart': 0,
-              },
-            },
-          },
-        },
-      },
-    }
+  props:{
+    matchData: {
+      type: Object,
+      required: true,
+    },
   },
 }
 </script>
