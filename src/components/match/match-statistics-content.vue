@@ -1,5 +1,5 @@
 <template>
-  <v-row class="overflow-y-auto" style="max-height: calc(100vh - 273px)">
+  <v-row class="overflow-y-auto" style="max-height: calc(100vh - 306px)">
     <v-col>
       <MatchGeneralStatistics :match-data="matchData" />
       <MatchSetStatistics :set-data="matchData.matchDetails.sets" :match-players="matchData.match.players" />

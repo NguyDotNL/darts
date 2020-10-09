@@ -20,7 +20,7 @@
       <tbody>
         <tr
           v-for="(turn, key) in turnData"
-          :key="turn.startpoints + key"
+          :key="key"
         >
           <td class="text-center">{{ key + 1 }}</td>
           <td>
