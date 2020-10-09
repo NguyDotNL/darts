@@ -14,6 +14,7 @@
                 label="Zoeken"
                 single-line
                 hide-details
+                @change="handleSearch"
               />
             </v-card-title>
             <MatchTable
