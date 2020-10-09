@@ -19,22 +19,22 @@
       </thead>
       <tbody>
         <tr
-          v-for="(leg, key) in items"
-          :key="key"
+          v-for="(turn, key) in turnData"
+          :key="turn.startpoints + key"
         >
-          <td class="text-center">{{ key+1 }}</td>
+          <td class="text-center">{{ key + 1 }}</td>
           <td>
             <ul>
               <li
-                v-for="(dart, dartKey) in leg.throws"
+                v-for="(dart, dartKey) in turn.throws"
                 :key="dartKey"
               >
-                {{ `Worp ${dartKey+1}: ${typeDart(dart.multiplier)} ${dart.points}` }}
+                {{ `Worp ${dartKey + 1}: ${typeDart(dart.multiplier)} ${dart.points}` }}
               </li>
             </ul>
           </td>
-          <td>{{ leg.total }}</td>
-          <td>{{ totalPoints(leg.total) }}</td>
+          <td>{{ turn.total }}</td>
+          <td>{{ turn.remainingPoints }}</td>
         </tr>
       </tbody>
     </template>
@@ -55,18 +55,27 @@ export default {
   },
   data: function () {
     return {
-      totalStartpoints: this.startpoints, 
+      turnData: [],
     }
   },
-  computed: {
-    totalStartingPoints(){
-      return this.startpoints
+  watch: {
+    items() {
+      this.calculateLegData()
     },
   },
+  mounted: function () {
+    this.calculateLegData()
+  },
   methods: {
-    totalPoints(itemPoints){
-      this.totalStartpoints -= itemPoints
-      return this.totalStartpoints
+    calculateLegData() {
+      let remainingPoints = this.startpoints
+      this.turnData = this.items.map(turn => {
+        remainingPoints -= turn.total
+        return {
+          ...turn,
+          remainingPoints,
+        }
+      })
     },
     typeDart(multiplier){
       let multiText = ''
