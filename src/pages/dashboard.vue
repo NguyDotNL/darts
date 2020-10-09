@@ -87,6 +87,14 @@ export default {
         this.loading = false
       })
     },
+    handleSearch(value){
+      if(value.length < 4) return
+      value = value.toUpperCase()
+      DashboardClient.searchMatchesByName(value).then((data) => {
+        this.matches = data
+        this.loading = false
+      })
+    },
   },
 }
 </script>

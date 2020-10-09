@@ -14,7 +14,6 @@
         hide-default-footer
         :page.sync="page"
         :items-per-page.sync="numberOfItemsPerPage"
-        :custom-filter="customMatchSearch"
         class="overflow-y-auto"
         style="max-height: 600px"
         @page-count="pageCount = $event"
@@ -23,8 +22,9 @@
           <tr>
             <td>
               <v-checkbox
+                :key="row.item.matchId"
                 v-model="selected"
-                :value="row.item"
+                :value="row.item.matchId"
               />
             </td>
             <td>
@@ -96,7 +96,7 @@
             <v-btn :disabled="page === 1" class="m-1" @click="previousPage">
               previous
             </v-btn>
-            <v-btn class="v-pagination__item v-pagination__item--active primary m-1">
+            <v-btn class="v-pagination__item v-pagination__item--active primary m-1" style="pointer-events: none">
               {{ page }}
             </v-btn>
             <v-btn class="m-1" @click="nextPage">
@@ -162,11 +162,6 @@ export default {
   methods: {
     showDate(value) {
       return moment(value, 'X').format('DD-MM HH:mm')
-    },
-    customMatchSearch () {
-      // if(this.search.length >= 4){
-      //
-      // }
     },
     nextPage: async function() {
       this.isLoading = true

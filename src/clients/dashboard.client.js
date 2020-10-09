@@ -9,8 +9,16 @@ const DashboardClient = {
       : matches.orderByChild('date').endAt(date).limitToLast(offset)
     return query.once('value').then(snapshot => Object.values(snapshot.val()).sort((a, b) => b.date - a.date))
   },
-  searchMatchesByName: (queryText) => matches.orderByChild('matchName').startAt(queryText).endAt(queryText+'\uf8ff')
-    .once('value').then(snapshot => Object.values(snapshot.val()).sort((a,b) => a.matchName - b.matchName)),
+  searchMatchesByName: (queryText) => matches.orderByChild('matchName').startAt(queryText).endAt(queryText+'\uf8ff').limitToFirst(10)
+    .once('value').then(snapshot => Object.values(snapshot.val()).sort((a,b) => {
+      if(a.matchName < b.matchName){
+        return -1
+      }
+      if (a.matchName > b.matchName){
+        return 1
+      }
+      return 0
+    })),
 }
 
 export default DashboardClient
