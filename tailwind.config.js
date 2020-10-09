@@ -27,6 +27,7 @@ module.exports = {
       danger: '#FF3939',
       success: '#339B3A',
       grey: '#3d3d3d',
+      buttongray: '#B2B2B2',
 
       gray: {
         100: '#f7fafc',
