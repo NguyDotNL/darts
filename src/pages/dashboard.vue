@@ -18,7 +18,7 @@
               />
             </v-card-title>
             <v-row>
-              <v-col cols="2" class="pr-0">
+              <v-col cols="5" sm="2" class="pr-0">
                 <VBtn
                   class="bg-primary rounded-0"
                   dark
@@ -28,7 +28,7 @@
                   Import
                 </VBtn>
               </v-col>
-              <v-col cols="2" class="pl-0">
+              <v-col cols="5" sm="2" class="pl-0">
                 <VBtn
                   class="bg-buttongray rounded-0"
                   dark
