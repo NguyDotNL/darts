@@ -39,12 +39,11 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'MatchStatistics',
         component: MatchStatistics,
       },
       {
         path: ':id',
-        name: 'MatchStatisticsId',
+        name: 'MatchStatistics',
         component: MatchStatistics,
       },
     ],

@@ -43,8 +43,8 @@ export default {
         let disabled = false
         this.$router.options.routes.map((route) => {
           if(route.path.includes(name.toLowerCase())) {
-            if(!route.name && route.children[0].path != '') {
-              disabled=true
+            if(!route.name && route.children[0].path != '' && route.children[0].name) {
+              disabled = true
             }
           }
         })

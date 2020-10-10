@@ -17,13 +17,13 @@ for (let i = 0; i < playerNames.names.length; i++) {
     playerName: playerNames.names[i],
   }
 
-  dartsDev.players[playerObj.playerId] = {...playerObj}
+  dartsDev.players[playerObj.playerId] = { ...playerObj }
 }
 
 const playerKeys = Object.keys(dartsDev.players)
 const bestOfOptions = [1,3,5,7,9,11,13]
 
-for (let i = 0; i < 2; i++){
+for (let i = 0; i < 200; i++){
   const matchId = uuidv4()
   const player1Key = playerKeys[rand(0, (playerKeys.length/2)-1)]
   const player1 = dartsDev.players[player1Key]
@@ -200,7 +200,7 @@ for (let i = 0; i < 2; i++){
           delete matchDetail.sets[setKey].legs[legKey].players[player2Key][turncount]
         }
         
-        if( player1Wins === Math.ceil(bestOfLegs/2)){
+        if(player1Wins === Math.ceil(bestOfLegs/2)){
           matchDetail.sets[setKey].winner = player1Key
 
           setsWinPlayer1++
@@ -233,21 +233,21 @@ for (let i = 0; i < 2; i++){
     }
   }
 
-  dartsDev.matches[matchId] = {...match}
-  dartsDev.matchDetails[matchId] = {...matchDetail}
+  dartsDev.matches[matchId] = { ...match }
+  dartsDev.matchDetails[matchId] = { ...matchDetail }
 }
 
 function getTotalThrowPoints(multiplier, points){
   if(multiplier === 4){
     return 25
-  } else if ( multiplier === 5){
+  } else if (multiplier === 5){
     return 50
   } else {
     return  multiplier * points
   }
 }
 
-function getPlayerThrow(legPointsPlayer ){
+function getPlayerThrow(legPointsPlayer){
   let throwObj = {
     multiplier: 0,
     points: 0,
@@ -319,6 +319,7 @@ function rand(min, max){
 // process.exit(0)
 
 const test = async () => {
+  console.log('test')
   await db.ref('matches').set(dartsDev.matches)
   await db.ref('players').set(dartsDev.players)
   await db.ref('matchDetails').set(dartsDev.matchDetails)

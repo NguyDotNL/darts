@@ -31,13 +31,13 @@ const PlayersClient = {
   searchPlayers: (name) => players.orderByChild('playerName').startAt(name).endAt(`${name}\uf8ff`)
     .once('value').then(snapshot => snapshot.val()),
   getPlayerData: async (playerId) => {
-    const player = await players.child(playerId).once('value').then(snap => snap.val())
+    const playerData = await players.child(playerId).once('value').then(snap => snap.val())
     const playerMatchesData = []
 
     await playerMatches.child(playerId).on('child_added',
       snap => matches.child(snap.val()).on('value', snapshot => playerMatchesData.push(snapshot.val())),
     )
-    return { playerId: player.playerId, playerName: player.playerName, playerMatches: playerMatchesData } 
+    return { player: playerData, playerMatches: playerMatchesData } 
   },
 }
 
