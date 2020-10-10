@@ -1,0 +1,21 @@
+module.exports = {
+  names: [
+    'André Brantjes',
+    'Raymond van Barneveld',
+    'Mieke de Boer',
+    'Dick van Dijk',
+    'Michael van Gerwen',
+    'Francis Hoenselaar',
+    'Jelle Klaasen',
+    'Karin Krappen',
+    'Mareno Michels',
+    'Niels de Ruiter',
+    'Roland Scholten',
+    'Co Stompé',
+    'Vincent van der Voort',
+    'Wesley Harms',
+    'Danny Noppert',
+    'Jermaine Wattimena',
+    'Jeffrey de Zwaan',
+  ],
+}
