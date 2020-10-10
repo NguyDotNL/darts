@@ -20,7 +20,6 @@ module.exports = {
     'no-unused-vars': ['warn'],
     'eol-last': ['warn', 'always'],
     'no-var': 'error',
-    'no-unused-vars': ['warn'],
     'indent': ['error', 2],
     'quotes': ['warn', 'single'],
     'semi': ['warn', 'never'],
