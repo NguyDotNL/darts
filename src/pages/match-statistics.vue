@@ -60,7 +60,7 @@ export default {
         this.matchData = data
         this.loading = false
       }).catch((err) => {
-        console.warn('Match loading failed',{err})
+        console.warn('Match loading failed',{ err })
         this.loading = false
       })
     },
