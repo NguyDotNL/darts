@@ -48,7 +48,7 @@ export default {
       type: Array,
       required: true,
     },
-    startpoints: {
+    startPoints: {
       type: Number,
       required: true,
     },
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     calculateLegData() {
-      let remainingPoints = this.startpoints
+      let remainingPoints = this.startPoints
       this.turnData = this.items.map(turn => {
         remainingPoints -= turn.total
         return {
