@@ -1,4 +1,4 @@
-//const { db } = require('../src/plugins/firebase')
+const { db } = require('../src/plugins/firebase')
 const { v4: uuidv4 } = require('uuid')
 const playerNames = require('./player-names.js')
 const process = require('process')
@@ -23,7 +23,7 @@ for (let i = 0; i < playerNames.names.length; i++) {
 const playerKeys = Object.keys(dartsDev.players)
 const bestOfOptions = [1,3,5,7,9,11,13]
 
-for (let i = 0; i < 50; i++){
+for (let i = 0; i < 2; i++){
   const matchId = uuidv4()
   const player1Key = playerKeys[rand(0, (playerKeys.length/2)-1)]
   const player1 = dartsDev.players[player1Key]
@@ -144,7 +144,7 @@ for (let i = 0; i < 50; i++){
             hasWinner = true
             player1Wins++
 
-            if(Object.keys(matchDetail.sets[setKey].legs[legKey].players[player1Key]).length === 3){
+            if(Object.keys(matchDetail.sets[setKey].legs[legKey].players[player1Key]).length === 3 && startPoints === 501){
               match.players[player1Key].statistics['9Dart']++
               matchDetail.sets[setKey].players[player1Key]['9Dart']++
             }
@@ -179,7 +179,7 @@ for (let i = 0; i < 50; i++){
               matchDetail.sets[setKey].players[player2Key].legsWon++
               player2Wins++
 
-              if(Object.keys(matchDetail.sets[setKey].legs[legKey].players[player2Key]).length === 3){
+              if(Object.keys(matchDetail.sets[setKey].legs[legKey].players[player2Key]).length === 3 && startPoints === 501){
                 match.players[player2Key].statistics['9Dart']++
                 matchDetail.sets[setKey].players[player2Key]['9Dart']++
               }
@@ -277,7 +277,7 @@ function getPlayerThrow(legPointsPlayer ){
     }
   } else {
     if(legPointsPlayer >= 180){
-      if(rand(0,8) >= 5){
+      if(rand(0,9) >= 5){
         throwObj.multiplier = rand(0,5)
         throwObj.points = throwObj.multiplier > 0 && throwObj.multiplier < 4 ? rand(1,20) :
           throwObj.multiplier === 0 ? 0 :
@@ -315,19 +315,19 @@ function rand(min, max){
   return Math.floor(Math.random() * (max-min+1)) + min
 }
 
-console.log(dartsDev)
-process.exit(0)
+// console.log(dartsDev)
+// process.exit(0)
 
-// const test = async () => {
-//   await db.ref('matches').set(dartsDev.matches)
-//   await db.ref('players').set(dartsDev.players)
-//   await db.ref('matchDetails').set(dartsDev.matchDetails)
-//   await db.ref('playerMatches').set(dartsDev.playerMatches)
-//
-//   console.log('Done')
-//   process.exit(0)
-// }
-//
-// test()
+const test = async () => {
+  await db.ref('matches').set(dartsDev.matches)
+  await db.ref('players').set(dartsDev.players)
+  await db.ref('matchDetails').set(dartsDev.matchDetails)
+  await db.ref('playerMatches').set(dartsDev.playerMatches)
+
+  console.log('Done')
+  process.exit(0)
+}
+
+test()
 
 
