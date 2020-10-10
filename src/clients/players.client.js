@@ -6,7 +6,7 @@ const PlayersClient = {
       const array = [] 
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val()
-        array.push({playerId: childData.playerId, playerName: childData.playerName})
+        array.push({ playerId: childData.playerId, playerName: childData.playerName })
       })
       return array
     }),
@@ -15,7 +15,7 @@ const PlayersClient = {
       const array = [] 
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val()
-        array.push({playerId: childData.playerId, playerName: childData.playerName})
+        array.push({ playerId: childData.playerId, playerName: childData.playerName })
       })
       return array
     }),
@@ -24,7 +24,7 @@ const PlayersClient = {
       const array = [] 
       snapshot.forEach((childSnapshot) => {
         const childData = childSnapshot.val()
-        array.push({playerId: childData.playerId, playerName: childData.playerName})
+        array.push({ playerId: childData.playerId, playerName: childData.playerName })
       })
       return array
     }),
