@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     setStatisticsData(){
-      const {match, matchDetails } = this.matchData
+      const { match, matchDetails } = this.matchData
       const player1 = match.players[Object.keys(match.players)[0]]
       const player2 = match.players[Object.keys(match.players)[1]]
 
