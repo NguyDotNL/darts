@@ -1,4 +1,4 @@
-import { players } from '@/plugins/firebase'
+import { players, playerMatches, matches } from '@/plugins/firebase'
 
 const PlayersClient = {
   getLoadingPlayersPage: (offset) => players.orderByChild('playerName').limitToFirst(offset)
@@ -32,10 +32,12 @@ const PlayersClient = {
     .once('value').then(snapshot => snapshot.val()),
   getPlayerData: async (playerId) => {
     const player = await players.child(playerId).once('value').then(snap => snap.val())
-    // const playerMatchesData = await playerMatches.child(playerId).on('child_added', 
-    //   async snap => await matches.child(snap.key).once('value', ca)
-    // )
-    return { playerId: player.playerId, playerName: player.playerName } // , playerMatches: playerMatchesData
+    const playerMatchesData = []
+
+    await playerMatches.child(playerId).on('child_added',
+      snap => matches.child(snap.val()).on('value', snapshot => playerMatchesData.push(snapshot.val())),
+    )
+    return { playerId: player.playerId, playerName: player.playerName, playerMatches: playerMatchesData } 
   },
 }
 

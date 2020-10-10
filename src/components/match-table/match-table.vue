@@ -20,9 +20,9 @@
       >
         <template v-slot:item="row">
           <tr>
-            <td>
+            <td v-if="matchExport">
               <v-checkbox
-                :key="row.item"
+                :key="row.item.matchId"
                 v-model="selected"
                 :value="row.item"
               />

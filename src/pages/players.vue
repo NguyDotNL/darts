@@ -1,7 +1,7 @@
 <template>
   <div>
     <Appbar />
-    <v-container>
+    <v-container class="overflow-hidden pt-0">
       <v-row>
         <v-col>
           <h1 class="text-4xl">Spelers</h1>

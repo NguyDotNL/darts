@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row class="overflow-y-auto" style="max-height: calc(100vh - 150px)">
     <v-col>
       <v-row>
         <v-col>
@@ -14,38 +14,53 @@
       </v-row>
       <v-row>
         <v-col>
-          <VDataTable
+          <v-data-table
             class="p-0"
             :headers="headers"
             :items="items"
             :page.sync="page"
             :items-per-page="itemsPerPage"
             :loading="loading"
+            disable-sort
+            fixed-header
             loading-text="Loading... Please wait"
             hide-default-footer
+            style="max-height: calc(100vh-150px);"
             @click:row="rowLink"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="text-center d-flex align-center justify-end">
-          <v-btn
-            class="mr-2"
-            depressed
-            :disabled="page == 1"
-            @click="prevPage()"
           >
-            Vorige
-          </v-btn>
-          <span>{{ page }}</span>
-          <v-btn
-            class="ml-2"
-            depressed
-            :disabled="items.length < itemsPerPage"
-            @click="nextPage()"
-          >
-            Volgende
-          </v-btn>
+            <template v-slot:footer>
+              <div class="text-center d-flex align-center justify-end">
+                <div class="whitespace-no-wrap d-flex align-center justify-end mr-3 text-xs">
+                  Rows per page:
+                  <v-select
+                    v-model="itemsPerPage"
+                    class="ml-5"
+                    style="flex: 0 1 0 !important;"
+                    :items="itemsPerPageArray"
+                    :full-width="false"
+                    @change="changeItemsPerPage"
+                  />
+                </div>
+                <span class="ml-5 mr-5 text-sm">{{ page }}</span>
+                <v-btn
+                  icon
+                  depressed
+                  :disabled="page == 1"
+                  @click="prevPage()"
+                >
+                  <v-icon>mdi-chevron-left</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  depressed
+                  :disabled="items.length < itemsPerPage"
+                  @click="nextPage()"
+                >
+                  <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+              </div>
+            </template>
+          </v-data-table>
         </v-col>
       </v-row>
     </v-col>
@@ -74,6 +89,7 @@ export default {
       search: '',
       items: [],
       backup: {},
+      itemsPerPageArray: [5, 10, 15, 20],
       itemsPerPage: 10,
       page: 1,
     }
@@ -89,6 +105,9 @@ export default {
     search: function () {
       if(this.search.length > 0) this.searchPlayer()
       else this.getStartPage()
+    },
+    itemsPerPage: function () {
+      this.getStartPage()
     },
   },
   mounted () {
@@ -138,6 +157,9 @@ export default {
     },
     rowLink: function (data) {
       this.$router.push('/spelers/' + data.playerId)
+    },
+    changeItemsPerPage(val) {
+      this.itemsPerPage = val
     },
   },
 }
