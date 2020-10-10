@@ -6,6 +6,11 @@ import '@testing-library/jest-dom'
 
 Vue.use(Vuetify)
 
+// Mock client imports
+jest.mock('@/clients/dashboard.client', () => require('@/clients/dashboard.mock.js').default)
+jest.mock('@/clients/match.client', () => require('@/clients/match.mock.js').default)
+jest.mock('@/clients/players.client', () => require('@/clients/players.mock.js').default)
+
 const renderWithVuetify = (component, options, cb) => {
   const root = document.createElement('div')
   root.setAttribute('data-app', 'true')

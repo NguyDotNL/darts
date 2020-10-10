@@ -2,11 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // Pages
-import Dashboard from '../pages/dashboard.vue'
-import PassThrough from '../pages/passthrough.vue'
-import Players from '../pages/players.vue'
-import PlayersStatistic from '../pages/player-statistics.vue'
-import MatchStatistics from '../pages/match-statistics.vue'
+const Dashboard = () => import('../pages/dashboard.vue')
+const PassThrough = () => import('../pages/passthrough.vue')
+const Players = () => import('../pages/players.vue')
+const PlayersStatistic = () => import('../pages/player-statistics.vue')
+const MatchStatistics = () => import('../pages/match-statistics.vue')
 
 Vue.use(VueRouter)
 
@@ -27,7 +27,7 @@ const routes = [
         component: Players,
       },
       {
-        path: ':name',
+        path: ':player_id',
         name: 'PlayerStatistic',
         component: PlayersStatistic,
       },
@@ -37,6 +37,11 @@ const routes = [
     path: '/wedstrijd',
     component: PassThrough,
     children: [
+      {
+        path: '',
+        name: 'MatchStatistics',
+        component: MatchStatistics,
+      },
       {
         path: ':id',
         name: 'MatchStatistics',

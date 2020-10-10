@@ -15,6 +15,9 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'object-curly-spacing': ['error', 'always'],
+    'space-in-parens': ['error', 'never'],
+    'no-unused-vars': ['warn'],
     'eol-last': ['warn', 'always'],
     'no-var': 'error',
     'indent': ['error', 2],

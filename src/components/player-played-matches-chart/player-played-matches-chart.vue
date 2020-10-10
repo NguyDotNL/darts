@@ -12,7 +12,6 @@
             width="450"
             :options="chartOptions"
             :series="series"
-            :labels="labels"
           />
         </v-col>
       </v-row>
