@@ -65,6 +65,7 @@ export default {
         this.playerName = data.playerName
         this.matches = data.playerMatches
         this.loadingData = false
+        console.log(data)
       })
     },
     getPlayerData: async function (playerId) {

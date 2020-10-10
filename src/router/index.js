@@ -44,7 +44,7 @@ const routes = [
       },
       {
         path: ':id',
-        name: 'MatchStatistics',
+        name: 'MatchStatisticsId',
         component: MatchStatistics,
       },
     ],

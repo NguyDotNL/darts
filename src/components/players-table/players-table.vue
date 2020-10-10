@@ -1,66 +1,71 @@
 <template>
-  <v-row class="overflow-y-auto" style="max-height: calc(100vh - 150px)">
+  <v-row>
     <v-col>
-      <v-row>
+      <v-row class="overflow-y-auto" style="max-height: calc(100vh - 260px)">
         <v-col>
-          <VTextField
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          />
+          <v-row>
+            <v-col>
+              <VTextField
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <VDataTable
+                class="p-0"
+                :headers="headers"
+                :items="items"
+                :page.sync="page"
+                :items-per-page="itemsPerPage"
+                :loading="loading"
+                disable-sort
+                fixed-header
+                loading-text="Loading... Please wait"
+                hide-default-footer
+                style="max-height: calc(100vh-150px);"
+                @click:row="rowLink"
+              />
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <v-data-table
-            class="p-0"
-            :headers="headers"
-            :items="items"
-            :page.sync="page"
-            :items-per-page="itemsPerPage"
-            :loading="loading"
-            disable-sort
-            fixed-header
-            loading-text="Loading... Please wait"
-            hide-default-footer
-            style="max-height: calc(100vh-150px);"
-            @click:row="rowLink"
-          >
-            <template v-slot:footer>
-              <div class="text-center d-flex align-center justify-end">
-                <div class="whitespace-no-wrap d-flex align-center justify-end mr-3 text-xs">
-                  Rows per page:
-                  <v-select
-                    v-model="itemsPerPage"
-                    class="ml-5"
-                    style="flex: 0 1 0 !important;"
-                    :items="itemsPerPageArray"
-                    :full-width="false"
-                    @change="changeItemsPerPage"
-                  />
-                </div>
-                <span class="ml-5 mr-5 text-sm">{{ page }}</span>
-                <v-btn
-                  icon
-                  depressed
-                  :disabled="page == 1"
-                  @click="prevPage()"
-                >
-                  <v-icon>mdi-chevron-left</v-icon>
-                </v-btn>
-                <v-btn
-                  icon
-                  depressed
-                  :disabled="items.length < itemsPerPage"
-                  @click="nextPage()"
-                >
-                  <v-icon>mdi-chevron-right</v-icon>
-                </v-btn>
-              </div>
-            </template>
-          </v-data-table>
+          <div class="text-center d-flex align-center justify-end">
+            <div class="whitespace-no-wrap d-flex align-center justify-end mr-3 text-xs">
+              Items per pagina:
+              <v-select
+                v-model="itemsPerPage"
+                class="ml-5 mr-5"
+                style="flex: 0 1 0 !important;"
+                :items="itemsPerPageArray"
+                :full-width="false"
+                @change="changeItemsPerPage"
+              />
+            </div>
+            <v-btn
+              icon
+              depressed
+              :disabled="page == 1"
+              @click="prevPage()"
+            >
+              <v-icon>mdi-chevron-left</v-icon>
+            </v-btn>
+            <span class="ml-3 mr-3 text-sm">{{ page }}</span>
+            <v-btn
+              icon
+              depressed
+              :disabled="items.length < itemsPerPage"
+              @click="nextPage()"
+            >
+              <v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-col>
