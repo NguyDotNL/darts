@@ -153,6 +153,10 @@ export default {
   },
   watch: {
     matches() {
+      if(!this.matches) {
+        this.matchesArray = []
+        return
+      }
       const matches = Object.values(this.matches)
       this.matchesArray = matches
       this.pageStack.push(last(matches).date)
