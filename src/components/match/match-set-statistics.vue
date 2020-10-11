@@ -54,7 +54,7 @@ export default {
     StatisticLineBar,
   },
   props: {
-    setData:{
+    setData: {
       type: Array,
       required: true,
     },

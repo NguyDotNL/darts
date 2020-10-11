@@ -51,7 +51,7 @@ export default {
     StatisticLegTable,
   },
   props: {
-    setData:{
+    setData: {
       type: Array,
       required: true,
     },
@@ -94,7 +94,7 @@ export default {
     },
   },
   methods: {
-    setLegData(){
+    setLegData() {
       const setDataKeys = Object.keys(this.setData)
 
       this.setItems = [...Array(setDataKeys.length+1).keys()].slice(1)
