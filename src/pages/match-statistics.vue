@@ -62,15 +62,15 @@ export default {
     this.destroyRtMatchData(this.matchId)
   },
   methods: {
-    destroyRtMatchData: async function(id){
-      await MatchClient.rtMatchAndDetailsOff(id)
+    destroyRtMatchData(id){
+      MatchClient.rtMatchAndDetailsOff(id)
     },
-    setRtMatchData: async function(id){
-      await MatchClient.getRtMatch(id, snapshot => {
+    setRtMatchData(id){
+      MatchClient.getRtMatch(id, snapshot => {
         this.matchData.match = snapshot.val()
       })
 
-      await MatchClient.getRtMatchDetails(id, snapshot => {
+      MatchClient.getRtMatchDetails(id, snapshot => {
         this.loading = false
         this.matchData.matchDetails = snapshot.val()
       })

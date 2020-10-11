@@ -105,36 +105,11 @@ export default {
       required: true,
     },
   },
-  data: function () {
-    return {
-      items: [
-        {
-          text: 'Dashboard',
-          disabled: false,
-          href: '/',
-        },
-        {
-          text: 'Wedstrijd',
-          disabled: false,
-          href: '/',
-        },
-        {
-          text: 'WK 2020',
-          disabled: true,
-          href: '',
-        },
-      ],
-    }
-  },
   methods: {
     deleteMatch: async function(){
       await MatchClient.rtMatchAndDetailsOff(this.matchId)
-
-      const deleted = await MatchClient.deleteMatch(this.matchId)
-
-      if(deleted){
-        window.location.href = `/wedstrijd/${this.matchId}`
-      }
+      await MatchClient.deleteMatch(this.matchId)
+      await this.$router.replace('/')
     },
   },
 }

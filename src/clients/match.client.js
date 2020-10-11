@@ -7,17 +7,17 @@ const MatchClient = {
     return { match, matchDetails: matchDetailsData }
   },
   deleteMatch: async (matchId) => {
-    const match =  await matches.child(matchId).once('value').then(snap => snap.val())
+    const match = await matches.child(matchId).once('value').then(snap => snap.val())
     const playerKeys = Object.keys(match.players)
-    const updateObject = {}
 
-    updateObject[`matches/${matchId}`] = null
-    updateObject[`matchDetails/${matchId}`] = null
-    updateObject[`playerMatches/${playerKeys[0]}/${matchId}`] = null
-    updateObject[`playerMatches/${playerKeys[1]}/${matchId}`] = null
+    const updateObject = {
+      [`matches/${matchId}`]: null,
+      [`matchDetails/${matchId}`]: null,
+      [`playerMatches/${playerKeys[0]}/${matchId}`]: null,
+      [`playerMatches/${playerKeys[1]}/${matchId}`]: null,
+    }
 
-    db.ref().update(updateObject)
-    return true
+    await db.ref().update(updateObject)
   },
   getRtMatch: async (matchId, callback) => {
     matches.child(matchId).on('value', callback)
