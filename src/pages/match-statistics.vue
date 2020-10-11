@@ -21,7 +21,7 @@
         </v-col>
       </v-row>
 
-      <MatchStatisticsHeader v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData.match" :match-id="matchId"/>
+      <MatchStatisticsHeader v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData.match" :match-id="matchId" />
       <MatchStatisticsContent v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData" />
 
       <v-row v-if="!loading && (!matchData.match || !matchData.matchDetails)" class="text-center font-weight-bold text-xl">

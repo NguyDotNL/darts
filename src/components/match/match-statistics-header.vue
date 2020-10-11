@@ -88,7 +88,8 @@
 
 <script>
 import NineDarterIcon from '@/components/9-darter/9-darter-icon'
-import { matches, matchDetails, db } from '@/plugins/firebase'
+import { matches, matchDetails } from '@/plugins/firebase'
+import MatchClient from '@/clients/match.client'
 
 export default {
   name: 'MatchStatisticsHeader',
@@ -132,11 +133,11 @@ export default {
       matches.child(this.matchId).off()
       matchDetails.child(this.matchId).off()
 
-      console.log({playerKey: Object.keys(this.matchData.players)[0], matchKey: this.matchId})
-      const player1Matches = await db.ref(`playerMatches/${Object.keys(this.matchData.players)[0]}`).once('value').then(snapshot => snapshot.val())
-      const player2Matches = await db.ref(`playerMatches/${Object.keys(this.matchData.players)[1]}`).once('value').then(snapshot => snapshot.val())
+      const deleted = await MatchClient.deleteMatch(this.matchId)
 
-      console.log('Delete match', {machId: this.matchId, player1Key: Object.keys(this.matchData.players)[0], player1Matches, player2Matches})
+      if(deleted){
+        window.location.href = `/wedstrijd/${this.matchId}`
+      }
     },
   },
 }
