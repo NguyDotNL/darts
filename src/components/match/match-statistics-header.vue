@@ -5,27 +5,31 @@
         <v-col class="text-end">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                large
-                class="text-gray-800 mr-3"
-                v-bind="attrs"
-                v-on="on"
-              >
-                mdi-cog
-              </v-icon>
+              <router-link :to="`/wedstrijd/${matchId}/instellingen/`">
+                <v-icon
+                  large
+                  class="text-gray-800 mr-3"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-cog
+                </v-icon>
+              </router-link>
             </template>
             <span>Wedstrijd instellingen</span>
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                large
-                class="text-primary mr-3"
-                v-bind="attrs"
-                v-on="on"
-              >
-                mdi-pencil-outline
-              </v-icon>
+              <router-link :to="`/wedstrijd/${matchId}/invullen/`">
+                <v-icon
+                  large
+                  class="text-primary mr-3"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-pencil-outline
+                </v-icon>
+              </router-link>
             </template>
             <span>Wedstrijd worpen aanpassen</span>
           </v-tooltip>
