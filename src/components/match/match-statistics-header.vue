@@ -110,7 +110,7 @@ export default {
     },
   },
   methods: {
-    deleteMatch(){
+    deleteMatch() {
       MatchClient.rtMatchAndDetailsOff(this.matchId)
       MatchClient.deleteMatch(this.matchId)
       this.$router.replace('/')

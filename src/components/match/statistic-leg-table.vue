@@ -62,7 +62,7 @@ export default {
     items() {
       this.calculateLegData()
     },
-    startPoints(){
+    startPoints() {
       this.calculateLegData()
     },
   },
@@ -80,7 +80,7 @@ export default {
         }
       })
     },
-    typeDart(multiplier){
+    typeDart(multiplier) {
       let multiText = ''
       switch (multiplier) {
       case 0:

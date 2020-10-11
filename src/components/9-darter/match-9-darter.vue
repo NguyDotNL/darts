@@ -45,7 +45,7 @@
 <script>
 export default {
   name: 'Match9Darter',
-  props:{
+  props: {
     width: String,
     height: String,
   },

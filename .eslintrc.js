@@ -41,5 +41,12 @@ module.exports = {
     }],
     'vue/require-default-prop': 0,
     'vue/singleline-html-element-content-newline': 0,
+    'key-spacing': ['error', {
+      beforeColon: false,
+      afterColon: true,
+      mode: 'strict',
+    }],
+    'arrow-spacing': ['error'],
+    'space-before-blocks': 2,
   },
 }
