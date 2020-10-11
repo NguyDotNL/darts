@@ -19,7 +19,7 @@ const MatchClient = {
 
     await db.ref().update(updateObject)
   },
-  getRtMatch:  (matchId, callback) => {
+  getRtMatch: (matchId, callback) => {
     matches.child(matchId).on('value', callback)
   },
   getRtMatchDetails: (matchId, callback) => {
