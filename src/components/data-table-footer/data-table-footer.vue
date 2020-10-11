@@ -69,13 +69,13 @@ export default {
     prevPage: function () {
       if(this.currentPage > 1) {
         this.currentPage--
-        this.$emit('prev', { page: this.currentPage, itemsPerPage: this.itemsPerPageValue })
+        this.$emit('prev', { page: this.currentPage, itemsPerPage: this.itemsPerPageValue, type: 'prev' })
       }
     },
     nextPage: function () {
       if(this.currentPage > 0) {
         this.currentPage++
-        this.$emit('next', { page: this.currentPage, itemsPerPage: this.itemsPerPageValue })
+        this.$emit('next', { page: this.currentPage, itemsPerPage: this.itemsPerPageValue, type: 'next' })
       }
     },
     changeItemsPerPage(val) {

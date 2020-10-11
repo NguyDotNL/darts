@@ -1,35 +1,22 @@
 import { players, playerMatches, matches } from '@/plugins/firebase'
 
 const PlayersClient = {
-  getLoadingPlayersPage: (offset) => players.orderByChild('playerName').limitToFirst(offset)
-    .once('value').then(snapshot => {
-      const array = [] 
-      snapshot.forEach((childSnapshot) => {
-        const childData = childSnapshot.val()
-        array.push({ playerId: childData.playerId, playerName: childData.playerName })
-      })
-      return array
-    }),
-  getPrevPlayersPage: (offset, name) => players.orderByChild('playerName').limitToLast(offset).endAt(name)
-    .once('value').then(snapshot => {
-      const array = [] 
-      snapshot.forEach((childSnapshot) => {
-        const childData = childSnapshot.val()
-        array.push({ playerId: childData.playerId, playerName: childData.playerName })
-      })
-      return array
-    }),
-  getNextPlayersPage: (offset, name) => players.orderByChild('playerName').limitToFirst(offset).startAt(name)
-    .once('value').then(snapshot => {
-      const array = [] 
-      snapshot.forEach((childSnapshot) => {
-        const childData = childSnapshot.val()
-        array.push({ playerId: childData.playerId, playerName: childData.playerName })
-      })
-      return array
-    }),
-  searchPlayers: (name) => players.orderByChild('playerName').startAt(name).endAt(`${name}\uf8ff`)
-    .once('value').then(snapshot => snapshot.val()),
+  getPlayers: (offset, name = null, type = null) => {
+    const query = type == null 
+      ? players.orderByChild('firstName').limitToFirst(offset)
+      : type == 'prev' ? players.orderByChild('firstName').limitToLast(offset).endAt(name)
+        : type == 'next' ? players.orderByChild('firstName').limitToFirst(offset).startAt(name) : ''
+        
+    return query.once('value').then(snapshot => Object.values(snapshot.val()).sort((a, b) => {
+      const aFirstName = a.firstName.toLowerCase(), bFirstName = b.firstName.toLowerCase()
+      return (aFirstName < bFirstName) ? -1 : (aFirstName > bFirstName) ? 1 : 0
+    }))
+  },
+  searchPlayers: (name) => players.orderByChild('firstName').startAt(name).endAt(`${name}\uf8ff`)
+    .once('value').then(snapshot => Object.values(snapshot.val()).sort((a, b) => {
+      const aFirstName = a.firstName.toLowerCase(), bFirstName = b.firstName.toLowerCase()
+      return (aFirstName < bFirstName) ? -1 : (aFirstName > bFirstName) ? 1 : 0
+    })),
   getPlayerData: async (playerId) => {
     const playerData = await players.child(playerId).once('value').then(snap => snap.val())
     const playerMatchesData = []

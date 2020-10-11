@@ -15,7 +15,7 @@
       </div>
       <v-row>
         <v-col>
-          <h1 class="text-4xl font-medium text-grey">{{ player && player.playerName }}</h1>
+          <h1 class="text-4xl font-medium text-grey">{{ player && `${player.firstName} ${player.lastName}` }}</h1>
         </v-col>
       </v-row>
       <v-row v-if="!loadingData && matches && player" class="overflow-y-auto" style="max-height: calc(100vh - 190px)">
@@ -50,7 +50,7 @@ export default {
     PlayerPlayedMatches,
     MatchTable,
   },
-  data: function () {
+  data() {
     return {
       playerId: this.$route.params.player_id,
       player: {},
@@ -58,18 +58,18 @@ export default {
       loadingData: true,
     }
   },
-  mounted () {
+  mounted() {
     this.setPlayerData(this.playerId)
   },
   methods: {
-    setPlayerData: async function (playerId) {
+    async setPlayerData(playerId) {
       this.getPlayerData(playerId).then(data => {
         this.player = data.player
         this.matches = data.playerMatches
         this.loadingData = false
       })
     },
-    getPlayerData: async function (playerId) {
+    async getPlayerData(playerId) {
       return await PlayersClient.getPlayerData(playerId)
     },
   },

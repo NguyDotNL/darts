@@ -33,7 +33,7 @@ export default {
       required: true,
     },
   },
-  data: function () {
+  data() {
     return {
       chartOptions: {
         labels: ['Gewonnen', 'Verloren'],
@@ -46,7 +46,7 @@ export default {
           style: {
             fontSize: '18px',
           },
-          formatter: function(val, opts) {
+          formatter(val, opts) {
             return opts.w.config.series[opts.seriesIndex]
           },
         },
@@ -55,7 +55,7 @@ export default {
           horizontalAlign: 'center',
           fontSize: '18px',
           inverseOrder: true,
-          formatter: function(name, opts) {
+          formatter(name, opts) {
             return [name + ':', opts.w.config.series[opts.seriesIndex]]
           },
         },
@@ -63,7 +63,7 @@ export default {
     }
   },
   computed: {
-    series: function () {
+    series() {
       const wins = this.matches.filter((match) => match.winner == this.player.playerId).length
       const loses = this.matches.length - wins
       return [wins, loses]

@@ -38,8 +38,8 @@
         :items-length="items.length"
         :items-per-page="itemsPerPage"
         :page="page"
-        @prev="prevPage"
-        @next="nextPage"
+        @prev="getPage"
+        @next="getPage"
         @changeItemsPerPage="changeItemsPerPage"
       />
     </v-col>
@@ -61,11 +61,11 @@ export default {
         {
           text: 'Voornaam',
           align: 'start',
-          value: 'first_name',
+          value: 'firstName',
         },
         {
           text: 'Achternaam',
-          value: 'last_name',
+          value: 'lastName',
         },
       ],
       loading: true,
@@ -77,71 +77,54 @@ export default {
     }
   },
   watch: {
-    items: function () {
+    items() {
       if(!this.items & this.search) return
       this.backup = {
-        FirstArrayName: this.items[0].full_name.toString(),
-        LastArrayName: this.items[this.items.length - 1].full_name.toString(), 
+        FirstArrayName: this.items[0].firstName.toString(),
+        LastArrayName: this.items[this.items.length - 1].firstName.toString(), 
       }
     },
-    search: function () {
+    search() {
       if(this.search.length > 0) this.searchPlayer()
-      else this.getStartPage()
+      else this.page = 1, this.getPage()
     },
-    itemsPerPage: function () {
-      this.page = 1
-      this.getStartPage()
+    itemsPerPage() {
+      this.page = 1, this.getPage()
     },
   },
   mounted () {
-    this.getStartPage()
+    this.getPage()
   },
   methods: {
-    getStartPage: async function () {
-      return await PlayersClient.getLoadingPlayersPage(this.itemsPerPage).then(obj => {
-        this.convertToArray(obj)
-      })
-    },
-    prevPage: async function (obj) {
-      if(obj.page >= 1) {
-        this.loading = true
+    async getPage(obj = null) {
+      this.loading = true
+      if(obj == null) {
+        this.getPlayersData().then(data => {
+          this.items = data
+          this.loading = false
+        })
+      } else {
         this.page = obj.page
-        await PlayersClient.getPrevPlayersPage(obj.itemsPerPage, this.backup.FirstArrayName).then(data => {
-          this.convertToArray(data)
+        this.getPlayersData(obj).then(data => {
+          this.items = data
+          this.loading = false
         })
       }
     },
-    nextPage: async function (obj) {
-      if(obj.page > 0) {
-        this.loading = true
-        this.page = obj.page
-        await PlayersClient.getNextPlayersPage(obj.itemsPerPage, this.backup.LastArrayName).then(data => {
-          this.convertToArray(data)
-        })
-      }
+    async getPlayersData(obj = null) {
+      if(obj == null) return await PlayersClient.getPlayers(this.itemsPerPage)
+      else if(obj.page >= 1 && obj.type == 'prev') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.FirstArrayName, obj.type)
+      else if(obj.page > 0 && obj.type == 'next') return await await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
     },
-    changeItemsPerPage: function (val) {
+    changeItemsPerPage(val) {
       this.itemsPerPage = val
     },
-    searchPlayer: async function () {
+    async searchPlayer() {
       await PlayersClient.searchPlayers(this.search).then(data => {
-        if(data) this.convertToArray(data)
+        if(data) this.items = data
       })
     },
-    convertToArray: function (data) {
-      const newItems = Object.values(data).map((player) => {
-        const full_name = player.playerName.split(' ')
-        return {
-          playerId: player.playerId,
-          full_name: player.playerName,
-          first_name: full_name[0],
-          last_name: full_name[1] + ' ' +(full_name[2] ? full_name[2]: ''),
-        }
-      })
-      this.items = newItems
-      this.loading = false
-    },
-    rowLink: function (data) {
+    rowLink(data) {
       this.$router.push('/spelers/' + data.playerId)
     },
   },
