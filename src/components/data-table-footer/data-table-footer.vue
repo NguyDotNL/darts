@@ -8,6 +8,7 @@
             v-model="itemsPerPageValue"
             class="ml-5 mr-5"
             style="flex: 0 1 0 !important;"
+            :disabled="currentPage != 1"
             :items="itemsPerPageArray"
             :full-width="false"
             @change="changeItemsPerPage"
@@ -42,7 +43,7 @@ export default {
     itemsPerPageArray: {
       type: Array,
       default: function () {
-        return [1, 5, 10, 15, 20]
+        return [5, 10, 15, 20]
       },
     },
     itemsPerPage: {

@@ -89,6 +89,7 @@ export default {
       else this.getStartPage()
     },
     itemsPerPage: function () {
+      this.page = 1
       this.getStartPage()
     },
   },
@@ -102,7 +103,7 @@ export default {
       })
     },
     prevPage: async function (obj) {
-      if(obj.page > 1) {
+      if(obj.page >= 1) {
         this.loading = true
         this.page = obj.page
         await PlayersClient.getPrevPlayersPage(obj.itemsPerPage, this.backup.FirstArrayName).then(data => {
