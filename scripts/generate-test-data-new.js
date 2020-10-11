@@ -14,7 +14,8 @@ const dartsDev = {
 for (let i = 0; i < playerNames.names.length; i++) {
   const playerObj = {
     playerId: uuidv4(),
-    playerName: playerNames.names[i],
+    firstName: playerNames.names[i].firstName,
+    lastName: playerNames.names[i].lastName
   }
 
   dartsDev.players[playerObj.playerId] = { ...playerObj }
@@ -23,7 +24,7 @@ for (let i = 0; i < playerNames.names.length; i++) {
 const playerKeys = Object.keys(dartsDev.players)
 const bestOfOptions = [1,3,5,7,9,11,13]
 
-for (let i = 0; i < 2; i++){
+for (let i = 0; i < 200; i++){
   const matchId = uuidv4()
   const player1Key = playerKeys[rand(0, (playerKeys.length/2)-1)]
   const player1 = dartsDev.players[player1Key]
@@ -50,7 +51,7 @@ for (let i = 0; i < 2; i++){
   dartsDev.playerMatches[player2Key][matchId] = matchId
 
   players[player1Key] = {
-    playerName: player1.playerName,
+    playerName: player1.firstName + " " + player1.lastName,
     statistics: {
       '180': 0,
       '9Dart': 0,
@@ -59,7 +60,7 @@ for (let i = 0; i < 2; i++){
     },
   }
   players[player2Key] = {
-    playerName: player2.playerName,
+    playerName: player2.firstName + " " + player2.lastName,
     statistics: {
       '180': 0,
       '9Dart': 0,
@@ -231,11 +232,11 @@ for (let i = 0; i < 2; i++){
 
     if(setsWinPlayer1 === Math.ceil(bestOfSets / 2)) {
       match.winner = player1Key
-      match.winnerName = player1.playerName
+      match.winnerName = player1.firstName + " " + player1.lastName
       break
     } else if(setsWinPlayer2 === Math.ceil(bestOfSets / 2)){
       match.winner = player2Key
-      match.winnerName = player2.playerName
+      match.winnerName = player2.firstName + " " + player2.lastName
       break
     }
   }
