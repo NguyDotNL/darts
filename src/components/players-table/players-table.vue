@@ -37,6 +37,7 @@
       <DataTableFooter
         :items-length="items.length"
         :items-per-page="itemsPerPage"
+        :page="page"
         @prev="prevPage"
         @next="nextPage"
         @changeItemsPerPage="changeItemsPerPage"
@@ -101,7 +102,7 @@ export default {
       })
     },
     prevPage: async function (obj) {
-      if(obj.page > 0) {
+      if(obj.page > 1) {
         this.loading = true
         this.page = obj.page
         await PlayersClient.getPrevPlayersPage(obj.itemsPerPage, this.backup.FirstArrayName).then(data => {

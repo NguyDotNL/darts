@@ -20,7 +20,7 @@
       </v-row>
       <v-row v-if="!loadingData && matches && player" class="overflow-y-auto" style="max-height: calc(100vh - 190px)">
         <v-col>
-          <PlayerPlayedMatches v-if="!loadingData && matches && player" :player="player && player" :matches="matches && matches" />
+          <PlayerPlayedMatches v-if="!loadingData && matches && player" :player="player" :matches="matches" />
           <v-row>
             <v-col>
               <h3 class="text-3xl font-medium">Gespeelde wedstrijden</h3>
