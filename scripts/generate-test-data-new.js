@@ -17,7 +17,7 @@ for (let i = 0; i < playerNames.names.length; i++) {
     playerName: playerNames.names[i],
   }
 
-  dartsDev.players[playerObj.playerId] = {...playerObj}
+  dartsDev.players[playerObj.playerId] = { ...playerObj }
 }
 
 const playerKeys = Object.keys(dartsDev.players)
@@ -38,9 +38,16 @@ for (let i = 0; i < 2; i++){
   const winnerName = undefined
   const players = {}
 
+  if(!(player1Key in dartsDev.playerMatches)){
+    dartsDev.playerMatches[player1Key] = {}
+  }
 
-  dartsDev.playerMatches[player1Key] = dartsDev.playerMatches[player1Key] ? [...dartsDev.playerMatches[player1Key], matchId] : [matchId]
-  dartsDev.playerMatches[player2Key] = dartsDev.playerMatches[player2Key] ? [...dartsDev.playerMatches[player2Key], matchId] : [matchId]
+  if(!(player2Key in dartsDev.playerMatches)){
+    dartsDev.playerMatches[player2Key] = {}
+  }
+
+  dartsDev.playerMatches[player1Key][matchId] = matchId
+  dartsDev.playerMatches[player2Key][matchId] = matchId
 
   players[player1Key] = {
     playerName: player1.playerName,
@@ -200,7 +207,7 @@ for (let i = 0; i < 2; i++){
           delete matchDetail.sets[setKey].legs[legKey].players[player2Key][turncount]
         }
         
-        if( player1Wins === Math.ceil(bestOfLegs/2)){
+        if(player1Wins === Math.ceil(bestOfLegs/2)){
           matchDetail.sets[setKey].winner = player1Key
 
           setsWinPlayer1++
@@ -233,21 +240,21 @@ for (let i = 0; i < 2; i++){
     }
   }
 
-  dartsDev.matches[matchId] = {...match}
-  dartsDev.matchDetails[matchId] = {...matchDetail}
+  dartsDev.matches[matchId] = { ...match }
+  dartsDev.matchDetails[matchId] = { ...matchDetail }
 }
 
 function getTotalThrowPoints(multiplier, points){
   if(multiplier === 4){
     return 25
-  } else if ( multiplier === 5){
+  } else if (multiplier === 5){
     return 50
   } else {
     return  multiplier * points
   }
 }
 
-function getPlayerThrow(legPointsPlayer ){
+function getPlayerThrow(legPointsPlayer){
   let throwObj = {
     multiplier: 0,
     points: 0,
