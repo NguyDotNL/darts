@@ -88,7 +88,6 @@
 
 <script>
 import NineDarterIcon from '@/components/9-darter/9-darter-icon'
-import { matches, matchDetails } from '@/plugins/firebase'
 import MatchClient from '@/clients/match.client'
 
 export default {
@@ -128,10 +127,8 @@ export default {
     }
   },
   methods: {
-
     deleteMatch: async function(){
-      matches.child(this.matchId).off()
-      matchDetails.child(this.matchId).off()
+      await MatchClient.rtMatchAndDetailsOff(this.matchId)
 
       const deleted = await MatchClient.deleteMatch(this.matchId)
 

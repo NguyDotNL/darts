@@ -36,7 +36,7 @@
 import Appbar from '@/components/app-bar/app-bar'
 import MatchStatisticsHeader from '@/components/match/match-statistics-header'
 import MatchStatisticsContent from '@/components/match/match-statistics-content'
-import { matches, matchDetails } from '@/plugins/firebase'
+import MatchClient from '@/clients/match.client'
 
 export default {
   name: 'MatchStatistics',
@@ -63,15 +63,14 @@ export default {
   },
   methods: {
     destroyRtMatchData: async function(id){
-      matches.child(id).off()
-      matchDetails.child(id).off()
+      await MatchClient.rtMatchAndDetailsOff(id)
     },
     setRtMatchData: async function(id){
-      matches.child(id).on('value', snapshot => {
+      await MatchClient.getRtMatch(id, snapshot => {
         this.matchData.match = snapshot.val()
       })
 
-      matchDetails.child(id).on('value', snapshot => {
+      await MatchClient.getRtMatchDetails(id, snapshot => {
         this.loading = false
         this.matchData.matchDetails = snapshot.val()
       })

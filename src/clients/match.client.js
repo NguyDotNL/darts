@@ -1,4 +1,4 @@
-import {matches, matchDetails, playerMatches} from '@/plugins/firebase'
+import {matches, matchDetails, db} from '@/plugins/firebase'
 
 const MatchClient = {
   getMatch: async (matchId) => {
@@ -7,19 +7,27 @@ const MatchClient = {
     return { match, matchDetails: matchDetailsData }
   },
   deleteMatch: async (matchId) => {
-    return await matches.child(matchId).once('value').then(snap => {
-      const data = snap.val()
-      const playerKeys = Object.keys(data.players)
+    const match =  await matches.child(matchId).once('value').then(snap => snap.val())
+    const playerKeys = Object.keys(match.players)
+    const updateObject = {}
 
-      if(data){
-        playerMatches.child(playerKeys[0]).child(matchId).remove()
-        playerMatches.child(playerKeys[1]).child(matchId).remove()
-        matchDetails.child(matchId).remove()
-        matches.child(matchId).remove()
-        return true
-      }
-      return false
-    })
+    updateObject[`matches/${matchId}`] = null
+    updateObject[`matchDetails/${matchId}`] = null
+    updateObject[`playerMatches/${playerKeys[0]}/${matchId}`] = null
+    updateObject[`playerMatches/${playerKeys[1]}/${matchId}`] = null
+
+    db.ref().update(updateObject)
+    return true
+  },
+  getRtMatch: async (matchId, callback) => {
+    matches.child(matchId).on('value', callback)
+  },
+  getRtMatchDetails: async (matchId, callback) => {
+    matchDetails.child(matchId).on('value', callback)
+  },
+  rtMatchAndDetailsOff: async (matchId) => {
+    matches.child(matchId).off()
+    matchDetails.child(matchId).off()
   },
 }
 
