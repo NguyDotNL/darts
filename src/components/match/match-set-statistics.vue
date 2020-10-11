@@ -77,6 +77,10 @@ export default {
       immediate: true,
       handler: 'setStatisticsData',
     },
+    'setData': {
+      immediate: true,
+      handler: 'setStatisticsData',
+    },
   },
   methods: {
     setStatisticsData() {

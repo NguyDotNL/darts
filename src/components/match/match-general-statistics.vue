@@ -57,6 +57,14 @@ export default {
     }
   },
   watch: {
+    'matchData.match': {
+      immediate: true,
+      handler: 'setStatisticsData',
+    },
+    'matchData.matchDetails': {
+      immediate: true,
+      handler: 'setStatisticsData',
+    },
     'matchData': {
       immediate: true,
       handler: 'setStatisticsData',

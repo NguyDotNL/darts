@@ -3,7 +3,7 @@
     <v-col>
       <MatchGeneralStatistics :match-data="matchData" />
       <MatchSetStatistics :set-data="matchData.matchDetails.sets" :match-players="matchData.match.players" />
-      <MatchLegStatistics :set-data="matchData.matchDetails.sets" :match-players="matchData.match.players" :startpoints="matchData.match.startpoints" />
+      <MatchLegStatistics :set-data="matchData.matchDetails.sets" :match-players="matchData.match.players" :start-points="matchData.match.startPoints" />
     </v-col>
   </v-row>
 </template>

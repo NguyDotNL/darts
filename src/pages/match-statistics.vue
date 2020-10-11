@@ -21,10 +21,10 @@
         </v-col>
       </v-row>
 
-      <MatchStatisticsHeader v-if="!loading && matchData && matchData.match && matchData.matchDetails" :match-data="matchData.match" />
-      <MatchStatisticsContent v-if="!loading && matchData && matchData.match && matchData.matchDetails" :match-data="matchData" />
+      <MatchStatisticsHeader v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData.match" :match-id="matchId" />
+      <MatchStatisticsContent v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData" />
 
-      <v-row v-if="!loading && (!matchData || !matchData.match || !matchData.matchDetails)" class="text-center font-weight-bold text-xl">
+      <v-row v-if="!loading && (!matchData.match || !matchData.matchDetails)" class="text-center font-weight-bold text-xl">
         <v-col>
           Geen wedstrijd gevonden met dit ID
         </v-col>
@@ -48,24 +48,32 @@ export default {
   data: function() {
     return {
       loading: true,
-      matchData: false,
+      matchData: {
+        match: null,
+        matchDetails: null,
+      },
+      matchId: this.$route.params.id,
     }
   },
   mounted() {
-    this.setMatchData(this.$route.params.id)
+    this.setRtMatchData(this.$route.params.id)
+  },
+  beforeDestroy() {
+    this.destroyRtMatchData(this.matchId)
   },
   methods: {
-    setMatchData: async function(id) {
-      this.getMatchData(id).then(data => {
-        this.matchData = data
-        this.loading = false
-      }).catch((err) => {
-        console.warn('Match loading failed',{ err })
-        this.loading = false
-      })
+    destroyRtMatchData(id) {
+      MatchClient.rtMatchAndDetailsOff(id)
     },
-    getMatchData: async function(id) {
-      return await MatchClient.getMatch(id)
+    setRtMatchData(id) {
+      MatchClient.getRtMatch(id, snapshot => {
+        this.matchData.match = snapshot.val()
+      })
+
+      MatchClient.getRtMatchDetails(id, snapshot => {
+        this.loading = false
+        this.matchData.matchDetails = snapshot.val()
+      })
     },
   },
 }
