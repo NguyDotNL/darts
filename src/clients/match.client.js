@@ -25,7 +25,7 @@ const MatchClient = {
   getRtMatchDetails: (matchId, callback) => {
     matchDetails.child(matchId).on('value', callback)
   },
-  rtMatchAndDetailsOff: async (matchId) => {
+  rtMatchAndDetailsOff: (matchId) => {
     matches.child(matchId).off()
     matchDetails.child(matchId).off()
   },
