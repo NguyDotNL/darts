@@ -62,6 +62,9 @@ export default {
     items() {
       this.calculateLegData()
     },
+    startPoints(){
+      this.calculateLegData()
+    },
   },
   mounted: function () {
     this.calculateLegData()

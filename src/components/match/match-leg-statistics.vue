@@ -84,6 +84,14 @@ export default {
       immediate: true,
       handler: 'setLegData',
     },
+    setData: {
+      immediate: true,
+      handler: 'setLegData',
+    },
+    startPoints: {
+      immediate: true,
+      handler: 'setLegData',
+    },
   },
   methods: {
     setLegData(){

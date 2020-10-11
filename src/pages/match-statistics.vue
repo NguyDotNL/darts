@@ -21,10 +21,10 @@
         </v-col>
       </v-row>
 
-      <MatchStatisticsHeader v-if="!loading && matchData && matchData.match && matchData.matchDetails" :match-data="matchData.match" />
-      <MatchStatisticsContent v-if="!loading && matchData && matchData.match && matchData.matchDetails" :match-data="matchData" />
+      <MatchStatisticsHeader v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData.match" :match-id="matchId"/>
+      <MatchStatisticsContent v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData" />
 
-      <v-row v-if="!loading && (!matchData || !matchData.match || !matchData.matchDetails)" class="text-center font-weight-bold text-xl">
+      <v-row v-if="!loading && (!matchData.match || !matchData.matchDetails)" class="text-center font-weight-bold text-xl">
         <v-col>
           Geen wedstrijd gevonden met dit ID
         </v-col>
@@ -36,7 +36,7 @@
 import Appbar from '@/components/app-bar/app-bar'
 import MatchStatisticsHeader from '@/components/match/match-statistics-header'
 import MatchStatisticsContent from '@/components/match/match-statistics-content'
-import MatchClient from '@/clients/match.client'
+import { matches, matchDetails } from '@/plugins/firebase'
 
 export default {
   name: 'MatchStatistics',
@@ -48,24 +48,33 @@ export default {
   data: function(){
     return {
       loading: true,
-      matchData: false,
+      matchData: {
+        match: null,
+        matchDetails: null,
+      },
+      matchId: this.$route.params.id,
     }
   },
   mounted() {
-    this.setMatchData(this.$route.params.id)
+    this.setRtMatchData(this.$route.params.id)
+  },
+  beforeDestroy() {
+    this.destroyRtMatchData(this.matchId)
   },
   methods: {
-    setMatchData: async function(id){
-      this.getMatchData(id).then(data => {
-        this.matchData = data
-        this.loading = false
-      }).catch((err) => {
-        console.warn('Match loading failed',{err})
-        this.loading = false
-      })
+    destroyRtMatchData: async function(id){
+      matches.child(id).off()
+      matchDetails.child(id).off()
     },
-    getMatchData: async function(id){
-      return await MatchClient.getMatch(id)
+    setRtMatchData: async function(id){
+      matches.child(id).on('value', snapshot => {
+        this.matchData.match = snapshot.val()
+      })
+
+      matchDetails.child(id).on('value', snapshot => {
+        this.loading = false
+        this.matchData.matchDetails = snapshot.val()
+      })
     },
   },
 }
