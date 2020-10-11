@@ -118,7 +118,7 @@ import last from 'lodash/last'
 
 export default {
   name: 'MatchTable',
-  components: {Match9Darter},
+  components: { Match9Darter },
   props: {
     matchExport: {
       type: Boolean,
@@ -135,11 +135,11 @@ export default {
     return {
       selected: [],
       headers: [
-        {text: 'Wedstrijdnaam', align: 'left'},
-        {text: 'Spelers', align: 'left'},
-        {text: 'Sets', align: 'left'},
-        {text: 'Legs', align: 'left'},
-        {text: 'Best of', align: 'left'},
+        { text: 'Wedstrijdnaam', align: 'left' },
+        { text: 'Spelers', align: 'left' },
+        { text: 'Sets', align: 'left' },
+        { text: 'Legs', align: 'left' },
+        { text: 'Best of', align: 'left' },
       ],
       matchesArray: [],
       page: 1,

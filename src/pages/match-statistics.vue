@@ -45,7 +45,7 @@ export default {
     MatchStatisticsHeader,
     MatchStatisticsContent,
   },
-  data: function(){
+  data: function() {
     return {
       loading: true,
       matchData: {
@@ -62,10 +62,10 @@ export default {
     this.destroyRtMatchData(this.matchId)
   },
   methods: {
-    destroyRtMatchData(id){
+    destroyRtMatchData(id) {
       MatchClient.rtMatchAndDetailsOff(id)
     },
-    setRtMatchData(id){
+    setRtMatchData(id) {
       MatchClient.getRtMatch(id, snapshot => {
         this.matchData.match = snapshot.val()
       })

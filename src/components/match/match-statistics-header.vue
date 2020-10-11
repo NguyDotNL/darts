@@ -95,12 +95,12 @@ export default {
   components: {
     NineDarterIcon,
   },
-  props:{
+  props: {
     matchData: {
       type: Object,
       required: true,
     },
-    matchId:{
+    matchId: {
       type: String,
       required: true,
     },

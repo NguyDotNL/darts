@@ -57,22 +57,22 @@ export default {
     }
   },
   watch:{
-    'matchData.match':{
+    'matchData.match': {
       immediate: true,
       handler: 'setStatisticsData',
     },
-    'matchData.matchDetails':{
+    'matchData.matchDetails': {
       immediate: true,
       handler: 'setStatisticsData',
     },
-    'matchData':{
+    'matchData': {
       immediate: true,
       handler: 'setStatisticsData',
     },
   },
   methods: {
     setStatisticsData(){
-      const {match, matchDetails } = this.matchData
+      const { match, matchDetails } = this.matchData
       const player1 = match.players[Object.keys(match.players)[0]]
       const player2 = match.players[Object.keys(match.players)[1]]
 

@@ -1,4 +1,4 @@
-import {matches, matchDetails, db} from '@/plugins/firebase'
+import { matches, matchDetails, db } from '@/plugins/firebase'
 
 const MatchClient = {
   getMatch: async (matchId) => {
@@ -19,10 +19,10 @@ const MatchClient = {
 
     await db.ref().update(updateObject)
   },
-  getRtMatch: async (matchId, callback) => {
+  getRtMatch:  (matchId, callback) => {
     matches.child(matchId).on('value', callback)
   },
-  getRtMatchDetails: async (matchId, callback) => {
+  getRtMatchDetails: (matchId, callback) => {
     matchDetails.child(matchId).on('value', callback)
   },
   rtMatchAndDetailsOff: async (matchId) => {
