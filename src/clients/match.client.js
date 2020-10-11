@@ -7,18 +7,19 @@ const MatchClient = {
     return { match, matchDetails: matchDetailsData }
   },
   deleteMatch: async (matchId) => {
-    const matchIsDeleted = await matches.child(matchId).once('value').then(snap => {
-      if(snap.val() != null){
-        playerMatches.child(Object.keys(snap.val().players)[0]).child(matchId).remove()
-        playerMatches.child(Object.keys(snap.val().players)[1]).child(matchId).remove()
+    return await matches.child(matchId).once('value').then(snap => {
+      const data = snap.val()
+      const playerKeys = Object.keys(data.players)
+
+      if(data){
+        playerMatches.child(playerKeys[0]).child(matchId).remove()
+        playerMatches.child(playerKeys[1]).child(matchId).remove()
         matchDetails.child(matchId).remove()
         matches.child(matchId).remove()
         return true
       }
       return false
     })
-    
-    return matchIsDeleted
   },
 }
 
