@@ -93,7 +93,7 @@ export default {
   components: {
     NineDarterIcon,
   },
-  props:{
+  props: {
     matchData: {
       type: Object,
       required: true,

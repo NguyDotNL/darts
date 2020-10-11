@@ -45,7 +45,7 @@ export default {
     MatchStatisticsHeader,
     MatchStatisticsContent,
   },
-  data: function(){
+  data: function() {
     return {
       loading: true,
       matchData: false,
@@ -55,7 +55,7 @@ export default {
     this.setMatchData(this.$route.params.id)
   },
   methods: {
-    setMatchData: async function(id){
+    setMatchData: async function(id) {
       this.getMatchData(id).then(data => {
         this.matchData = data
         this.loading = false
@@ -64,7 +64,7 @@ export default {
         this.loading = false
       })
     },
-    getMatchData: async function(id){
+    getMatchData: async function(id) {
       return await MatchClient.getMatch(id)
     },
   },

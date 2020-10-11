@@ -77,7 +77,7 @@ export default {
         }
       })
     },
-    typeDart(multiplier){
+    typeDart(multiplier) {
       let multiText = ''
       switch (multiplier) {
       case 0:

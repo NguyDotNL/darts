@@ -45,25 +45,25 @@ export default {
   components: {
     StatisticLineBar,
   },
-  props:{
+  props: {
     matchData: {
       type: Object,
       required: true,
     },
   },
-  data: function (){
+  data: function () {
     return {
       statisticsObj: {},
     }
   },
-  watch:{
-    'matchData':{
+  watch: {
+    'matchData': {
       immediate: true,
       handler: 'setStatisticsData',
     },
   },
   methods: {
-    setStatisticsData(){
+    setStatisticsData() {
       const { match, matchDetails } = this.matchData
       const player1 = match.players[Object.keys(match.players)[0]]
       const player2 = match.players[Object.keys(match.players)[1]]
@@ -73,20 +73,20 @@ export default {
       let turnCountPlayer1 = 0
       let turnCountPlayer2 = 0
 
-      for(let setKey in matchDetails.sets){
+      for(let setKey in matchDetails.sets) {
         const set = matchDetails.sets[setKey]
-        for(let legKey in set.legs){
+        for(let legKey in set.legs) {
           const leg = set.legs[legKey]
           const pl1Key = Object.keys(leg.players)[0]
           const pl2Key = Object.keys(leg.players)[1]
 
-          for(let turnKey in leg.players[pl1Key]){
+          for(let turnKey in leg.players[pl1Key]) {
             const turn = leg.players[pl1Key][turnKey]
             totalPointPlayer1 += turn.total
             turnCountPlayer1++
           }
 
-          for(let turnKey in leg.players[pl2Key]){
+          for(let turnKey in leg.players[pl2Key]) {
             const turn = leg.players[pl2Key][turnKey]
             totalPointPlayer2 += turn.total
             turnCountPlayer2++

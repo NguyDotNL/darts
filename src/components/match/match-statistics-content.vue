@@ -19,7 +19,7 @@ export default {
     MatchSetStatistics,
     MatchLegStatistics,
   },
-  props:{
+  props: {
     matchData: {
       type: Object,
       required: true,
