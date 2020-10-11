@@ -2,9 +2,8 @@
   <v-navigation-drawer
     data-testid="app-drawer"
     :value="open"
-    absolute
-    bottom
     temporary
+    app
     @input="(value) => !value && $emit('toggle')"
   >
     <v-list nav dense class="p-0">

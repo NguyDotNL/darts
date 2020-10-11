@@ -34,49 +34,26 @@
           </v-row>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col>
-          <div class="text-center d-flex align-center justify-end">
-            <div class="whitespace-no-wrap d-flex align-center justify-end mr-3 text-xs">
-              Items per pagina:
-              <v-select
-                v-model="itemsPerPage"
-                class="ml-5 mr-5"
-                style="flex: 0 1 0 !important;"
-                :items="itemsPerPageArray"
-                :full-width="false"
-                @change="changeItemsPerPage"
-              />
-            </div>
-            <v-btn
-              icon
-              depressed
-              :disabled="page == 1"
-              @click="prevPage()"
-            >
-              <v-icon>mdi-chevron-left</v-icon>
-            </v-btn>
-            <span class="ml-3 mr-3 text-sm">{{ page }}</span>
-            <v-btn
-              icon
-              depressed
-              :disabled="items.length < itemsPerPage"
-              @click="nextPage()"
-            >
-              <v-icon>mdi-chevron-right</v-icon>
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
+      <DataTableFooter
+        :items-length="items.length"
+        :items-per-page="itemsPerPage"
+        @prev="prevPage"
+        @next="nextPage"
+        @changeItemsPerPage="changeItemsPerPage"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script>
 import PlayersClient from '@/clients/players.client'
+import DataTableFooter from '@/components/data-table-footer/data-table-footer'
 
 export default {
-  name: 'Table',
+  name: 'PlayersTable',
+  components: {
+    DataTableFooter,
+  },
   data: function () {
     return {
       headers: [
@@ -94,7 +71,6 @@ export default {
       search: '',
       items: [],
       backup: {},
-      itemsPerPageArray: [5, 10, 15, 20],
       itemsPerPage: 10,
       page: 1,
     }
@@ -124,23 +100,26 @@ export default {
         this.convertToArray(obj)
       })
     },
-    prevPage: async function () {
-      if(this.page > 1) {
-        this.page--
+    prevPage: async function (obj) {
+      if(obj.page > 0) {
         this.loading = true
-        await PlayersClient.getPrevPlayersPage(this.itemsPerPage, this.backup.FirstArrayName).then(data => {
+        this.page = obj.page
+        await PlayersClient.getPrevPlayersPage(obj.itemsPerPage, this.backup.FirstArrayName).then(data => {
           this.convertToArray(data)
         })
       }
     },
-    nextPage: async function () {
-      if(this.page > 0) {
-        this.page++
+    nextPage: async function (obj) {
+      if(obj.page > 0) {
         this.loading = true
-        await PlayersClient.getNextPlayersPage(this.itemsPerPage, this.backup.LastArrayName).then(data => {
+        this.page = obj.page
+        await PlayersClient.getNextPlayersPage(obj.itemsPerPage, this.backup.LastArrayName).then(data => {
           this.convertToArray(data)
         })
       }
+    },
+    changeItemsPerPage: function (val) {
+      this.itemsPerPage = val
     },
     searchPlayer: async function () {
       await PlayersClient.searchPlayers(this.search).then(data => {
@@ -162,9 +141,6 @@ export default {
     },
     rowLink: function (data) {
       this.$router.push('/spelers/' + data.playerId)
-    },
-    changeItemsPerPage(val) {
-      this.itemsPerPage = val
     },
   },
 }

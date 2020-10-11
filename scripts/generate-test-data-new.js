@@ -315,11 +315,7 @@ function rand(min, max){
   return Math.floor(Math.random() * (max-min+1)) + min
 }
 
-// console.log(dartsDev)
-// process.exit(0)
-
 const test = async () => {
-  console.log('test')
   await db.ref('matches').set(dartsDev.matches)
   await db.ref('players').set(dartsDev.players)
   await db.ref('matchDetails').set(dartsDev.matchDetails)
