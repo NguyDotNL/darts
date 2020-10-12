@@ -1,5 +1,5 @@
 import { render, Vue, screen } from '@/test/test-wrapper'
-import Breadcrumbs from './Breadcrumbs.vue'
+import Breadcrumbs from './breadcrumbs.vue'
 import Last from 'lodash/last'
 
 test('Player id is rendered in breadcrumbs', async () => {
