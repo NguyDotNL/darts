@@ -14,7 +14,6 @@
                 label="Zoeken"
                 single-line
                 hide-details
-                @change="handleSearch"
               />
             </v-card-title>
             <v-row>
@@ -48,9 +47,7 @@
               </router-link>
             </v-row>
             <MatchTable 
-              :matches="matches"
               :search="search"
-              :loading="loading"
             />
           </v-card>
         </v-col>
@@ -73,28 +70,7 @@ export default {
   data: function() {
     return {
       search: '',
-      matches: {},
-      loading: true,
     }
-  },
-  beforeMount() {
-    this.getMatchData()
-  },
-  methods: {
-    getMatchData() {
-      DashboardClient.getMatchesPerPage(10).then((data) => { 
-        this.matches = data
-        this.loading = false
-      })
-    },
-    handleSearch(value) {
-      if(value.length < 4) return
-      value = value.toUpperCase()
-      DashboardClient.searchMatchesByName(value).then((data) => {
-        this.matches = data
-        this.loading = false
-      })
-    },
   },
 }
 </script>

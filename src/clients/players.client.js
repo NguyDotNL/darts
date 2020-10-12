@@ -6,7 +6,6 @@ const PlayersClient = {
       ? players.orderByChild('firstName').limitToFirst(offset)
       : type == 'prev' ? players.orderByChild('firstName').limitToLast(offset).endAt(name)
         : type == 'next' ? players.orderByChild('firstName').limitToFirst(offset).startAt(name) : ''
-        
     return query.once('value').then(snapshot => Object.values(snapshot.val()).sort((a, b) => {
       const aFirstName = a.firstName.toLowerCase(), bFirstName = b.firstName.toLowerCase()
       return (aFirstName < bFirstName) ? -1 : (aFirstName > bFirstName) ? 1 : 0

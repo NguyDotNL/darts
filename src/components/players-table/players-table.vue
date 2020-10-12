@@ -78,7 +78,7 @@ export default {
   },
   watch: {
     items() {
-      if(!this.items & this.search) return
+      if(!this.items && this.search) return
       this.backup = {
         FirstArrayName: this.items[0].firstName.toString(),
         LastArrayName: this.items[this.items.length - 1].firstName.toString(), 
