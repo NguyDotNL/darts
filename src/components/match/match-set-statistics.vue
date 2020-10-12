@@ -54,7 +54,7 @@ export default {
     StatisticLineBar,
   },
   props: {
-    setData:{
+    setData: {
       type: Array,
       required: true,
     },
@@ -74,6 +74,10 @@ export default {
   },
   watch: {
     selectedSet: {
+      immediate: true,
+      handler: 'setStatisticsData',
+    },
+    'setData': {
       immediate: true,
       handler: 'setStatisticsData',
     },

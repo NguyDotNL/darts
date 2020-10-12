@@ -29,15 +29,15 @@
       </v-row>
       <v-row>
         <v-col class="font-weight-bold text-hd text-center text-3xl">
-          {{ startpoints }}
+          {{ startPoints }}
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <StatisticLegTable :items="legPlayer1" :startpoints="startpoints" />
+          <StatisticLegTable :items="legPlayer1" :start-points="startPoints" />
         </v-col>
         <v-col>
-          <StatisticLegTable :items="legPlayer2" :startpoints="startpoints" />
+          <StatisticLegTable :items="legPlayer2" :start-points="startPoints" />
         </v-col>
       </v-row>
     </v-col>
@@ -51,7 +51,7 @@ export default {
     StatisticLegTable,
   },
   props: {
-    setData:{
+    setData: {
       type: Array,
       required: true,
     },
@@ -59,7 +59,7 @@ export default {
       type: Object,
       required: true,
     },
-    startpoints: {
+    startPoints: {
       type: Number,
       required: true,
     },
@@ -80,9 +80,21 @@ export default {
       immediate: true,
       handler: 'setLegData',
     },
+    selectedLeg: {
+      immediate: true,
+      handler: 'setLegData',
+    },
+    setData: {
+      immediate: true,
+      handler: 'setLegData',
+    },
+    startPoints: {
+      immediate: true,
+      handler: 'setLegData',
+    },
   },
   methods: {
-    setLegData(){
+    setLegData() {
       const setDataKeys = Object.keys(this.setData)
 
       this.setItems = [...Array(setDataKeys.length+1).keys()].slice(1)

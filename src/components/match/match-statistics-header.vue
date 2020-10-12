@@ -5,27 +5,31 @@
         <v-col class="text-end">
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                large
-                class="text-gray-800 mr-3"
-                v-bind="attrs"
-                v-on="on"
-              >
-                mdi-cog
-              </v-icon>
+              <router-link :to="`/wedstrijd/${matchId}/instellingen/`">
+                <v-icon
+                  large
+                  class="text-gray-800 mr-3"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-cog
+                </v-icon>
+              </router-link>
             </template>
             <span>Wedstrijd instellingen</span>
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                large
-                class="text-primary mr-3"
-                v-bind="attrs"
-                v-on="on"
-              >
-                mdi-pencil-outline
-              </v-icon>
+              <router-link :to="`/wedstrijd/${matchId}/invullen/`">
+                <v-icon
+                  large
+                  class="text-primary mr-3"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-pencil-outline
+                </v-icon>
+              </router-link>
             </template>
             <span>Wedstrijd worpen aanpassen</span>
           </v-tooltip>
@@ -37,6 +41,7 @@
                 class="text-iconred"
                 v-bind="attrs"
                 v-on="on"
+                @click="deleteMatch"
               >
                 mdi-trash-can-outline
               </v-icon>
@@ -87,38 +92,29 @@
 
 <script>
 import NineDarterIcon from '@/components/9-darter/9-darter-icon'
+import MatchClient from '@/clients/match.client'
 
 export default {
   name: 'MatchStatisticsHeader',
   components: {
     NineDarterIcon,
   },
-  props:{
+  props: {
     matchData: {
       type: Object,
       required: true,
     },
+    matchId: {
+      type: String,
+      required: true,
+    },
   },
-  data: function () {
-    return {
-      items: [
-        {
-          text: 'Dashboard',
-          disabled: false,
-          href: '/',
-        },
-        {
-          text: 'Wedstrijd',
-          disabled: false,
-          href: '/',
-        },
-        {
-          text: 'WK 2020',
-          disabled: true,
-          href: '',
-        },
-      ],
-    }
+  methods: {
+    deleteMatch() {
+      MatchClient.rtMatchAndDetailsOff(this.matchId)
+      MatchClient.deleteMatch(this.matchId)
+      this.$router.replace('/')
+    },
   },
 }
 </script>

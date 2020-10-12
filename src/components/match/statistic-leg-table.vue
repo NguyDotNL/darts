@@ -48,7 +48,7 @@ export default {
       type: Array,
       required: true,
     },
-    startpoints: {
+    startPoints: {
       type: Number,
       required: true,
     },
@@ -62,13 +62,16 @@ export default {
     items() {
       this.calculateLegData()
     },
+    startPoints() {
+      this.calculateLegData()
+    },
   },
   mounted: function () {
     this.calculateLegData()
   },
   methods: {
     calculateLegData() {
-      let remainingPoints = this.startpoints
+      let remainingPoints = this.startPoints
       this.turnData = this.items.map(turn => {
         remainingPoints -= turn.total
         return {
@@ -77,7 +80,7 @@ export default {
         }
       })
     },
-    typeDart(multiplier){
+    typeDart(multiplier) {
       let multiText = ''
       switch (multiplier) {
       case 0:

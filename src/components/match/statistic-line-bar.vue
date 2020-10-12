@@ -46,16 +46,16 @@ export default {
       type: Number,
       required: true,
     },
-    playerLeftNumber:  {
+    playerLeftNumber: {
       type: Number,
       required: true,
     },
-    playerRightNumber:  {
+    playerRightNumber: {
       type: Number,
       required: true,
     },
   },
-  data: function (){
+  data: function () {
     return {
       percLeft: 0,
       percRight: 0,
@@ -76,7 +76,7 @@ export default {
     },
   },
   methods: {
-    calculateBarPerc(){
+    calculateBarPerc() {
       this.percLeft = this.totalNumber ? this.playerLeftNumber/this.totalNumber*100 : 0
       this.percRight = this.totalNumber ? this.playerRightNumber/this.totalNumber*100 : 0
     },

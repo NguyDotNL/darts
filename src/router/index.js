@@ -8,7 +8,6 @@ const Players = () => import('../pages/players.vue')
 const PlayersStatistic = () => import('../pages/player-statistics.vue')
 const MatchStatistics = () => import('../pages/match-statistics.vue')
 
-Vue.use(VueRouter)
 
 const routes = [
   {
@@ -54,5 +53,7 @@ const router = new VueRouter({
   mode: 'history',
   routes,
 })
+
+Vue.use(VueRouter)
 
 export default router

@@ -1,21 +1,68 @@
 module.exports = {
   names: [
-    'André Brantjes',
-    'Raymond van Barneveld',
-    'Mieke de Boer',
-    'Dick van Dijk',
-    'Michael van Gerwen',
-    'Francis Hoenselaar',
-    'Jelle Klaasen',
-    'Karin Krappen',
-    'Mareno Michels',
-    'Niels de Ruiter',
-    'Roland Scholten',
-    'Co Stompé',
-    'Vincent van der Voort',
-    'Wesley Harms',
-    'Danny Noppert',
-    'Jermaine Wattimena',
-    'Jeffrey de Zwaan',
+    {
+      firstName: "André",
+      lastName: "Brantjes"
+    },
+    {
+      firstName: "Raymond",
+      lastName: "van Barneveld"
+    },
+    {
+      firstName: "Mieke",
+      lastName: "de Boer"
+    },
+    {
+      firstName: "Dick",
+      lastName: "van Dijk"
+    },
+    {
+      firstName: "Michael",
+      lastName: "van Gerwen"
+    },
+    {
+      firstName: "Francis",
+      lastName: "Hoenselaar"
+    },
+    {
+      firstName: "Jelle",
+      lastName: "Klaasen"
+    },
+    {
+      firstName: "Karin",
+      lastName: "Krappen"
+    },
+    {
+      firstName: "Mareno",
+      lastName: "Michels"
+    },
+    {
+      firstName: "Niels",
+      lastName: "de Ruiter"
+    },
+    {
+      firstName: "Roland",
+      lastName: "Scholten"
+    },{
+      firstName: "Co",
+      lastName: "Stompé"
+    },{
+      firstName: "Vincent",
+      lastName: "van der Voort"
+    },
+    {
+      firstName: "Wesley",
+      lastName: "Harms"
+    },
+    {
+      firstName: "Danny",
+      lastName: "Noppert"
+    },{
+      firstName: "Jermaine",
+      lastName: "Wattimena"
+    },{
+      firstName: "Jeffrey",
+      lastName: "de Zwaan"
+    },
   ],
 }
