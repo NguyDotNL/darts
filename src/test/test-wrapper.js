@@ -28,4 +28,4 @@ const renderWithVuetify = (component, options, cb) => {
 
 export * from '@testing-library/vue'
 
-export { renderWithVuetify as render }
+export { renderWithVuetify as render, router }
