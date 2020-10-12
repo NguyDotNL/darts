@@ -4,20 +4,20 @@ import MockData from '@/components/match/match-statistics.mock.js'
 
 test('Line bar title', async () => {
   const { getByTestId } = render(StatisticLineBar, { props: MockData.lineBarData })
-  expect(getByTestId('line-bar-title').innerHTML).toBe('Gewonnen sets')
+  expect(getByTestId('line-bar-title')).toHaveTextContent('Gewonnen sets')
 })
 
 test('Line bar subtitle', async () => {
   const { getByTestId } = render(StatisticLineBar, { props: MockData.lineBarData })
-  expect(getByTestId('line-bar-subtitle').innerHTML).toBe('20 gewonnen sets')
+  expect(getByTestId('line-bar-subtitle')).toHaveTextContent('20 gewonnen sets')
 })
 
 test('Line bar left player score', async () => {
   const { getByTestId } = render(StatisticLineBar, { props: MockData.lineBarData })
-  expect(getByTestId('line-bar-left-score').innerHTML).toBe('15')
+  expect(getByTestId('line-bar-left-score')).toHaveTextContent('15')
 })
 
 test('Line bar right player score', async () => {
   const { getByTestId } = render(StatisticLineBar, { props: MockData.lineBarData })
-  expect(getByTestId('line-bar-right-score').innerHTML).toBe('5')
+  expect(getByTestId('line-bar-right-score')).toHaveTextContent('5')
 })

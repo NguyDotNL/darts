@@ -4,27 +4,27 @@ import MockData from '@/components/match/match-statistics.mock.js'
 
 test('Match title', async () => {
   const { getByTestId } = render(MatchStatisticsHeaders, { props: MockData.matchHeaderProps })
-  expect(getByTestId('match-header-title').innerHTML).toContain('Test WK 162')
+  expect(getByTestId('match-header-title')).toHaveTextContent('Test WK 162')
 })
 
 test('Match player left', async () => {
   const { getByTestId } = render(MatchStatisticsHeaders, { props: MockData.matchHeaderProps })
-  expect(getByTestId('match-header-player-left').innerHTML).toContain('Mieke de Boer')
+  expect(getByTestId('match-header-player-left')).toHaveTextContent('Mieke de Boer')
 })
 
 test('Match player right', async () => {
   const { getByTestId } = render(MatchStatisticsHeaders, { props: MockData.matchHeaderProps })
-  expect(getByTestId('match-header-player-right').innerHTML).toContain('Wesley Harms')
+  expect(getByTestId('match-header-player-right')).toHaveTextContent('Wesley Harms')
 })
 
 test('Match player right score', async () => {
   const { getByTestId } = render(MatchStatisticsHeaders, { props: MockData.matchHeaderProps })
-  expect(getByTestId('match-header-player-right-sets').innerHTML).toContain('0')
+  expect(getByTestId('match-header-player-right-sets')).toHaveTextContent('0')
 })
 
 test('Match player left score', async () => {
   const { getByTestId } = render(MatchStatisticsHeaders, { props: MockData.matchHeaderProps })
-  expect(getByTestId('match-header-player-left-sets').innerHTML).toContain('6')
+  expect(getByTestId('match-header-player-left-sets')).toHaveTextContent('6')
 })
 
 test('Match winner', async () => {
