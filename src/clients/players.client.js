@@ -13,10 +13,10 @@ const PlayersClient = {
     }))
   },
   searchPlayers: (name) => players.orderByChild('firstName').startAt(name).endAt(`${name}\uf8ff`)
-    .once('value').then(snapshot => Object.values(snapshot.val()).sort((a, b) => {
+    .once('value').then(snapshot => snapshot.val() ? Object.values(snapshot.val()).sort((a, b) => {
       const aFirstName = a.firstName.toLowerCase(), bFirstName = b.firstName.toLowerCase()
       return (aFirstName < bFirstName) ? -1 : (aFirstName > bFirstName) ? 1 : 0
-    })),
+    }): []),
   getPlayerData: async (playerId) => {
     const playerData = await players.child(playerId).once('value').then(snap => snap.val())
     const playerMatchesData = []

@@ -15,6 +15,7 @@
           />
         </div>
         <v-btn
+          data-testid="PrevBtn"
           icon
           depressed
           :disabled="currentPage == 1"
@@ -22,8 +23,9 @@
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <span class="ml-3 mr-3 text-sm">{{ currentPage }}</span>
+        <span class="ml-3 mr-3 text-sm" data-testid="currentPage">{{ currentPage }}</span>
         <v-btn
+          data-testid="NextBtn"
           icon
           depressed
           :disabled="itemsLength < itemsPerPageValue"
