@@ -18,7 +18,7 @@ const renderWithVuetify = (component, options, cb) => {
     {
       container: document.body.appendChild(root),
       vuetify: new Vuetify(),
-      stubs: ['router-link'],
+      stubs: ['router-link', 'apexchart'],
       routes: [],
       ...options,
     },

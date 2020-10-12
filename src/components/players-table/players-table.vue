@@ -17,6 +17,7 @@
           <v-row>
             <v-col>
               <VDataTable
+                data-testid="players-table"
                 class="p-0"
                 :headers="headers"
                 :items="items"
@@ -93,14 +94,14 @@ export default {
       this.page = 1, this.getPage()
     },
   },
-  mounted () {
+  mounted() {
     this.getPage()
   },
   methods: {
     async getPage(obj = null) {
       this.loading = true
       if(obj == null) {
-        this.getPlayersData().then(data => {
+        this.getPlayersData(obj).then(data => {
           this.items = data
           this.loading = false
         })
@@ -115,7 +116,7 @@ export default {
     async getPlayersData(obj = null) {
       if(obj == null) return await PlayersClient.getPlayers(this.itemsPerPage)
       else if(obj.page >= 1 && obj.type == 'prev') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.FirstArrayName, obj.type)
-      else if(obj.page > 0 && obj.type == 'next') return await await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
+      else if(obj.page > 0 && obj.type == 'next') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
     },
     changeItemsPerPage(val) {
       this.itemsPerPage = val
