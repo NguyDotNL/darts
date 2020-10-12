@@ -2,12 +2,12 @@
   <v-row>
     <v-col>
       <v-row dense>
-        <v-col class="text-center font-weight-bold text-2xl pb-0 leading-none">{{ title }}</v-col>
+        <v-col class="text-center font-weight-bold text-2xl pb-0 leading-none" data-testid="line-bar-title">{{ title }}</v-col>
       </v-row>
       <v-row dense>
-        <v-col class="pb-0 pt-0">{{ playerLeftNumber }}</v-col>
-        <v-col v-if="subtitle" class="pb-0 pt-0 text-center">{{ subtitle }}</v-col>
-        <v-col class="pb-0 pt-0 text-right">{{ playerRightNumber }}</v-col>
+        <v-col class="pb-0 pt-0" data-testid="line-bar-left-score">{{ playerLeftNumber }}</v-col>
+        <v-col v-if="subtitle" class="pb-0 pt-0 text-center" data-testid="line-bar-subtitle">{{ subtitle }}</v-col>
+        <v-col class="pb-0 pt-0 text-right" data-testid="line-bar-right-score">{{ playerRightNumber }}</v-col>
       </v-row>
       <v-row dense>
         <v-col class="pr-1 pt-0">
