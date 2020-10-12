@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import router from '../router'
 import { render } from '@testing-library/vue'
 import '@testing-library/jest-dom'
 
@@ -19,7 +18,8 @@ const renderWithVuetify = (component, options, cb) => {
     {
       container: document.body.appendChild(root),
       vuetify: new Vuetify(),
-      router,
+      stubs: ['router-link'],
+      routes: [],
       ...options,
     },
     cb,
