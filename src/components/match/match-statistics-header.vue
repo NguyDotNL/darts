@@ -51,27 +51,27 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col class="text-center font-bold text-2xl pb-0">
+        <v-col class="text-center font-bold text-2xl pb-0" data-testid="match-header-title">
           {{ matchData.matchName }}
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <div class="block font-bold text-h6">
+          <div class="block font-bold text-h6" data-testid="match-header-player-left">
             {{ matchData.players[Object.keys(matchData.players)[0]].playerName }}
-            <NineDarterIcon v-if="matchData.players[Object.keys(matchData.players)[0]].statistics['9Dart'] > 0" />
+            <NineDarterIcon v-if="matchData.players[Object.keys(matchData.players)[0]].statistics['9Dart'] > 0" data-testid="match-header-player-left-nine-dart" />
           </div>
-          <div v-if="Object.keys(matchData.players)[0] === matchData.winner" class="block text-uppercase text-xs font-bold">Winnaar</div>
+          <div v-if="Object.keys(matchData.players)[0] === matchData.winner" class="block text-uppercase text-xs font-bold" data-testid="match-header-player-left-won">Winnaar</div>
         </v-col>
         <v-col class="text-center font-bold text-4xl text-no-wrap">
-          <span v-if="matchData.bestOfSets > 1">
+          <span v-if="matchData.bestOfSets > 1" data-testid="match-header-player-left-sets">
             {{ matchData.players[Object.keys(matchData.players)[0]].statistics.setsWon }}
           </span>
           <span v-else>
             {{ matchData.players[Object.keys(matchData.players)[0]].statistics.legsWon }}
           </span>
           VS
-          <span v-if="matchData.bestOfSets > 1">
+          <span v-if="matchData.bestOfSets > 1" data-testid="match-header-player-right-sets">
             {{ matchData.players[Object.keys(matchData.players)[1]].statistics.setsWon }}
           </span>
           <span v-else>
@@ -79,11 +79,11 @@
           </span>
         </v-col>
         <v-col class="text-end">
-          <div class="block font-bold text-h6">
+          <div class="block font-bold text-h6" data-testid="match-header-player-right">
             {{ matchData.players[Object.keys(matchData.players)[1]].playerName }}
-            <NineDarterIcon v-if="matchData.players[Object.keys(matchData.players)[1]].statistics['9Dart'] > 0" />
+            <NineDarterIcon v-if="matchData.players[Object.keys(matchData.players)[1]].statistics['9Dart'] > 0" data-testid="match-header-player-right-nine-dart" />
           </div>
-          <div v-if="Object.keys(matchData.players)[1] === matchData.winner" class="block text-uppercase text-xs font-bold">Winnaar</div>
+          <div v-if="Object.keys(matchData.players)[1] === matchData.winner" class="block text-uppercase text-xs font-bold" data-testid="match-header-player-right-won">Winnaar</div>
         </v-col>
       </v-row>
     </v-col>
@@ -110,10 +110,10 @@ export default {
     },
   },
   methods: {
-    deleteMatch() {
-      MatchClient.rtMatchAndDetailsOff(this.matchId)
-      MatchClient.deleteMatch(this.matchId)
-      this.$router.replace('/')
+    deleteMatch: async function() {
+      await MatchClient.rtMatchAndDetailsOff(this.matchId)
+      await MatchClient.deleteMatch(this.matchId)
+      await this.$router.replace('/')
     },
   },
 }
