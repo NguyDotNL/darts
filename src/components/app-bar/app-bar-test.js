@@ -1,14 +1,12 @@
-import { render } from '@/test/test-wrapper'
-import AppDrawer from './app-drawer.vue'
+import { render, fireEvent } from '@/test/test-wrapper'
+import AppBar from './app-bar.vue'
 
-test('Open Drawer', async () => {
-  const { getByTestId } = render(AppDrawer, { props: { open: false } })
+test('Open Drawer with Button', async () => {
+  const { getByTestId } = render(AppBar, { props: { open: false } })
 
-  expect(getByTestId('app-drawer')).not.toHaveClass('v-navigation-drawer--open')
-})
+  const button = getByTestId('AppBarBtn')
 
-test('Drawer is open', async () => {
-  const { getByTestId } = render(AppDrawer, { props: { open: true } })
-  
+  await fireEvent.click(button)
+
   expect(getByTestId('app-drawer')).toHaveClass('v-navigation-drawer--open')
-})    
+})

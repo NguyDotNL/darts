@@ -27,7 +27,8 @@
                 fixed-header
                 loading-text="Loading... Please wait"
                 hide-default-footer
-                style="max-height: calc(100vh-150px);"
+                no-data-text="Geen spelers gevonden."
+                style="max-height: calc(100vh - 150px);"
                 @click:row="rowLink"
               />
             </v-col>
@@ -78,7 +79,7 @@ export default {
   },
   watch: {
     items() {
-      if(!this.items & this.search) return
+      if(!this.items.length > 0 && this.search) return
       this.backup = {
         FirstArrayName: this.items[0].firstName.toString(),
         LastArrayName: this.items[this.items.length - 1].firstName.toString(), 
