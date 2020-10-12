@@ -110,10 +110,10 @@ export default {
     },
   },
   methods: {
-    deleteMatch() {
-      MatchClient.rtMatchAndDetailsOff(this.matchId)
-      MatchClient.deleteMatch(this.matchId)
-      this.$router.replace('/')
+    deleteMatch: async function() {
+      await MatchClient.rtMatchAndDetailsOff(this.matchId)
+      await MatchClient.deleteMatch(this.matchId)
+      await this.$router.replace('/')
     },
   },
 }
