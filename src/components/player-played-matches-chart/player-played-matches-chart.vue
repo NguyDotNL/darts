@@ -3,7 +3,7 @@
     <v-col>
       <v-row>
         <v-col class="text-center d-flex align-center justify-space-around">
-          <h2 class="text-2xl font-medium">Gespeelde wedstrijden: {{ series[0] + series[1] }}</h2>
+          <h2 class="text-2xl font-medium">Gespeelde wedstrijden: {{ matches.length }}</h2>
         </v-col>
       </v-row>
       <v-row>
@@ -23,9 +23,18 @@
 
 export default {
   name: 'PlayerPlayedMatchesChart',
-  data: function () {
+  props: {
+    player: {
+      type: Object,
+      required: true,
+    },
+    matches: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
     return {
-      series: [85, 60],
       chartOptions: {
         labels: ['Gewonnen', 'Verloren'],
         colors: ['#32b132', '#ff4d4d'],
@@ -37,7 +46,7 @@ export default {
           style: {
             fontSize: '18px',
           },
-          formatter: function(val, opts) {
+          formatter(val, opts) {
             return opts.w.config.series[opts.seriesIndex]
           },
         },
@@ -46,12 +55,19 @@ export default {
           horizontalAlign: 'center',
           fontSize: '18px',
           inverseOrder: true,
-          formatter: function(name, opts) {
+          formatter(name, opts) {
             return [name + ':', opts.w.config.series[opts.seriesIndex]]
           },
         },
       },
     }
+  },
+  computed: {
+    series() {
+      const wins = this.matches.filter((match) => match.winner == this.player.playerId).length
+      const loses = this.matches.length - wins
+      return [wins, loses]
+    },
   },
 }
 </script>

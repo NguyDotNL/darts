@@ -37,6 +37,10 @@ const routes = [
     component: PassThrough,
     children: [
       {
+        path: '',
+        component: MatchStatistics,
+      },
+      {
         path: ':id',
         name: 'MatchStatistics',
         component: MatchStatistics,

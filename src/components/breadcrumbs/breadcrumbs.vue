@@ -1,7 +1,7 @@
 <template>
   <v-breadcrumbs :items="breadcrumbList" class="pl-0 p-0">
     <template v-slot:item="{ item }">
-      <v-breadcrumbs-item :href="item.link" :disabled="item.disabled">
+      <v-breadcrumbs-item :to="item.link" :disabled="item.disabled" exact>
         {{ item.name }}
       </v-breadcrumbs-item>
     </template>
@@ -42,14 +42,15 @@ export default {
         breadcrumbLink += id !== 0 ? `/${name}` : ''
         let disabled = false
         this.$router.options.routes.map((route) => {
-          if(route.path.includes(name.toLowerCase())) {
-            if(!route.name && route.children[0].path != '') {
-              disabled=true
+          if(route.path.includes(name.toLowerCase()) && !route.name && route.children.length > 0) {
+            const child = route.children.filter(childRoute => childRoute.path == '' && childRoute.name)
+            if(child.length <= 0) {
+              disabled = true
             }
           }
         })
         this.breadcrumbList.push({
-          name: name == 'Dashboard' ? 'Dashboard' : name,
+          name: name,
           link: name == 'Dashboard' ? '/' : breadcrumbLink.toLowerCase(),
           disabled: (id + 1 == PathsArray.length) ? true : disabled ? true : false,
         })
