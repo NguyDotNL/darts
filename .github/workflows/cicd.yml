@@ -16,7 +16,7 @@ jobs:
       - name: Branch name policy
         uses: deepakputhraya/action-branch-name@master
         with:
-          regex: '([a-z])+\/([a-z])+' # Regex the branch should match. This example enforces grouping
+          regex: '[^A-Za-z0-9\.\/\-]+' # Regex the branch should match. This example enforces grouping
           allowed_prefixes: 'feature,release,hotfix,fix' # All branches should start with the given prefix
           ignore: main,dev # Ignore exactly matching branch names from convention
           min_length: 5 # Min length of the branch name
