@@ -122,9 +122,12 @@ export default {
       else if(obj.page > 0 && obj.type === 'next') return await DashboardClient.getMatchesPerPage(obj.itemsPerPage, this.currentLocation.lastArrayMatch, obj.type)
     },
     async searchMatch() {
+      this.matches = []
+      this.loading = true
       await DashboardClient.searchMatchesByName(this.search, this.itemsPerPage).then(data => {
         if(data.length > 0) this.matches = data
         else this.matches = []
+        this.loading = false
       })
     },
   },
