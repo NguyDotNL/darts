@@ -117,9 +117,14 @@ export default {
       }
     },
     async getMatchData(obj = null) {
-      if(obj == null) return await DashboardClient.getMatchesPerPage(this.itemsPerPage)
-      else if(obj.page >= 1 && obj.type === 'prev') return await DashboardClient.getMatchesPerPage(obj.itemsPerPage, this.currentLocation.firstArrayMatch, obj.type)
-      else if(obj.page > 0 && obj.type === 'next') return await DashboardClient.getMatchesPerPage(obj.itemsPerPage, this.currentLocation.lastArrayMatch, obj.type)
+      const type = (obj === null) ? false : obj.type
+      const itemsPerPage = (obj === null) ? this.itemsPerPage : obj.itemsPerPage
+      const location = (obj == null) ? false
+        : (obj.page >= 1 && obj.type === 'prev') ? this.currentLocation.firstArrayMatch
+          : (obj.page > 0 && obj.type === 'next') ? this.currentLocation.lastArrayMatch
+            : false
+
+      return await DashboardClient.getMatchesPerPage(itemsPerPage, location, type)
     },
     async searchMatch() {
       this.matches = []

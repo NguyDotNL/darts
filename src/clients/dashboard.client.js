@@ -4,7 +4,7 @@ const DashboardClient = {
   getAllMatches: (options) => options.iKnowThisCanBeALotOfDataThatIProbablyDontNeed === true &&
     matches.once('value').then(snapshot => snapshot.val()),
 
-  getMatchesPerPage: (offset, date = null, type = false) => {
+  getMatchesPerPage: (offset, date = false, type = false) => {
     const query = !type
       ? matches.orderByChild('date').limitToLast(offset)
       : type == 'prev' ? matches.orderByChild('date').limitToFirst(offset).startAt(date + 1)
