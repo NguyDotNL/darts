@@ -2,25 +2,7 @@
   <div>
     <Appbar />
     <v-container class="overflow-hidden pt-0">
-      <v-row v-if="loading">
-        <v-col>
-          <v-row>
-            <v-col class="text-center">
-              Wedstrijd wordt ingeladen...
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col class="d-flex justify-center">
-              <v-progress-circular
-                :size="50"
-                color="primary"
-                indeterminate
-              />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-
+      <CircularLoader v-if="loading" title="Wedstrijd wordt ingeladen..." />
       <MatchStatisticsHeader v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData.match" :match-id="matchId" />
       <MatchStatisticsContent v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData" />
 
@@ -37,6 +19,7 @@ import Appbar from '@/components/app-bar/app-bar'
 import MatchStatisticsHeader from '@/components/match/match-statistics-header'
 import MatchStatisticsContent from '@/components/match/match-statistics-content'
 import MatchClient from '@/clients/match.client'
+import CircularLoader from '@/components/circular-loader/circular-loader'
 
 export default {
   name: 'MatchStatistics',
@@ -44,6 +27,7 @@ export default {
     Appbar,
     MatchStatisticsHeader,
     MatchStatisticsContent,
+    CircularLoader,
   },
   data: function() {
     return {
