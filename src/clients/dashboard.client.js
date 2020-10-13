@@ -23,7 +23,7 @@ const DashboardClient = {
       const matchDetailsData = await matchDetails.child(matchId).once('value').then(snapshot => snapshot.val())
       return { match, matchDetails: matchDetailsData }
     })
-    Promise.all(matchesData).then((values) => {
+    await Promise.all(matchesData).then((values) => {
       let blob = new Blob([JSON.stringify({ matches: values }, null, 2)], { type: 'text/plain;charset=utf-8' })
       saveAs(blob, 'dartinmolema.json')
     })
