@@ -46,8 +46,14 @@
                 </VIcon>
               </router-link>
             </v-row>
-            <MatchTable 
-              :search="search"
+            <MatchTable
+              :matches="matches"
+              :loading="loading"
+              :reset="reset"
+              @change-page="getPage($event)"
+              @items-per-page="changeItemsPerPage"
+              @selected-matches="selectedMatches = $event"
+              @reset-finished="reset = false"
             />
           </v-card>
         </v-col>
@@ -70,7 +76,57 @@ export default {
   data: function() {
     return {
       search: '',
+      matches: [],
+      loading: true,
+      itemsPerPage: 0,
+      selectedMatches: [],
+      reset: false,
     }
+  },
+  watch: {
+    matches() {
+      if(!this.matches.length > 0 && this.search) return
+      this.currentLocation = {
+        firstArrayMatch: this.matches[0].date,
+        lastArrayMatch: this.matches[this.matches.length - 1].date,
+      }
+    },
+    search() {
+      if(this.search.length > 3)  this.searchMatch()
+      if(this.search.length === 0) this.page = 1, this.getPage()
+    },
+  },
+  methods: {
+    changeItemsPerPage(pageInfo) {
+      this.itemsPerPage = pageInfo
+      this.getPage()
+    },
+    async getPage(obj = null) {
+      this.loading = true
+      if(obj == null) {
+        this.getMatchData().then(data => {
+          this.matches = data
+          this.loading = false
+        })
+      } else {
+        this.page = obj.page
+        this.getMatchData(obj).then(data => {
+          this.matches = data
+          this.loading = false
+        })
+      }
+    },
+    async getMatchData(obj = null) {
+      if(obj == null) return await DashboardClient.getMatchesPerPage(this.itemsPerPage)
+      else if(obj.page >= 1 && obj.type === 'prev') return await DashboardClient.getMatchesPerPage(obj.itemsPerPage, this.currentLocation.firstArrayMatch, obj.type)
+      else if(obj.page > 0 && obj.type === 'next') return await DashboardClient.getMatchesPerPage(obj.itemsPerPage, this.currentLocation.lastArrayMatch, obj.type)
+    },
+    async searchMatch() {
+      await DashboardClient.searchMatchesByName(this.search, this.itemsPerPage).then(data => {
+        if(data.length > 0) this.matches = data
+        else this.matches = []
+      })
+    },
   },
 }
 </script>

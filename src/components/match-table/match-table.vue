@@ -2,21 +2,21 @@
   <v-row>
     <v-col cols="12">
       <VDataTable
+        v-model="selected"
         :headers="headers"
-        :items="matches || []"
+        :items="matches"
         :page.sync="page"
         :items-per-page="itemsPerPage"
         data-testid="match-table"
         item-key="matchId"
         :show-select="matchExport"
-        :loading="loading || isLoadingData"
+        :loading="loading"
         loading-text="Bezig met het ophalen van data"
         no-data-text="Geen wedstrijden gevonden"
         disable-sort
         hide-default-footer
         class="overflow-y-auto"
         style="max-height: calc(100vh - 350px);"
-        @toggle-select-all="toggleSelectAllMatches"
       >
         <template v-slot:item="row">
           <tr>
@@ -24,7 +24,8 @@
               <v-checkbox
                 :key="row.item.matchId"
                 v-model="selected"
-                :value="row.item.matchId"
+                :value="row.item"
+                :value-comparator="checkSelected"
               />
             </td>
             <td @click="rowLink(row.item.matchId)">
@@ -81,8 +82,8 @@
         :items-length="matches.length"
         :items-per-page="itemsPerPage"
         :page="page"
-        @prev="getPage"
-        @next="getPage"
+        @prev="$emit('change-page', $event)"
+        @next="$emit('change-page', $event)"
         @changeItemsPerPage="itemsPerPage = $event"
       />
     </v-col>
@@ -91,7 +92,6 @@
 
 <script>
 import moment from 'moment'
-import DashboardClient from '@/clients/dashboard.client'
 import DataTableFooter from '@/components/data-table-footer/data-table-footer'
 import NineDarterIcon from '@/components/9-darter/9-darter-icon'
 
@@ -103,7 +103,15 @@ export default {
       type: Boolean,
       default: true,
     },
-    search: String,
+    matches: {
+      required: true,
+      type: Array,
+    },
+    loading: {
+      required: true,
+      type: Boolean,
+    },
+    reset: Boolean,
   },
   data: function () {
     return {
@@ -115,73 +123,38 @@ export default {
         { text: 'Best of', align: 'left' },
       ],
       selected: [],
-      unselectedList: [],
-      matches: [],
       itemsPerPage: 10,
       currentLocation: {},
-      isLoadingData: false,
       page: 1,
-      loading: true,
-      selectAllMatches: false,
     }
   },
   watch: {
-    matches() {
-      console.log(this.matches)
-      if(!this.matches.length > 0 && this.search) return
-      if(this.unselectedList) this.selected = this.matches.map(x => x.matchId)
-      this.currentLocation = {
-        firstArrayMatch: this.matches[0].date,
-        lastArrayMatch: this.matches[this.matches.length - 1].date,
-      }
+    itemsPerPage: {
+      immediate: true,
+      handler: 'sendItemsPerPage',
     },
-    search() {
-      if(this.search.length > 3) this.searchMatch()
-      if(this.search.length === 0) this.page = 1, this.getPage()
+    selected (selectedMatches) {
+      const selectedMatchIds = selectedMatches.map(x => x.matchId)
+      this.$emit('selected-matches', selectedMatchIds)
     },
-    itemsPerPage() {
-      this.page = 1
-      this.getPage()
+    reset () {
+      this.selected = []
+      this.$emit('reset-finished')
     },
-  },
-  mounted () {
-    this.getPage()
   },
   methods: {
-    toggleSelectAllMatches(toggleAll) {
-      this.selectAllMatches = toggleAll
+    checkSelected (a, b) {
+      return a.matchId === b.matchId
+    },
+    sendItemsPerPage() {
+      this.$emit('items-per-page', this.itemsPerPage)
+      this.page = 1
     },
     rowLink(matchId) {
       this.$router.push('/wedstrijd/' + matchId)
     },
     showDate(value) {
       return moment(value, 'X').format('DD-MM HH:mm')
-    },
-    async getPage(obj = null) {
-      this.loading = true
-      if(obj == null) {
-        this.getMatchData().then(data => {
-          this.matches = data
-          this.loading = false
-        })
-      } else {
-        this.page = obj.page
-        this.getMatchData(obj).then(data => {
-          this.matches = data
-          this.loading = false
-        })
-      }
-    },
-    async getMatchData(obj = null) {
-      if(obj == null) return await DashboardClient.getMatchesPerPage(this.itemsPerPage)
-      else if(obj.page >= 1 && obj.type === 'prev') return await DashboardClient.getMatchesPerPage(obj.itemsPerPage, this.currentLocation.firstArrayMatch, obj.type)
-      else if(obj.page > 0 && obj.type === 'next') return await DashboardClient.getMatchesPerPage(obj.itemsPerPage, this.currentLocation.lastArrayMatch, obj.type)
-    },
-    async searchMatch() {
-      await DashboardClient.searchMatchesByName(this.search, this.itemsPerPage).then(data => {
-        if(data.length > 0) this.matches = data
-        else this.matches = []
-      })
     },
   },
 }
