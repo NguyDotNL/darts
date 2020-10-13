@@ -88,7 +88,7 @@ export default {
   },
   watch: {
     matches() {
-      if(!this.matches.length > 0 && this.search) return
+      if(!this.matches.length > 0) return
       this.currentLocation = {
         firstArrayMatch: this.matches[0].date,
         lastArrayMatch: this.matches[this.matches.length - 1].date,
@@ -101,6 +101,10 @@ export default {
   },
   methods: {
     exportMatches() {
+      if(this.selectedMatches.length < 1) {
+        alert('Weet u zeker dat u deze pagina wilt verlaten?')
+        return
+      }
       this.exportingMatches = true
       DashboardClient.exportMatches(this.selectedMatches).then(() => { 
         this.resetSelection = true
@@ -108,6 +112,7 @@ export default {
       })
     },
     changeItemsPerPage(pageInfo) {
+      this.matches = []
       this.itemsPerPage = pageInfo
       this.getPage()
     },
