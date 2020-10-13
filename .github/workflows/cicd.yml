@@ -64,20 +64,20 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/dev')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:darts-dev
+          args: deploy --only hosting:darts-dev,database:darts-dev
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to QA
         if: startsWith(github.ref, 'refs/heads/release/')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:darts-qa
+          args: deploy --only hosting:darts-qa,database:darts-qa
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to Production
         if: startsWith(github.ref, 'refs/heads/main')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:darts-prod
+          args: deploy --only hosting:darts-prod,database:darts-prod
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
