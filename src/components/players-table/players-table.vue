@@ -40,7 +40,7 @@
         :page="page"
         @prev="getPage"
         @next="getPage"
-        @changeItemsPerPage="changeItemsPerPage"
+        @changeItemsPerPage="itemsPerPage = $event"
       />
     </v-col>
   </v-row>
