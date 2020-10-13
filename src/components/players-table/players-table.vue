@@ -17,6 +17,7 @@
           <v-row>
             <v-col>
               <VDataTable
+                data-testid="players-table"
                 class="p-0"
                 :headers="headers"
                 :items="items"
@@ -27,7 +28,8 @@
                 fixed-header
                 loading-text="Loading... Please wait"
                 hide-default-footer
-                style="max-height: calc(100vh-150px);"
+                no-data-text="Geen spelers gevonden."
+                style="max-height: calc(100vh - 150px);"
                 @click:row="rowLink"
               />
             </v-col>
@@ -78,7 +80,7 @@ export default {
   },
   watch: {
     items() {
-      if(!this.items && this.search) return
+      if(!this.items.length > 0 && this.search) return
       this.backup = {
         FirstArrayName: this.items[0].firstName.toString(),
         LastArrayName: this.items[this.items.length - 1].firstName.toString(), 
@@ -92,14 +94,14 @@ export default {
       this.page = 1, this.getPage()
     },
   },
-  mounted () {
+  mounted() {
     this.getPage()
   },
   methods: {
     async getPage(obj = null) {
       this.loading = true
       if(obj == null) {
-        this.getPlayersData().then(data => {
+        this.getPlayersData(obj).then(data => {
           this.items = data
           this.loading = false
         })
@@ -114,10 +116,7 @@ export default {
     async getPlayersData(obj = null) {
       if(obj == null) return await PlayersClient.getPlayers(this.itemsPerPage)
       else if(obj.page >= 1 && obj.type == 'prev') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.FirstArrayName, obj.type)
-      else if(obj.page > 0 && obj.type == 'next') return await await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
-    },
-    changeItemsPerPage(val) {
-      this.itemsPerPage = val
+      else if(obj.page > 0 && obj.type == 'next') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
     },
     async searchPlayer() {
       await PlayersClient.searchPlayers(this.search).then(data => {

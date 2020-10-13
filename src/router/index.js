@@ -9,7 +9,7 @@ const PlayersStatistic = () => import('../pages/player-statistics.vue')
 const MatchStatistics = () => import('../pages/match-statistics.vue')
 
 
-const routes = [
+export const routes = [
   {
     path: '/',
     exact: true,
