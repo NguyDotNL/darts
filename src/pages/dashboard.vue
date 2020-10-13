@@ -4,6 +4,14 @@
     <v-container>
       <v-row>
         <v-col offset="1" cols="10">
+          <v-alert
+            v-if="uploaded != null"
+            :type="uploaded.success == 0 || uploaded.found == 0 ? 'error' : 'success' "
+            dismissible
+            @input="uploaded = undefined"
+          >
+            {{ uploaded.found }} wedstrijd(en) gevonden waarvan {{ uploaded.success }} zijn opgeslagen, {{ uploaded.error }} wedstrijd(en) waren ongeldig.
+          </v-alert>
           <v-card class="shadow-none">
             <v-card-title class="px-0">
               Wedstrijden
@@ -18,11 +26,19 @@
             </v-card-title>
             <v-row>
               <v-col cols="5" sm="2" class="pr-0">
+                <input
+                  ref="fileUpload"
+                  type="file"
+                  class="hidden"
+                  accept=".json"
+                  @change="uploadMatches"
+                >
                 <VBtn
                   class="bg-primary rounded-0"
                   dark
                   block
                   depressed
+                  @click="$refs.fileUpload.click()"
                 >
                   Import
                 </VBtn>
@@ -84,6 +100,7 @@ export default {
       selectedMatches: [],
       resetSelection: false,
       exportingMatches: false,
+      uploaded: undefined,
     }
   },
   watch: {
@@ -100,6 +117,15 @@ export default {
     },
   },
   methods: {
+    uploadMatches: async function(event) {
+      let reader = new FileReader()
+      reader.readAsText(event.target.files[0])
+      reader.onload = async (event) => { 
+        const obj = JSON.parse(event.target.result)
+        this.uploaded = await DashboardClient.uploadMatches(obj)
+        this.getPage()
+      }
+    },
     exportMatches() {
       this.exportingMatches = true
       DashboardClient.exportMatches(this.selectedMatches).then(() => { 
