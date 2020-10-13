@@ -6,7 +6,7 @@
         <v-col offset="1" cols="10">
           <v-alert
             v-if="uploaded != null"
-            :type="uploaded.success == 0 || uploaded.found == 0 ? 'error' : 'success' "
+            :type="uploaded.success == 0 ? 'error' : 'success' "
             dismissible
             @input="uploaded = undefined"
           >
@@ -105,7 +105,7 @@ export default {
   },
   watch: {
     matches() {
-      if(!this.matches.length > 0 && this.search) return
+      if(!this.matches.length > 0) return
       this.currentLocation = {
         firstArrayMatch: this.matches[0].date,
         lastArrayMatch: this.matches[this.matches.length - 1].date,
@@ -134,6 +134,7 @@ export default {
       })
     },
     changeItemsPerPage(pageInfo) {
+      this.matches = []
       this.itemsPerPage = pageInfo
       this.getPage()
     },
