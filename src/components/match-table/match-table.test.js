@@ -29,7 +29,7 @@ const props = {
 
 test('Export visible ', async () => {
   const { getByTestId } = render(MatchTable, { props })
-  expect(getByTestId('match-table').querySelectorAll('i.v-icon.notranslate.mdi.mdi-checkbox-blank-outline.theme--light').length).toBe(1)
+  expect(getByTestId('match-table').querySelector('i.v-icon.notranslate.mdi.mdi-checkbox-blank-outline.theme--light').nodeName).toBe('I')
 })
 
 test('Is loading ', async () => {
