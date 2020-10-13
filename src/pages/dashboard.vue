@@ -33,6 +33,8 @@
                   dark
                   block
                   depressed
+                  :loading="exportingMatches"
+                  @click="exportMatches"
                 >
                   Export
                 </VBtn>
@@ -49,11 +51,11 @@
             <MatchTable
               :matches="matches"
               :loading="loading"
-              :reset="reset"
+              :reset="resetSelection"
               @change-page="getPage($event)"
               @items-per-page="changeItemsPerPage"
               @selected-matches="selectedMatches = $event"
-              @reset-finished="reset = false"
+              @reset-finished="resetSelection = false"
             />
           </v-card>
         </v-col>
@@ -80,7 +82,8 @@ export default {
       loading: true,
       itemsPerPage: 0,
       selectedMatches: [],
-      reset: false,
+      resetSelection: false,
+      exportingMatches: false,
     }
   },
   watch: {
@@ -97,6 +100,13 @@ export default {
     },
   },
   methods: {
+    exportMatches() {
+      this.exportingMatches = true
+      DashboardClient.exportMatches(this.selectedMatches).then(() => { 
+        this.resetSelection = true
+        this.exportingMatches = false
+      })
+    },
     changeItemsPerPage(pageInfo) {
       this.itemsPerPage = pageInfo
       this.getPage()
