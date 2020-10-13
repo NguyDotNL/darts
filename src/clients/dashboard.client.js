@@ -8,7 +8,7 @@ const DashboardClient = {
     const query = !type
       ? matches.orderByChild('date').limitToLast(offset)
       : type == 'prev' ? matches.orderByChild('date').limitToFirst(offset).startAt(date + 1)
-        : type == 'next' ? matches.orderByChild('date').limitToLast(offset).endAt(date - 1) : ''
+        : type == 'next' ? matches.orderByChild('date').limitToLast(offset).endAt(date - 1) : matches.orderByChild('date').limitToLast(offset)
 
     return query.once('value').then(snapshot => Object.values(snapshot.val()).sort((a, b) => b.date - a.date))
   },
