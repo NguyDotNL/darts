@@ -5,7 +5,7 @@ import MockData from '@/components/match-table/match-table.mock.js'
 
 test('Export visible ', async () => {
   const { getByTestId } = render(MatchTable, { props: MockData.props })
-  getByTestId('rowCheckBox')
+  expect(getByTestId('rowCheckBox')).toBeVisible()
 })
 
 test('Is loading ', async () => {
