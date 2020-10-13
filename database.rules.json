@@ -3,6 +3,7 @@
     ".read": true,
     ".write": true,
     "matches": {
+      ".indexOn": "date",
       "$matchId": {
         ".validate": "!data.parent().child($matchId).exists() && $matchId.length === 36 && newData.hasChildren(['bestOfLegs','bestOfSets','date','matchId','matchName','players','startPoints','winner','winnerName'])",
         "players": {
