@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <VDataTable
+      <v-data-table
         v-model="selected"
         :headers="headers"
         :items="matches"
@@ -77,7 +77,7 @@
             </td>
           </tr>
         </template>
-      </VDataTable>
+      </v-data-table>
       <DataTableFooter 
         :items-length="matches.length"
         :items-per-page="itemsPerPage"
