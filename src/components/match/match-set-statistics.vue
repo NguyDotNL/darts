@@ -16,7 +16,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col class="font-weight-bold text-hd">
+        <v-col class="font-weight-bold text-hd" data-testid="match-set-winner">
           Set winnaar: {{ winner }}
         </v-col>
       </v-row>

@@ -7,7 +7,7 @@
         dark
         fixed
       >
-        <VAppBarNavIcon @click.stop="toggleDrawer" />
+        <VAppBarNavIcon data-testid="AppBarBtn" @click.stop="toggleDrawer" />
 
         <v-toolbar-title>Dashboard</v-toolbar-title>
 
