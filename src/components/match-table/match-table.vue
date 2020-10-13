@@ -83,8 +83,8 @@
         :items-length="matches.length"
         :items-per-page="itemsPerPage"
         :page="page"
-        @prev="$emit('change-page', $event)"
-        @next="$emit('change-page', $event)"
+        @prev="$emit('change-page', $event); page = $event.page"
+        @next="$emit('change-page', $event); page = $event.page"
         @changeItemsPerPage="itemsPerPage = $event"
       />
     </v-col>

@@ -124,7 +124,6 @@ export default {
           this.loading = false
         })
       } else {
-        this.page = obj.page
         this.getMatchData(obj).then(data => {
           this.matches = data
           this.loading = false
