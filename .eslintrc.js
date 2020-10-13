@@ -1,0 +1,52 @@
+module.exports = {
+  root: true,
+  plugins: ['jest'],
+  env: {
+    node: true,
+    'jest/globals': true,
+  },
+  'extends': [
+    'plugin:vue/recommended',
+    'eslint:recommended',
+  ],
+  parserOptions: {
+    parser: 'babel-eslint',
+  },
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'object-curly-spacing': ['error', 'always'],
+    'space-in-parens': ['error', 'never'],
+    'no-unused-vars': ['warn'],
+    'eol-last': ['warn', 'always'],
+    'no-var': 'error',
+    'indent': ['error', 2],
+    'quotes': ['warn', 'single'],
+    'semi': ['warn', 'never'],
+    'comma-dangle': ['warn', 'always-multiline'],
+    'no-async-promise-executor': 0,
+    'no-case-declarations': 0,
+    'no-control-regex': 0,
+    'no-new-func': 0,
+    'no-prototype-builtins': 0,
+    'no-useless-call': 0,
+    'no-useless-catch': 0,
+    'no-useless-rename': 0,
+    'vue/max-attributes-per-line': ['warn', {
+      'singleline': 3,
+      'multiline': {
+        'max': 1,
+        'allowFirstLine': false,
+      },
+    }],
+    'vue/require-default-prop': 0,
+    'vue/singleline-html-element-content-newline': 0,
+    'key-spacing': ['error', {
+      beforeColon: false,
+      afterColon: true,
+      mode: 'strict',
+    }],
+    'arrow-spacing': ['error'],
+    'space-before-blocks': 2,
+  },
+}
