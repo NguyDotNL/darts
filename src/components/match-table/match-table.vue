@@ -24,6 +24,7 @@
               <v-checkbox
                 :key="row.item.matchId"
                 v-model="selected"
+                data-testid="rowCheckBox"
                 :value="row.item"
                 :value-comparator="checkSelected"
               />

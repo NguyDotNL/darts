@@ -5,16 +5,16 @@ import MockData from '@/components/match-table/match-table.mock.js'
 
 test('Export visible ', async () => {
   const { getByTestId } = render(MatchTable, { props: MockData.props })
-  expect(getByTestId('match-table').querySelector('i.v-icon.notranslate.mdi.mdi-checkbox-blank-outline.theme--light').nodeName).toBe('I')
+  getByTestId('rowCheckBox')
 })
 
 test('Is loading ', async () => {
-  const { getByTestId } = render(MatchTable, { props: MockData.props })
-  expect(getByTestId('match-table').querySelectorAll('.v-progress-linear__buffer').length).toBe(1)
+  const { getByRole } = render(MatchTable, { props: MockData.props })
+  getByRole('progressbar')
 })
 
 test('Has data', async () => {
-  const { getByTestId } = render(MatchTable, { props: MockData.props })
-  expect(getByTestId('match-table').querySelector('tr').nodeName).toBe('TR')
+  const { getByText } = render(MatchTable, { props: MockData.props })
+  getByText('Test WK 5')
 })
 
