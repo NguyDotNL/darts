@@ -42,7 +42,7 @@
         :page="page"
         @prev="getPage"
         @next="getPage"
-        @changeItemsPerPage="changeItemsPerPage"
+        @changeItemsPerPage="itemsPerPage = $event"
       />
     </v-col>
   </v-row>
@@ -117,9 +117,6 @@ export default {
       if(obj == null) return await PlayersClient.getPlayers(this.itemsPerPage)
       else if(obj.page >= 1 && obj.type == 'prev') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.FirstArrayName, obj.type)
       else if(obj.page > 0 && obj.type == 'next') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
-    },
-    changeItemsPerPage(val) {
-      this.itemsPerPage = val
     },
     async searchPlayer() {
       await PlayersClient.searchPlayers(this.search).then(data => {
