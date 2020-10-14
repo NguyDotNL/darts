@@ -16,7 +16,31 @@
               :rules="rules"
               :cols="6"
             />
-            <MatchesDateTime @date="date" @time="time" />
+            <MatchesDateTime @date="date = $event" @time="time = $event" />
+          </v-row>
+          <v-row>
+            <MatchesPlayerPicker
+              v-model="player1"
+              :items="items"
+              item-value="playerId"
+              item-text="fullName"
+              label="Speler 1"
+              :rules="rules"
+              :loading="false"
+              :cols="6"
+              @search="getPlayers"
+            />
+            <MatchesPlayerPicker
+              v-model="player2"
+              :items="items"
+              item-value="playerId"
+              item-text="fullName"
+              label="Speler 2"
+              :rules="rules"
+              :loading="false"
+              :cols="6"
+              @search="getPlayers"
+            />
           </v-row>
           <v-row>
             <MatchesRadioButtons
@@ -62,6 +86,7 @@ import Appbar from '@/components/app-bar/app-bar'
 import MatchesRadioButtons from '@/components/match-settings/matches-radio-buttons'
 import MatchesTextField from '@/components/match-settings/matches-text-field'
 import MatchesDateTime from '@/components/match-settings/matches-date-time'
+import MatchesPlayerPicker from '@/components/match-settings/matches-player-picker'
 import playersClient from '@/clients/players.client'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -72,16 +97,20 @@ export default {
     MatchesRadioButtons,
     MatchesTextField,
     MatchesDateTime,
+    MatchesPlayerPicker,
   },
   data() {
     return {
       matchName: '',
       date: '',
       time: '',
+      player1: null,
+      player2: null,
       bestOfArray: [1, 3, 5, 7, 9, 11, 13],
       bestOfSets: 1,
       bestOfLegs: 1,
       startPoints: 501,
+      items: [],
       rules: [
         value => !!value || 'Verplicht.',
       ],
@@ -90,7 +119,7 @@ export default {
   methods: {
     createMatch() {
       const uniqueId = uuidv4()
-      console.log({
+      return {
         [uniqueId]: {
           bestOfLegs: this.bestOfLegs,
           bestOfSets: this.bestOfSets,
@@ -121,12 +150,12 @@ export default {
           winner: '',
           winnerName: '',
         },
-      })
+      }
     },
     async getPlayers(name) {
       if(name && name.length > 0) {
         name = name.charAt(0).toUpperCase() + name.slice(1)
-        return await playersClient.searchPlayers(name)
+        return await playersClient.searchPlayers(name).then((res) => this.items = res)
       }
     },
   },

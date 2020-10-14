@@ -7,6 +7,8 @@
           v-model="dateMenu"
           :close-on-content-click="false"
           transition="scale-transition"
+          offset-y
+          min-width="290px"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
@@ -16,13 +18,13 @@
               persistent-hint
               prepend-icon="mdi-calendar"
               v-bind="attrs"
-              @blur="date = parseDate(dateFormatted)"
               v-on="on"
+              @blur="date = parseDate(dateFormatted)"
             />
           </template>
           <v-date-picker
             v-model="date"
-            no-title
+            locale="nl-nl"
             @input="dateMenu = false"
           />
         </v-menu>
@@ -32,11 +34,9 @@
           ref="menu"
           v-model="timeMenu"
           :close-on-content-click="false"
-          :nudge-right="40"
           :return-value.sync="time"
           transition="scale-transition"
           offset-y
-          max-width="290px"
           min-width="290px"
         >
           <template v-slot:activator="{ on, attrs }">
@@ -50,9 +50,8 @@
             />
           </template>
           <v-time-picker
-            v-if="timeMenu"
             v-model="time"
-            full-width
+            format="24hr"
             @click:minute="$refs.menu.save(time)"
           />
         </v-menu>
@@ -66,6 +65,10 @@
 export default {
   name: 'MatchDateTime',
   props: {
+    defaultDate: {
+      type: String,
+      default: new Date().toISOString().substr(0, 10),
+    },
     defaultTime: {
       type: String,
       default: '12:34',
@@ -73,7 +76,7 @@ export default {
   },
   data() {
     return {
-      date: new Date().toISOString().substr(0, 10),
+      date: this.defaultDate,
       dateMenu: false,
       timeMenu: false,
       time: this.defaultTime,
@@ -91,6 +94,10 @@ export default {
     time() {
       this.$emit('time', this.time)
     },
+  },
+  mounted() {
+    this.$emit('date', this.dateFormatted)
+    this.$emit('time', this.time)
   },
   methods: {
     formatDate(date) {
