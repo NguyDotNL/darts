@@ -3,20 +3,20 @@
     <v-col cols="12">
       <v-data-table
         v-model="selected"
-        data-testid="match-table"
         :headers="headers"
-        :items="matchesArray || []"
+        :items="matches"
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        data-testid="match-table"
         item-key="matchId"
         :show-select="matchExport"
-        :loading="loading || isLoadingData"
+        :loading="loading"
         loading-text="Bezig met het ophalen van data"
+        no-data-text="Geen wedstrijden gevonden"
         disable-sort
         hide-default-footer
-        :page.sync="page"
-        :items-per-page.sync="numberOfItemsPerPage"
         class="overflow-y-auto"
-        style="max-height: 600px"
-        @page-count="pageCount = $event"
+        style="max-height: calc(100vh - 350px);"
       >
         <template v-slot:item="row">
           <tr>
@@ -24,116 +24,98 @@
               <v-checkbox
                 :key="row.item.matchId"
                 v-model="selected"
+                data-testid="rowCheckBox"
                 :value="row.item"
+                :value-comparator="checkSelected"
               />
             </td>
-            <td>
-              <router-link :to="/wedstrijd/ + row.item.matchId ">
-                <span class="block">{{ row.item.matchName }}</span>
-                <span>{{ showDate(row.item.date) }}</span>
-              </router-link>
+            <td @click="rowLink(row.item.matchId)">
+              <span class="block">{{ row.item.matchName }}</span>
+              <span>{{ showDate(row.item.date) }}</span>
             </td>
-            <td>
-              <router-link :to="/wedstrijd/ + row.item.matchId ">
-                <ul>
-                  <li
-                    v-for="(player, key) in row.item.players"
-                    :key="key"
-                    class="font-medium flex"
-                    style="align-items: center"
-                    :class="key === row.item.winner ? 'text-success' : 'text-danger'"
-                  >
-                    <span style="margin-right: 1px;">{{ player.playerName }}</span>
-                    <Match9Darter
-                      v-if="player.statistics['9Dart'] >= 1"
-                      width="15"
-                      height="16"
-                    />
-                  </li>
-                </ul>
-              </router-link>
+            <td @click="rowLink(row.item.matchId)">
+              <ul>
+                <li
+                  v-for="(player, key) in row.item.players"
+                  :key="key"
+                  class="font-medium flex"
+                  style="align-items: center"
+                  :class="!row.item.winner ? '' : key === row.item.winner ? 'text-success' : 'text-danger'"
+                >
+                  <span style="margin-right: 1px;">{{ player.playerName }}</span>
+                  <NineDarterIcon
+                    v-if="player.statistics['9Dart'] >= 1"
+                  />
+                </li>
+              </ul>
             </td>
-            <td>
-              <router-link :to="/wedstrijd/ + row.item.matchId ">
-                <ul v-if="row.item.bestOfSets !== 1">
-                  <li
-                    v-for="(player, key) in row.item.players"
-                    :key="key"
-                    class="font-medium"
-                    :class="key === row.item.winner ? 'text-success' : 'text-danger'"
-                  >
-                    {{ player.statistics.setsWon }}
-                  </li>
-                </ul>
-              </router-link>
+            <td @click="rowLink(row.item.matchId)">
+              <ul v-if="row.item.bestOfSets !== 1">
+                <li
+                  v-for="(player, key) in row.item.players"
+                  :key="key"
+                  class="font-medium"
+                  :class="!row.item.winner ? '' : key === row.item.winner ? 'text-success' : 'text-danger'"
+                >
+                  {{ player.statistics.setsWon }}
+                </li>
+              </ul>
             </td>
-            <td>
-              <router-link :to="/wedstrijd/ + row.item.matchId ">
-                <ul v-if="row.item.bestOfSets === 1">
-                  <li
-                    v-for="(player, key) in row.item.players"
-                    :key="key"
-                    class="font-medium"
-                    :class="key === row.item.winner ? 'text-success' : 'text-danger'"
-                  >
-                    {{ player.statistics.legsWon }}
-                  </li>
-                </ul>
-              </router-link>
+            <td @click="rowLink(row.item.matchId)">
+              <ul v-if="row.item.bestOfSets === 1">
+                <li
+                  v-for="(player, key) in row.item.players"
+                  :key="key"
+                  class="font-medium"
+                  :class="!row.item.winner ? '' : key === row.item.winner ? 'text-success' : 'text-danger'"
+                >
+                  {{ player.statistics.legsWon }}
+                </li>
+              </ul>
             </td>
-            <td>
-              <router-link :to="/wedstrijd/ + row.item.matchId ">
-                <span>{{ row.item.bestOfSets !== 1 ? row.item.bestOfSets + ' Sets' : row.item.bestOfLegs + ' Legs' }}</span>
-              </router-link>
+            <td @click="rowLink(row.item.matchId)">
+              <span>{{ row.item.bestOfSets !== 1 ? row.item.bestOfSets + ' Sets' : row.item.bestOfLegs + ' Legs' }}</span>
             </td>
           </tr>
         </template>
       </v-data-table>
-      <v-row>
-        <v-spacer />
-        <v-col>
-          <div class="flex">
-            <v-btn :disabled="page === 1" class="m-1" @click="previousPage">
-              previous
-            </v-btn>
-            <v-btn class="v-pagination__item v-pagination__item--active primary m-1" style="pointer-events: none">
-              {{ page }}
-            </v-btn>
-            <v-btn class="m-1" @click="nextPage">
-              next
-            </v-btn>
-          </div>
-        </v-col>
-        <v-spacer />
-      </v-row>
+      <DataTableFooter 
+        :items-length="matches.length"
+        :items-per-page="itemsPerPage"
+        :page="page"
+        @prev="$emit('change-page', $event)"
+        @next="$emit('change-page', $event)"
+        @changeItemsPerPage="itemsPerPage = $event"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script>
 import moment from 'moment'
-import Match9Darter from '@/components/9-darter/match-9-darter'
-import DashboardClient from '@/clients/dashboard.client'
-import last from 'lodash/last'
+import DataTableFooter from '@/components/data-table-footer/data-table-footer'
+import NineDarterIcon from '@/components/9-darter/9-darter-icon'
 
 export default {
   name: 'MatchTable',
-  components: { Match9Darter },
+  components: { NineDarterIcon, DataTableFooter },
   props: {
     matchExport: {
       type: Boolean,
       default: true,
     },
     matches: {
-      type: [Object, Array],
-      required: false,
+      required: true,
+      type: Array,
     },
-    loading: Boolean,
-    search: String,
+    loading: {
+      required: true,
+      type: Boolean,
+    },
+    reset: Boolean,
   },
   data: function () {
     return {
-      selected: [],
       headers: [
         { text: 'Wedstrijdnaam', align: 'left' },
         { text: 'Spelers', align: 'left' },
@@ -141,49 +123,39 @@ export default {
         { text: 'Legs', align: 'left' },
         { text: 'Best of', align: 'left' },
       ],
-      matchesArray: [],
+      selected: [],
+      itemsPerPage: 10,
+      currentLocation: {},
       page: 1,
-      lastPage: 0,
-      pageCount: 0,
-      numberOfItemsPerPage: 10,
-      pageStack: [],
-      pageData: {},
-      isLoadingData: false,
     }
   },
   watch: {
-    matches() {
-      if(!this.matches) {
-        this.matchesArray = []
-        return
-      }
-      const matches = Object.values(this.matches)
-      this.matchesArray = matches
-      this.pageStack.push(last(matches).date)
-      this.pageData = { ...this.pageData, [this.page]: matches }
+    itemsPerPage: {
+      immediate: true,
+      handler: 'sendItemsPerPage',
+    },
+    selected (selectedMatches) {
+      const selectedMatchIds = selectedMatches.map(x => x.matchId)
+      this.$emit('selected-matches', selectedMatchIds)
+    },
+    reset () {
+      this.selected = []
+      this.$emit('reset-finished')
     },
   },
   methods: {
+    checkSelected (a, b) {
+      return a.matchId === b.matchId
+    },
+    sendItemsPerPage() {
+      this.$emit('items-per-page', this.itemsPerPage)
+      this.page = 1
+    },
+    rowLink(matchId) {
+      this.$router.push('/wedstrijd/' + matchId)
+    },
     showDate(value) {
       return moment(value, 'X').format('DD-MM HH:mm')
-    },
-    nextPage: async function() {
-      this.isLoading = true
-      this.page = this.page + 1
-      const date = last(this.pageStack)
-
-      const matches = this.pageData[this.page] != null
-        ? this.pageData[this.page]
-        : await DashboardClient.getMatchesPerPage(this.numberOfItemsPerPage, date)
-      this.pageStack.push(last(matches).date)
-      this.matchesArray = matches
-      this.pageData = { ...this.pageData, [this.page]: matches }
-      this.isLoading = false
-    },
-    previousPage() {
-      this.page = this.page - 1
-      this.pageStack.pop()
-      this.matchesArray = Object.values(this.pageData[this.page])
     },
   },
 }

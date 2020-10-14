@@ -42,7 +42,7 @@
         :page="page"
         @prev="getPage"
         @next="getPage"
-        @changeItemsPerPage="changeItemsPerPage"
+        @changeItemsPerPage="itemsPerPage = $event"
       />
     </v-col>
   </v-row>
@@ -122,9 +122,6 @@ export default {
             : false
 
       return await PlayersClient.getPlayers(itemsPerPage, location, type)
-    },
-    changeItemsPerPage(val) {
-      this.itemsPerPage = val
     },
     async searchPlayer() {
       await PlayersClient.searchPlayers(this.search).then(data => {

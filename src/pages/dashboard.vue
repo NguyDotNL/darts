@@ -14,7 +14,6 @@
                 label="Zoeken"
                 single-line
                 hide-details
-                @change="handleSearch"
               />
             </v-card-title>
             <v-row>
@@ -34,6 +33,8 @@
                   dark
                   block
                   depressed
+                  :loading="exportingMatches"
+                  @click="exportMatches"
                 >
                   Export
                 </VBtn>
@@ -47,10 +48,14 @@
                 </VIcon>
               </router-link>
             </v-row>
-            <MatchTable 
+            <MatchTable
               :matches="matches"
-              :search="search"
               :loading="loading"
+              :reset="resetSelection"
+              @change-page="getPage($event)"
+              @items-per-page="changeItemsPerPage"
+              @selected-matches="selectedMatches = $event"
+              @reset-finished="resetSelection = false"
             />
           </v-card>
         </v-col>
@@ -73,25 +78,75 @@ export default {
   data: function() {
     return {
       search: '',
-      matches: {},
+      matches: [],
       loading: true,
+      itemsPerPage: 0,
+      selectedMatches: [],
+      resetSelection: false,
+      exportingMatches: false,
     }
   },
-  beforeMount() {
-    this.getMatchData()
+  watch: {
+    matches() {
+      if(!this.matches.length > 0) return
+      this.currentLocation = {
+        firstArrayMatch: this.matches[0].date,
+        lastArrayMatch: this.matches[this.matches.length - 1].date,
+      }
+    },
+    search() {
+      if(this.search.length > 3)  this.searchMatch()
+      if(this.search.length === 0) this.page = 1, this.getPage()
+    },
   },
   methods: {
-    getMatchData() {
-      DashboardClient.getMatchesPerPage(10).then((data) => { 
-        this.matches = data
-        this.loading = false
+    exportMatches() {
+      if(this.selectedMatches.length < 1) {
+        alert('Weet u zeker dat u deze pagina wilt verlaten?')
+        return
+      }
+      this.exportingMatches = true
+      DashboardClient.exportMatches(this.selectedMatches).then(() => { 
+        this.resetSelection = true
+        this.exportingMatches = false
       })
     },
-    handleSearch(value) {
-      if(value.length < 4) return
-      value = value.toUpperCase()
-      DashboardClient.searchMatchesByName(value).then((data) => {
-        this.matches = data
+    changeItemsPerPage(pageInfo) {
+      this.matches = []
+      this.itemsPerPage = pageInfo
+      this.getPage()
+    },
+    async getPage(obj = null) {
+      this.loading = true
+      if(obj == null) {
+        this.getMatchData().then(data => {
+          this.matches = data
+          this.loading = false
+        })
+      } else {
+        this.page = obj.page
+        this.getMatchData(obj).then(data => {
+          this.matches = data
+          this.loading = false
+        })
+      }
+    },
+    async getMatchData(obj = null) {
+      const type = (obj === null) ? false : obj.type
+      const itemsPerPage = (obj === null) ? this.itemsPerPage : obj.itemsPerPage
+      const location = (obj == null) ? false
+        : (obj.page >= 1 && obj.type === 'prev') ? this.currentLocation.firstArrayMatch
+          : (obj.page > 0 && obj.type === 'next') ? this.currentLocation.lastArrayMatch
+            : false
+
+      return await DashboardClient.getMatchesPerPage(itemsPerPage, location, type)
+    },
+    async searchMatch() {
+      this.matches = []
+      this.loading = true
+      await DashboardClient.searchMatchesByName(this.search, this.itemsPerPage).then(data => {
+        if(data.length > 0) this.matches = data
+        else this.matches = []
         this.loading = false
       })
     },
