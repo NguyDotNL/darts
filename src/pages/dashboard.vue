@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Appbar />
+    <appbar />
     <v-container>
       <v-row>
         <v-col offset="1" cols="10">
           <v-alert
-            v-if="uploaded != null"
+            v-if="uploaded"
             :type="uploaded.success == 0 ? 'error' : 'success' "
             dismissible
             @input="uploaded = undefined"
@@ -15,8 +15,8 @@
           <v-card class="shadow-none">
             <v-card-title class="px-0">
               Wedstrijden
-              <VSpacer />
-              <VTextField
+              <v-spacer />
+              <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
                 label="Zoeken"
@@ -33,7 +33,7 @@
                   accept=".json"
                   @change="uploadMatches"
                 >
-                <VBtn
+                <v-btn
                   class="bg-primary rounded-0"
                   dark
                   block
@@ -41,10 +41,10 @@
                   @click="$refs.fileUpload.click()"
                 >
                   Import
-                </VBtn>
+                </v-btn>
               </v-col>
               <v-col cols="5" sm="2" class="pl-0">
-                <VBtn
+                <v-btn
                   class="bg-buttongray rounded-0"
                   dark
                   block
@@ -53,18 +53,18 @@
                   @click="exportMatches"
                 >
                   Export
-                </VBtn>
+                </v-btn>
               </v-col>
-              <VSpacer />
+              <v-spacer />
               <router-link to="/wedstrijd/toevoegen">
-                <VIcon
+                <v-icon
                   x-large
                 >
                   mdi-plus
-                </VIcon>
+                </v-icon>
               </router-link>
             </v-row>
-            <MatchTable
+            <match-table
               :matches="matches"
               :loading="loading"
               :reset="resetSelection"
@@ -117,7 +117,7 @@ export default {
     },
   },
   methods: {
-    uploadMatches: async function(event) {
+    async uploadMatches(event) {
       let reader = new FileReader()
       reader.readAsText(event.target.files[0])
       reader.onload = async (event) => { 
