@@ -28,7 +28,11 @@
           </v-row>
           <v-row>
             <v-col>
-              <MatchTable v-if="!loadingData && matches && player" :matches="matches" :match-export="false" />
+              <MatchTable
+                :matches="matches"
+                :match-export="false"
+                :loading="loadingData"
+              />
             </v-col>
           </v-row>
         </v-col>

@@ -45,10 +45,12 @@
               </v-col>
               <v-col cols="5" sm="2" class="pl-0">
                 <v-btn
-                  class="bg-buttongray rounded-0"
-                  dark
+                  :class=" selectedMatches.length < 1 ? 'bg-buttongray' : 'bg-primary'"
+                  class="rounded-0 text-white"
+                  style="margin-left: 1px"
                   block
                   depressed
+                  :disabled="selectedMatches.length < 1"
                   :loading="exportingMatches"
                   @click="exportMatches"
                 >
@@ -127,6 +129,9 @@ export default {
       }
     },
     exportMatches() {
+      if(this.selectedMatches.length < 1) {
+        return
+      }
       this.exportingMatches = true
       DashboardClient.exportMatches(this.selectedMatches).then(() => { 
         this.resetSelection = true
@@ -146,7 +151,6 @@ export default {
           this.loading = false
         })
       } else {
-        this.page = obj.page
         this.getMatchData(obj).then(data => {
           this.matches = data
           this.loading = false
