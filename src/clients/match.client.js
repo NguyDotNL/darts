@@ -29,6 +29,9 @@ const MatchClient = {
     matches.child(matchId).off()
     matchDetails.child(matchId).off()
   },
+  createMatch: (data) => {
+    console.log(data)
+  },
 }
 
 export default MatchClient

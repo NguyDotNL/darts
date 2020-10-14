@@ -1,8 +1,8 @@
 import { players, playerMatches, matches } from '@/plugins/firebase'
 
 const PlayersClient = {
-  getPlayers: (offset, name = null, type = null) => {
-    const query = type == null 
+  getPlayers: (offset, name = false, type = false) => {
+    const query = !type 
       ? players.orderByChild('firstName').limitToFirst(offset)
       : type == 'prev' ? players.orderByChild('firstName').limitToLast(offset).endAt(name)
         : type == 'next' ? players.orderByChild('firstName').limitToFirst(offset).startAt(name) : ''

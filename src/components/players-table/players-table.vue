@@ -82,8 +82,8 @@ export default {
     items() {
       if(!this.items.length > 0 && this.search) return
       this.backup = {
-        FirstArrayName: this.items[0].firstName.toString(),
-        LastArrayName: this.items[this.items.length - 1].firstName.toString(), 
+        firstArrayName: this.items[0].firstName.toString(),
+        lastArrayName: this.items[this.items.length - 1].firstName.toString(), 
       }
     },
     search() {
@@ -114,9 +114,14 @@ export default {
       }
     },
     async getPlayersData(obj = null) {
-      if(obj == null) return await PlayersClient.getPlayers(this.itemsPerPage)
-      else if(obj.page >= 1 && obj.type == 'prev') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.FirstArrayName, obj.type)
-      else if(obj.page > 0 && obj.type == 'next') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
+      const type = (obj === null) ? false : obj.type
+      const itemsPerPage = (obj === null) ? this.itemsPerPage : obj.itemsPerPage
+      const location = (obj === null) ? false 
+        : (obj.page >= 1 && obj.type === 'prev') ? this.backup.firstArrayName 
+          : (obj.page > 0 && obj.type === 'next') ? this.backup.lastArrayName
+            : false
+
+      return await PlayersClient.getPlayers(itemsPerPage, location, type)
     },
     changeItemsPerPage(val) {
       this.itemsPerPage = val
