@@ -15,7 +15,7 @@
       </div>
       <v-row v-if="!loadingData && !player" class="text-center font-weight-bold text-xl">
         <v-col>
-          Geen speler gevonden met dit ID
+          Helaas, wij hebben deze speler niet gevonden!
         </v-col>
       </v-row>
       <v-row else>
