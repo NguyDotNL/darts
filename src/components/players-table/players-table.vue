@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-row class="overflow-y-auto" style="max-height: calc(100vh - 260px)">
+      <v-row>
         <v-col>
           <v-row>
             <v-col>
@@ -14,7 +14,7 @@
               />
             </v-col>
           </v-row>
-          <v-row>
+          <v-row class="overflow-y-auto" style="max-height: calc(100vh - 260px)">
             <v-col>
               <VDataTable
                 data-testid="players-table"
