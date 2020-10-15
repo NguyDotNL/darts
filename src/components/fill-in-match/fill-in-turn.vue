@@ -111,6 +111,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    winner: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: function () {
     return {
@@ -191,12 +195,21 @@ export default {
       let newTurnPoints = this.allThrows.reduce((total, dart) => total += this.total(dart.multiplier, dart.points), 0)
       const newRemainingPoints = this.turnData.remainingPoints - newTurnPoints
       const lastThrow = this.allThrows[this.allThrows.length-1]
+      let legWinChange = false
 
       if(newRemainingPoints <= 1 && !(lastThrow.multiplier === 2 && newRemainingPoints === 0)) {
         newTurnPoints = 0
+        
+        if(this.winner) {
+          legWinChange = 'remove'
+        }
+      } else if(lastThrow.multiplier === 2 && newRemainingPoints === 0) {
+        legWinChange = 'add'
+      } else if(this.winner && newRemainingPoints > 0) {
+        legWinChange = 'remove'
       }
 
-      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints })
+      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints, legWinChange })
     },
   },
 }

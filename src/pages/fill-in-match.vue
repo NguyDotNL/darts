@@ -107,15 +107,74 @@ export default {
     updateThrow(data) {
       const setKey = this.set - 1
       const legKey = this.leg - 1
-
       const newData = { ...data, matchId: this.matchId, setKey, legKey }
+
       MatchClient.updateThrow(newData)
-      
       this.updateWinners(newData)
     },
     updateWinners(data) {
-      console.log('winners', data)
+      const legWinnerUpdate = this.updateLegWin(data)
+      if(!legWinnerUpdate) return
+      const setWinnerUpdate = this.updateSetWin(data)
+      if(!setWinnerUpdate) return
+      this.updateMatchWin(data)
+    },
+    
+    updateLegWin(data) {
+      const set = this.matchData.matchDetails.sets[data.setKey]
+      const leg = set.legs[data.legKey]
+      const legWinner = leg.winner
 
+      if(legWinner !== data.playerKey && legWinner !== '') {
+        return false
+      }
+
+      switch (data.legWinChange) {
+      case 'remove':
+        MatchClient.removeLegWinner(data.matchId, data.setKey, data.legKey)
+        MatchClient.increaseLegsWon(data.matchId, data.setKey, data.playerKey, -1)
+        return true
+      case 'add':
+        MatchClient.addLegWinner(data.matchId, data.setKey, data.legKey, data.playerKey)
+        MatchClient.increaseLegsWon(data.matchId, data.setKey, data.playerKey, 1)
+        return true
+      default:
+        return false
+      }
+    },
+    updateSetWin(data) {
+      const set = this.matchData.matchDetails.sets[data.setKey]
+      const setPlayers = Object.values(set.players)
+      const setPlayersKeys = Object.keys(set.players)
+      const highestLegScorePlayerKey = setPlayers.reduce((a, b) => a.legsWon > b.legsWon ? setPlayersKeys[0] : setPlayersKeys[1])
+      const bestOfLegs = this.matchData.match.bestOfLegs
+      const winLegs = Math.ceil(bestOfLegs / 2)
+      const setWinner = set.winner
+
+      if(winLegs === set.players[highestLegScorePlayerKey].legsWon && setWinner === '') {
+        MatchClient.addSetWinner(data.matchId, data.setKey, data.playerKey)
+        MatchClient.increaseSetsWon(data.matchId, data.playerKey, 1)
+      } else if (highestLegScorePlayerKey === setWinner)  {
+        MatchClient.removeSetWinner(data.matchId, data.setKey)
+        MatchClient.increaseSetsWon(data.matchId, data.playerKey, -1)
+      }
+
+      return true
+    },
+    updateMatchWin(data) {
+      const match = this.matchData.match
+      const players = Object.values(match.players)
+      const playersKeys = Object.keys(match.players)
+      const highestMatchScorePlayerKey = players.reduce((a, b) => a.statistics.setsWon > b.statistics.setsWon ? playersKeys[0] : playersKeys[1])
+      const bestOfSets = this.matchData.match.bestOfSets
+      const winSets = Math.ceil(bestOfSets / 2)
+      const matchWinner = match.winner
+
+      if(winSets === match.players[highestMatchScorePlayerKey].statistics.setsWon && matchWinner === '') {
+        MatchClient.addMatchWinner(data.matchId, data.playerKey, match.players[highestMatchScorePlayerKey].playerName)
+      } else if (highestMatchScorePlayerKey === matchWinner)  {
+        MatchClient.removeMatchWinner(data.matchId)
+      }
     },
   },
 }

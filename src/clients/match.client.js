@@ -37,6 +37,68 @@ const MatchClient = {
 
     db.ref().update(updateObject)
   },
+  removeLegWinner: (matchId, setKey, legKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/legs/${legKey}/winner`]: '',
+    }
+    
+    db.ref().update(updateObject)
+  },
+  addLegWinner: (matchId, setKey, legKey, playerKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/legs/${legKey}/winner`]: playerKey,
+    }
+
+    db.ref().update(updateObject)
+  },
+  addSetWinner: (matchId, setKey, playerKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/winner`]: playerKey,
+    }
+
+    db.ref().update(updateObject)
+  },
+  removeSetWinner: (matchId, setKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/winner`]: '',
+    }
+
+    db.ref().update(updateObject)
+  },
+  increaseLegsWon: (matchId, setKey, playerKey, increase) => {
+    const playerMatchStatsRef = db.ref(`matches/${matchId}/players/${playerKey}/statistics/legsWon`)
+    const playerSetStatsRef = db.ref(`matchDetails/${matchId}/sets/${setKey}/players/${playerKey}/legsWon`)
+
+    playerMatchStatsRef.transaction((current) => {
+      return (current || 0) + parseInt(increase)
+    })
+    playerSetStatsRef.transaction((current) => {
+      return (current || 0) + parseInt(increase)
+    })
+  },
+  increaseSetsWon: (matchId, playerKey, increase) => {
+    const playerMatchStatsRef = db.ref(`matches/${matchId}/players/${playerKey}/statistics/setsWon`)
+
+    playerMatchStatsRef.transaction((current) => {
+      return (current || 0) + parseInt(increase)
+    })
+  },
+  addMatchWinner: (matchId, playerKey, playerName) => {
+    const updateObject = {
+      [`matches/${matchId}/winner`]: playerKey,
+      [`matches/${matchId}/winnerName`]: playerName,
+    }
+
+    db.ref().update(updateObject)
+  },
+  removeMatchWinner: (matchId) => {
+    const updateObject = {
+      [`matches/${matchId}/winner`]: '',
+      [`matches/${matchId}/winnerName`]: '',
+    }
+
+    db.ref().update(updateObject)
+  },
 }
 
 export default MatchClient

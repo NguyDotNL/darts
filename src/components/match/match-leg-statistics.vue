@@ -105,7 +105,7 @@ export default {
       const currentLeg = this.setData[currentSetKey].legs[currentLegKey]
 
       this.legItems = [...Array(legDataKeys.length+1).keys()].slice(1)
-      this.winner = this.matchPlayers[currentLeg.winner].playerName
+      this.winner = currentLeg.winner ? this.matchPlayers[currentLeg.winner].playerName : ''
 
       this.legPlayer1 = currentLeg.players[Object.keys(currentLeg.players)[0]]
       this.legPlayer2 = currentLeg.players[Object.keys(currentLeg.players)[1]]
