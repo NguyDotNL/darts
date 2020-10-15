@@ -29,6 +29,13 @@ const MatchClient = {
     matches.child(matchId).off()
     matchDetails.child(matchId).off()
   },
+  updateThrow: ({ matchId, setKey, legKey, playerKey, turn, throwKey, throwData }) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/legs/${legKey}/players/${playerKey}/${turn}/throws/${throwKey}`]: throwData,
+    }
+
+    db.ref().update(updateObject)
+  },
 }
 
 export default MatchClient

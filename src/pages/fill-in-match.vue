@@ -5,7 +5,7 @@
       <v-container class="overflow-hidden pt-0 ">
         <PageTitle title="Wedstrijd invullen" />
         <CircularLoader v-if="loadingMatch && loadingMatchDetails" title="Wedstrijd wordt ingeladen..." />
-        <v-row v-else>
+        <v-row v-if="!loadingMatch && !loadingMatchDetails">
           <v-col>
             <NumberChoice
               v-model="set"
@@ -21,11 +21,12 @@
               :active="leg"
               :choice-enabled="playedLegs"
             />
-            <FillInTable
+            <FillInContent
               :match-data="matchData"
               :match-id="matchId"
-              set="set"
-              leg="leg"
+              :set="set"
+              :leg="leg"
+              @update="updateThrow"
             />
           </v-col>
         </v-row>
@@ -40,13 +41,12 @@ import MatchClient from '@/clients/match.client'
 import NumberChoice from '@/components/number-choice/number-choice'
 import CircularLoader from '@/components/circular-loader/circular-loader'
 import PageTitle from '@/components/page-title/page-title'
-import FillInTable from '@/components/fill-in-match/fill-in-table'
-
+import FillInContent from '@/components/fill-in-match/fill-in-content'
 
 export default {
   name: 'FillInMatch',
   components: {
-    FillInTable,
+    FillInContent,
     PageTitle,
     AppBar,
     NumberChoice,
@@ -104,6 +104,12 @@ export default {
       const setKeys = Object.keys(sets)
       this.leg = 1
       this.playedLegs = Object.keys(sets[setKeys[this.set-1]].legs).length
+    },
+    updateThrow(data) {
+      const setKey = this.set - 1
+      const legKey = this.leg - 1
+      MatchClient.updateThrow({ ...data, matchId: this.matchId, setKey, legKey })
+      console.log('update', { ...data, matchId: this.matchId, setKey, legKey })
     },
   },
 }
