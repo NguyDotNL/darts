@@ -13,7 +13,12 @@
           </v-col>
         </v-row>
       </div>
-      <v-row>
+      <v-row v-if="!loadingData && !player" class="text-center font-weight-bold text-xl">
+        <v-col>
+          Geen speler gevonden met dit ID
+        </v-col>
+      </v-row>
+      <v-row else>
         <v-col>
           <h1 class="text-4xl font-medium text-grey">{{ player && `${player.firstName} ${player.lastName}` }}</h1>
         </v-col>
