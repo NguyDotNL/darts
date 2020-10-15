@@ -28,6 +28,7 @@
       >
         <template v-slot:item.multiplier="{ item }">
           <v-radio-group
+            v-if="isLast"
             v-model="item.multiplier"
             row
             dense
@@ -73,10 +74,13 @@
               :value="3"
             />
           </v-radio-group>
+          <span v-else>
+            {{ multiplierText(item.multiplier) }}: {{ item.points }}
+          </span>
         </template>
         <template v-slot:item.points="{item}">
           <v-autocomplete
-            v-if="item.multiplier < 4 && item.multiplier"
+            v-if="item.multiplier < 4 && item.multiplier && isLast"
             v-model="item.points"
             :items="autoCompleteChoices"
             dense
@@ -102,6 +106,10 @@ export default {
     turn: {
       type: Number,
       required: true,
+    },
+    isLast: {
+      type: Boolean,
+      default: false,
     },
   },
   data: function () {
@@ -144,6 +152,22 @@ export default {
     total(type, points) {
       return type < 4 ? type * points : points
     },
+    multiplierText(multiplier) {
+      switch (multiplier) {
+      case 0:
+        return 'Missed'
+      case 1:
+        return 'Single'
+      case 2:
+        return 'Double'
+      case 3:
+        return 'Triple'
+      case 4:
+        return 'Bull'
+      default:
+        return 'Bullseye'
+      }
+    },
     changeType(item) {
       if(item.multiplier === 4) {
         item.points = 25
@@ -162,8 +186,17 @@ export default {
       const throwData = {
         multiplier: item.multiplier,
         points: item.points,
-      } 
-      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData })
+      }
+
+      let newTurnPoints = this.allThrows.reduce((total, dart) => total += this.total(dart.multiplier, dart.points), 0)
+      const newRemainingPoints = this.turnData.remainingPoints - newTurnPoints
+      const lastThrow = this.allThrows[this.allThrows.length-1]
+
+      if(newRemainingPoints <= 1 && !(lastThrow.multiplier === 2 && newRemainingPoints === 0)) {
+        newTurnPoints = 0
+      }
+
+      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints })
     },
   },
 }

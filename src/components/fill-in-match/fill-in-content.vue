@@ -79,7 +79,7 @@ export default {
       immediate: true,
       handler: 'initData',
     },
-    'matchData.details': {
+    'matchData.matchDetails': {
       immediate: true,
       handler: 'initData',
     },

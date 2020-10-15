@@ -11,6 +11,7 @@
       :key="key"
       :turn-data="turn"
       :turn="key+1"
+      :is-last="key === (turns.length-1)"
       @update="updateThrow"
     />
   </v-col>

@@ -74,7 +74,6 @@ export default {
   },
   mounted() {
     this.setRtMatchData(this.$route.params.id)
-
   },
   beforeDestroy() {
     this.destroyRtMatchData(this.matchId)
@@ -108,8 +107,15 @@ export default {
     updateThrow(data) {
       const setKey = this.set - 1
       const legKey = this.leg - 1
-      MatchClient.updateThrow({ ...data, matchId: this.matchId, setKey, legKey })
-      console.log('update', { ...data, matchId: this.matchId, setKey, legKey })
+
+      const newData = { ...data, matchId: this.matchId, setKey, legKey }
+      MatchClient.updateThrow(newData)
+      
+      this.updateWinners(newData)
+    },
+    updateWinners(data) {
+      console.log('winners', data)
+
     },
   },
 }
