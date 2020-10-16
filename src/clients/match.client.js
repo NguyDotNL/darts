@@ -21,13 +21,11 @@ const MatchClient = {
   },
   createMatch: (data, matchId) => {
     const playersId = Object.keys(data.players)
-    console.log(matchId)
     // Set Match
     matches.child(matchId).set(data)
 
     // Set Player Matches
     for(const id of playersId) {
-      console.log(id)
       playerMatches.child(id).child(matchId).set(matchId)
     }
 
