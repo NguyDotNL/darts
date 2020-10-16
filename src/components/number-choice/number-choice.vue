@@ -45,7 +45,7 @@ export default {
   data: function () {
     return {
       value: 1,
-      numbers: [...Array(this.length).keys()].slice(1),
+      numbers: [...Array(this.length + 1).keys()].slice(1),
     }
   },
   watch: {
