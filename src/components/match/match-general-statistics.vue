@@ -97,7 +97,7 @@ export default {
             totalPointPlayer1 += turn.total
             turnCountPlayer1++
           }
-          
+
           for(let turnKey in leg.players[pl2Key]) {
             const turn = leg.players[pl2Key][turnKey]
             totalPointPlayer2 += turn.total
@@ -121,9 +121,9 @@ export default {
         '9Total': player1.statistics['9Dart'] + player2.statistics['9Dart'],
         '9Player1': player1.statistics['9Dart'],
         '9Player2': player2.statistics['9Dart'],
-        avgPlayer1: totalPointPlayer1 > 0 && totalPointPlayer2 > 0 
+        avgPlayer1: totalPointPlayer1 > 0 && turnCountPlayer1 > 0
           ? Math.round(totalPointPlayer1/turnCountPlayer1) : 0,
-        avgPlayer2: totalPointPlayer1 > 0 && totalPointPlayer2 > 0 
+        avgPlayer2: turnCountPlayer2 > 0 && totalPointPlayer2 > 0
           ? Math.round(totalPointPlayer2/turnCountPlayer2) : 0,
       }
     },
