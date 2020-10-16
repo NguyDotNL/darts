@@ -19,7 +19,7 @@
         style="max-height: calc(100vh - 350px);"
       >
         <template v-slot:item="row">
-          <tr>
+          <tr style="cursor: pointer">
             <td v-if="matchExport">
               <v-checkbox
                 :key="row.item.matchId"

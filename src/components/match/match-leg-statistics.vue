@@ -10,6 +10,7 @@
         <v-col sm="6" md="1" cols="12">
           <v-select
             v-model="selectedSet"
+            :disabled="!matchStarted"
             :items="setItems"
             label="Set"
           />
@@ -17,6 +18,7 @@
         <v-col sm="6" md="1" cols="12">
           <v-select
             v-model="selectedLeg"
+            :disabled="!matchStarted"
             :items="legItems"
             label="Leg"
           />
@@ -34,10 +36,10 @@
       </v-row>
       <v-row>
         <v-col>
-          <StatisticLegTable :items="legPlayer1" :start-points="startPoints" />
+          <StatisticLegTable :items="legPlayer1" :start-points="startPoints" :match-started="matchStarted" />
         </v-col>
         <v-col>
-          <StatisticLegTable :items="legPlayer2" :start-points="startPoints" />
+          <StatisticLegTable :items="legPlayer2" :start-points="startPoints" :match-started="matchStarted" />
         </v-col>
       </v-row>
     </v-col>
@@ -73,6 +75,7 @@ export default {
       legItems: [],
       legPlayer1: {},
       legPlayer2: {},
+      matchStarted: !!this.setData[0].legs[0].players,
     }
   },
   watch: {
@@ -95,8 +98,9 @@ export default {
   },
   methods: {
     setLegData() {
-      const setDataKeys = Object.keys(this.setData)
+      if(!this.matchStarted) return
 
+      const setDataKeys = Object.keys(this.setData)
       this.setItems = [...Array(setDataKeys.length+1).keys()].slice(1)
 
       const currentSetKey = setDataKeys[this.selectedSet-1]
