@@ -26,6 +26,7 @@
               :match-id="matchId"
               :set="set"
               :leg="leg"
+              :is-last-set-and-leg="playedSets === set && playedLegs === leg"
               @update="updateThrow"
             />
           </v-col>
@@ -95,19 +96,22 @@ export default {
         const sets = this.matchData.matchDetails.sets
         const setKeys = Object.keys(sets)
         this.playedSets = setKeys.length
+        this.set = this.playedSets
         this.playedLegs = Object.keys(sets[setKeys[this.set-1]].legs).length
+        this.leg = this.playedLegs
       })
     },
     setChanged() {
       const sets = this.matchData.matchDetails.sets
       const setKeys = Object.keys(sets)
-      this.leg = 1
       this.playedLegs = Object.keys(sets[setKeys[this.set-1]].legs).length
     },
     updateThrow(data) {
       const setKey = this.set - 1
       const legKey = this.leg - 1
       const newData = { ...data, matchId: this.matchId, setKey, legKey }
+
+      console.log(newData)
 
       MatchClient.updateThrow(newData)
       this.updateWinners(newData)

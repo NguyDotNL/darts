@@ -209,8 +209,6 @@ export default {
         legWinChange = 'remove'
       }
 
-
-
       this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints, legWinChange })
     },
   },

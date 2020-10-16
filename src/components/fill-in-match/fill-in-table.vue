@@ -11,7 +11,7 @@
       :key="key"
       :turn-data="turn"
       :turn="key+1"
-      :is-last="key === (turns.length-1)"
+      :is-last="key === (turns.length-1) && isLastSetAndLeg"
       :winner="winner"
       @update="updateThrow"
     />
@@ -42,6 +42,10 @@ export default {
     },
     startPoints: {
       type: Number,
+      required: true,
+    },
+    isLastSetAndLeg: {
+      type: Boolean,
       required: true,
     },
   },

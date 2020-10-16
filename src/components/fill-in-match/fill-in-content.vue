@@ -9,6 +9,7 @@
           :turn-data="legData.players[players[0].playerKey]"
           :winner="legData.winner === players[0].playerKey"
           :start-points="matchData.match.startPoints"
+          :is-last-set-and-leg="isLastSetAndLeg"
           @update="updateThrow"
         />
         <FillInTable
@@ -17,6 +18,7 @@
           :turn-data="legData.players[players[1].playerKey]"
           :winner="legData.winner === players[1].playerKey"
           :start-points="matchData.match.startPoints"
+          :is-last-set-and-leg="isLastSetAndLeg"
           @update="updateThrow"
         />
       </v-row>
@@ -62,6 +64,10 @@ export default {
     },
     leg: {
       type: Number,
+      required: true,
+    },
+    isLastSetAndLeg: {
+      type: Boolean,
       required: true,
     },
   },
