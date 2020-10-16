@@ -4,11 +4,19 @@
     <v-container>
       <v-row>
         <v-col offset="1" cols="10">
+          <v-alert
+            v-if="uploaded"
+            :type="uploaded.success == 0 ? 'error' : 'success' "
+            dismissible
+            @input="uploaded = undefined"
+          >
+            {{ uploaded.found }} wedstrijd(en) gevonden waarvan {{ uploaded.success }} zijn opgeslagen, {{ uploaded.error }} wedstrijd(en) waren ongeldig.
+          </v-alert>
           <v-card class="shadow-none">
             <v-card-title class="px-0">
               Wedstrijden
-              <VSpacer />
-              <VTextField
+              <v-spacer />
+              <v-text-field
                 v-model="search"
                 append-icon="mdi-magnify"
                 label="Zoeken"
@@ -18,37 +26,47 @@
             </v-card-title>
             <v-row>
               <v-col cols="5" sm="2" class="pr-0">
-                <VBtn
+                <input
+                  ref="fileUpload"
+                  type="file"
+                  class="hidden"
+                  accept=".json"
+                  @change="uploadMatches"
+                >
+                <v-btn
                   class="bg-primary rounded-0"
                   dark
                   block
                   depressed
+                  @click="$refs.fileUpload.click()"
                 >
                   Import
-                </VBtn>
+                </v-btn>
               </v-col>
               <v-col cols="5" sm="2" class="pl-0">
-                <VBtn
-                  class="bg-buttongray rounded-0"
-                  dark
+                <v-btn
+                  :class=" selectedMatches.length < 1 ? 'bg-buttongray' : 'bg-primary'"
+                  class="rounded-0 text-white"
+                  style="margin-left: 1px"
                   block
                   depressed
+                  :disabled="selectedMatches.length < 1"
                   :loading="exportingMatches"
                   @click="exportMatches"
                 >
                   Export
-                </VBtn>
+                </v-btn>
               </v-col>
-              <VSpacer />
+              <v-spacer />
               <router-link to="/wedstrijd/toevoegen">
-                <VIcon
+                <v-icon
                   x-large
                 >
                   mdi-plus
-                </VIcon>
+                </v-icon>
               </router-link>
             </v-row>
-            <MatchTable
+            <match-table
               :matches="matches"
               :loading="loading"
               :reset="resetSelection"
@@ -84,6 +102,7 @@ export default {
       selectedMatches: [],
       resetSelection: false,
       exportingMatches: false,
+      uploaded: undefined,
     }
   },
   watch: {
@@ -100,9 +119,17 @@ export default {
     },
   },
   methods: {
+    async uploadMatches(event) {
+      let reader = new FileReader()
+      reader.readAsText(event.target.files[0])
+      reader.onload = async (event) => { 
+        const obj = JSON.parse(event.target.result)
+        this.uploaded = await DashboardClient.uploadMatches(obj)
+        this.getPage()
+      }
+    },
     exportMatches() {
       if(this.selectedMatches.length < 1) {
-        alert('Weet u zeker dat u deze pagina wilt verlaten?')
         return
       }
       this.exportingMatches = true
@@ -124,7 +151,6 @@ export default {
           this.loading = false
         })
       } else {
-        this.page = obj.page
         this.getMatchData(obj).then(data => {
           this.matches = data
           this.loading = false
