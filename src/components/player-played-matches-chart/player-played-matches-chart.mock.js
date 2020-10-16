@@ -1,0 +1,20 @@
+module.exports = {
+  player: {
+    playerId: 'dit-is-een-id',
+    firstName: 'Jantje',
+    lastName: 'Bakker',
+  },
+  matches: [
+    {
+      bestOfLegs: 1,
+      bestofSets: 5,
+      date: 1594408074,
+      matchId: '10b8d8df-ff96-4f09-9338-c9ecce6e1719',
+      matchName: 'Test WK 94',
+      players: Object,
+      startPoints: 501,
+      winner: 'd88033b9-14fe-41f6-98d2-f9f35d7024a1',
+      winnerName: 'Francis Hoenselaar',
+    },
+  ],
+}

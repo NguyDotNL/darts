@@ -1,7 +1,12 @@
 <template>
   <v-breadcrumbs :items="breadcrumbList" class="pl-0 p-0">
     <template v-slot:item="{ item }">
-      <v-breadcrumbs-item :to="item.link" :disabled="item.disabled" exact>
+      <v-breadcrumbs-item
+        :to="item.link"
+        :disabled="item.disabled"
+        exact
+        data-testid="test"
+      >
         {{ item.name }}
       </v-breadcrumbs-item>
     </template>

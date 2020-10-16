@@ -1,10 +1,12 @@
 name: Continuous Integration Continuous Deployment
 
 on:
+  create:
+    branches: [ release/* ]
   push:
-    branches: [ feature/*, main, dev, release]
+    branches: [ feature/*, main, dev, release/*]
   pull_request:
-    branches: [ main, dev, release ]
+    branches: [ main, dev, release/* ]
 
 jobs:
   build:
@@ -14,7 +16,7 @@ jobs:
       - name: Branch name policy
         uses: deepakputhraya/action-branch-name@master
         with:
-          regex: '([a-z])+\/([a-z])+' # Regex the branch should match. This example enforces grouping
+          regex: '([a-z])+\/([A-Za-z0-9\.])+' # Regex the branch should match. This example enforces grouping
           allowed_prefixes: 'feature,release,hotfix,fix' # All branches should start with the given prefix
           ignore: main,dev # Ignore exactly matching branch names from convention
           min_length: 5 # Min length of the branch name
@@ -64,20 +66,23 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/dev')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:darts-dev
+          args: deploy --only hosting,database
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: darts-dev
       - name: Deploy to QA
         if: startsWith(github.ref, 'refs/heads/release/')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:darts-qa
+          args: deploy --only hosting,database
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: darts-qa
       - name: Deploy to Production
         if: startsWith(github.ref, 'refs/heads/main')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:darts-prod
+          args: deploy --only hosting,database
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: darts-prod
