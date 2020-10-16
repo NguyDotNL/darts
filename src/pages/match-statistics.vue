@@ -36,20 +36,22 @@ export default {
         match: null,
         matchDetails: null,
       },
-      matchId: this.$route.params.id,
+      matchId: this.$route.params.id || 'NoId',
     }
   },
   mounted() {
-    this.setRtMatchData(this.$route.params.id)
+    this.setRtMatchData(this.matchId)
   },
   beforeDestroy() {
     this.destroyRtMatchData(this.matchId)
   },
   methods: {
     destroyRtMatchData(id) {
+      if(id === 'NoId') return
       MatchClient.rtMatchAndDetailsOff(id)
     },
     setRtMatchData(id) {
+      if(id === 'NoId') { this.$router.push('/'); return }
       MatchClient.getRtMatch(id, snapshot => {
         this.matchData.match = snapshot.val()
       })
