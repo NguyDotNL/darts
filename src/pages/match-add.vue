@@ -177,6 +177,7 @@ export default {
           },
           uniqueId,
         )
+        this.$router.push('/')
       })
     },
     async getPlayers(name) {
