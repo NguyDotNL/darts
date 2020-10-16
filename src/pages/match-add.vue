@@ -58,7 +58,7 @@
           <v-row>
             <MatchesRadioButtons
               v-model="startPoints"
-              title="Best of Sets"
+              title="Score per leg"
               :items="[501, 301]"
               :cols="6"
             />

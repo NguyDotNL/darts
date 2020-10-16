@@ -145,6 +145,7 @@ export default {
       this.getPage()
     },
     async getPage(obj = null) {
+      this.matches = []
       this.loading = true
       if(obj == null) {
         this.getMatchData().then(data => {
