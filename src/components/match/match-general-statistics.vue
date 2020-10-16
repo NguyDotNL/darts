@@ -84,15 +84,20 @@ export default {
       for(let setKey in matchDetails.sets) {
         const set = matchDetails.sets[setKey]
         for(let legKey in set.legs) {
+
           const leg = set.legs[legKey]
+
           if(!leg.players) continue
+
           const pl1Key = Object.keys(leg.players)[0]
           const pl2Key = Object.keys(leg.players)[1]
+
           for(let turnKey in leg.players[pl1Key]) {
             const turn = leg.players[pl1Key][turnKey]
             totalPointPlayer1 += turn.total
             turnCountPlayer1++
           }
+          
           for(let turnKey in leg.players[pl2Key]) {
             const turn = leg.players[pl2Key][turnKey]
             totalPointPlayer2 += turn.total
@@ -103,17 +108,17 @@ export default {
 
       this.statisticsObj = {
         setsSubTitle: `${player1.statistics.setsWon + player2.statistics.setsWon} gewonnen sets`,
-        setsTotal: (player1.statistics.setsWon + player2.statistics.setsWon),
+        setsTotal: player1.statistics.setsWon + player2.statistics.setsWon,
         setsPlayer1: player1.statistics.setsWon,
         setsPlayer2: player2.statistics.setsWon,
         legsSubTitle: `${player1.statistics.legsWon + player2.statistics.legsWon} gewonnen legs`,
-        legsTotal: (player1.statistics.legsWon + player2.statistics.legsWon),
+        legsTotal: player1.statistics.legsWon + player2.statistics.legsWon,
         legsPlayer1: player1.statistics.legsWon,
         legsPlayer2: player2.statistics.legsWon,
-        '180Total': (player1.statistics['180'] + player2.statistics['180']),
+        '180Total': player1.statistics['180'] + player2.statistics['180'],
         '180Player1': player1.statistics['180'],
         '180Player2': player2.statistics['180'],
-        '9Total': (player1.statistics['9Dart'] + player2.statistics['9Dart']),
+        '9Total': player1.statistics['9Dart'] + player2.statistics['9Dart'],
         '9Player1': player1.statistics['9Dart'],
         '9Player2': player2.statistics['9Dart'],
         avgPlayer1: totalPointPlayer1 > 0 && totalPointPlayer2 > 0 
