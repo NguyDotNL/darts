@@ -124,7 +124,8 @@ export default {
       reader.readAsText(event.target.files[0])
       reader.onload = async (event) => { 
         const obj = JSON.parse(event.target.result)
-        this.uploaded = await DashboardClient.uploadMatches(obj)
+        this.uploaded = await DashboardClient.importMatches(obj)
+        this.$refs.fileUpload.value = null
         this.getPage()
       }
     },
