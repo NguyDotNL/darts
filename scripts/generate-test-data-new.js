@@ -16,6 +16,8 @@ for (let i = 0; i < playerNames.names.length; i++) {
     playerId: uuidv4(),
     firstName: playerNames.names[i].firstName,
     lastName: playerNames.names[i].lastName,
+    fullName: playerNames.names[i].firstName + ' ' + playerNames.names[i].lastName,
+    fullNameLower: playerNames.names[i].firstName.toLowerCase() + ' ' + playerNames.names[i].lastName.toLowerCase(),
   }
 
   dartsDev.players[playerObj.playerId] = { ...playerObj }
@@ -135,18 +137,21 @@ for (let i = 0; i < 200; i++) {
           total: 0,
         }
         let hasWinner = false
+        let totalPlayer1 = 0
+        let bustPlayer1 = false
+        let legPointsPlayer1Temp = legPointsPlayer1
         for (let dartThrow = 0; dartThrow < 3; dartThrow++) {
-          const Player1Throw = getPlayerThrow(legPointsPlayer1)
+          const Player1Throw = getPlayerThrow(legPointsPlayer1Temp)
           matchDetail.sets[setKey].legs[legKey].players[player1Key][turncount].throws[dartThrow] = {
             multiplier: Player1Throw.multiplier,
             points: Player1Throw.points,
           }
 
-          const newPlayer1LegPoints = legPointsPlayer1 - getTotalThrowPoints(Player1Throw.multiplier, Player1Throw.points)
+          const newPlayer1LegPoints = legPointsPlayer1Temp - getTotalThrowPoints(Player1Throw.multiplier, Player1Throw.points)
           if (newPlayer1LegPoints === 0 && Player1Throw.multiplier === 2) {
-            matchDetail.sets[setKey].legs[legKey].players[player1Key][turncount].total += getTotalThrowPoints(Player1Throw.multiplier, Player1Throw.points)
+            totalPlayer1 += getTotalThrowPoints(Player1Throw.multiplier, Player1Throw.points)
             matchDetail.sets[setKey].legs[legKey].winner = player1Key
-            legPointsPlayer1 = newPlayer1LegPoints
+            legPointsPlayer1Temp = newPlayer1LegPoints
             match.players[player1Key].statistics.legsWon++
             matchDetail.sets[setKey].players[player1Key].legsWon++
             hasWinner = true
@@ -158,11 +163,17 @@ for (let i = 0; i < 200; i++) {
             }
             break
           } else if(newPlayer1LegPoints > 1) {
-            matchDetail.sets[setKey].legs[legKey].players[player1Key][turncount].total += getTotalThrowPoints(Player1Throw.multiplier, Player1Throw.points)
-            legPointsPlayer1 = newPlayer1LegPoints
+            totalPlayer1 += getTotalThrowPoints(Player1Throw.multiplier, Player1Throw.points)
+            legPointsPlayer1Temp = newPlayer1LegPoints
           } else if (newPlayer1LegPoints <= 1) {
+            bustPlayer1 = true
             break
           }
+        }
+      
+        if(!bustPlayer1) {
+          matchDetail.sets[setKey].legs[legKey].players[player1Key][turncount].total += totalPlayer1
+          legPointsPlayer1 = legPointsPlayer1Temp
         }
 
         if(matchDetail.sets[setKey].legs[legKey].players[player1Key][turncount].total === 180) {
@@ -171,18 +182,21 @@ for (let i = 0; i < 200; i++) {
         }
         
         if(!hasWinner) {
+          let totalPlayer2 = 0
+          let bustPlayer2 = false
+          let legPointsPlayer2Temp = legPointsPlayer2
           for (let dartThrow = 0; dartThrow < 3; dartThrow++) {
-            const Player2Throw = getPlayerThrow(legPointsPlayer2)
+            const Player2Throw = getPlayerThrow(legPointsPlayer2Temp)
             matchDetail.sets[setKey].legs[legKey].players[player2Key][turncount].throws[dartThrow] = {
               multiplier: Player2Throw.multiplier,
               points: Player2Throw.points,
             }
 
-            const newPlayer2LegPoints = legPointsPlayer2 - getTotalThrowPoints(Player2Throw.multiplier, Player2Throw.points)
+            const newPlayer2LegPoints = legPointsPlayer2Temp - getTotalThrowPoints(Player2Throw.multiplier, Player2Throw.points)
             if (newPlayer2LegPoints === 0 && Player2Throw.multiplier === 2) {
-              matchDetail.sets[setKey].legs[legKey].players[player2Key][turncount].total += getTotalThrowPoints(Player2Throw.multiplier, Player2Throw.points)
+              totalPlayer2 += getTotalThrowPoints(Player2Throw.multiplier, Player2Throw.points)
               matchDetail.sets[setKey].legs[legKey].winner = player2Key
-              legPointsPlayer2 = newPlayer2LegPoints
+              legPointsPlayer2Temp = newPlayer2LegPoints
               match.players[player2Key].statistics.legsWon++
               matchDetail.sets[setKey].players[player2Key].legsWon++
               player2Wins++
@@ -193,11 +207,17 @@ for (let i = 0; i < 200; i++) {
               }
               break
             } else if(newPlayer2LegPoints > 1) {
-              matchDetail.sets[setKey].legs[legKey].players[player2Key][turncount].total += getTotalThrowPoints(Player2Throw.multiplier, Player2Throw.points)
-              legPointsPlayer2 = newPlayer2LegPoints
+              totalPlayer2 += getTotalThrowPoints(Player2Throw.multiplier, Player2Throw.points)
+              legPointsPlayer2Temp = newPlayer2LegPoints
             } else if (newPlayer2LegPoints <= 1) {
+              bustPlayer2 = true
               break
             }
+          }
+
+          if(!bustPlayer2) {
+            matchDetail.sets[setKey].legs[legKey].players[player2Key][turncount].total += totalPlayer2
+            legPointsPlayer2 = legPointsPlayer2Temp
           }
 
           if(matchDetail.sets[setKey].legs[legKey].players[player2Key][turncount].total === 180) {
