@@ -1,4 +1,4 @@
-import { matches, matchDetails, db } from '@/plugins/firebase'
+import { matches, matchDetails, playerMatches, db } from '@/plugins/firebase'
 
 const MatchClient = {
   getMatch: async (matchId) => {
@@ -19,6 +19,46 @@ const MatchClient = {
 
     await db.ref().update(updateObject)
   },
+  createMatch: (data, matchId) => {
+    const playersId = Object.keys(data.players)
+    // Set Match
+    matches.child(matchId).set(data)
+
+    // Set Player Matches
+    for(const id of playersId) {
+      playerMatches.child(id).child(matchId).set(matchId)
+    }
+
+    // Set Match Details
+    matchDetails.child(matchId).set({
+      sets: {
+        0: {
+          legs: {
+            0: {
+              players: {
+                [playersId[0]]: {},
+                [playersId[1]]: {},
+              },
+              winner: '',
+            },
+          },
+          players: {
+            [playersId[0]]: {
+              '180': 0,
+              '9Dart': 0,
+              legsWon: 0,
+            },
+            [playersId[1]]: {
+              '180': 0,
+              '9Dart': 0,
+              legsWon: 0,
+            },
+          },
+          winner: '',
+        },
+      },
+    })
+  },
   getRtMatch: (matchId, callback) => {
     matches.child(matchId).on('value', callback)
   },
@@ -28,6 +68,76 @@ const MatchClient = {
   rtMatchAndDetailsOff: (matchId) => {
     matches.child(matchId).off()
     matchDetails.child(matchId).off()
+  },
+  updateThrow: ({ matchId, setKey, legKey, playerKey, turn, throwKey, throwData, newTurnPoints }) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/legs/${legKey}/players/${playerKey}/${turn}/throws/${throwKey}`]: throwData,
+      [`matchDetails/${matchId}/sets/${setKey}/legs/${legKey}/players/${playerKey}/${turn}/total`]: newTurnPoints,
+    }
+
+    db.ref().update(updateObject)
+  },
+  removeLegWinner: (matchId, setKey, legKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/legs/${legKey}/winner`]: '',
+    }
+    
+    db.ref().update(updateObject)
+  },
+  addLegWinner: (matchId, setKey, legKey, playerKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/legs/${legKey}/winner`]: playerKey,
+    }
+
+    db.ref().update(updateObject)
+  },
+  addSetWinner: (matchId, setKey, playerKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/winner`]: playerKey,
+    }
+
+    db.ref().update(updateObject)
+  },
+  removeSetWinner: (matchId, setKey) => {
+    const updateObject = {
+      [`matchDetails/${matchId}/sets/${setKey}/winner`]: '',
+    }
+
+    db.ref().update(updateObject)
+  },
+  increaseLegsWon: (matchId, setKey, playerKey, increase) => {
+    const playerMatchStatsRef = db.ref(`matches/${matchId}/players/${playerKey}/statistics/legsWon`)
+    const playerSetStatsRef = db.ref(`matchDetails/${matchId}/sets/${setKey}/players/${playerKey}/legsWon`)
+
+    playerMatchStatsRef.transaction((current) => {
+      return (current || 0) + parseInt(increase)
+    })
+    playerSetStatsRef.transaction((current) => {
+      return (current || 0) + parseInt(increase)
+    })
+  },
+  increaseSetsWon: (matchId, playerKey, increase) => {
+    const playerMatchStatsRef = db.ref(`matches/${matchId}/players/${playerKey}/statistics/setsWon`)
+
+    playerMatchStatsRef.transaction((current) => {
+      return (current || 0) + parseInt(increase)
+    })
+  },
+  addMatchWinner: (matchId, playerKey, playerName) => {
+    const updateObject = {
+      [`matches/${matchId}/winner`]: playerKey,
+      [`matches/${matchId}/winnerName`]: playerName,
+    }
+
+    db.ref().update(updateObject)
+  },
+  removeMatchWinner: (matchId) => {
+    const updateObject = {
+      [`matches/${matchId}/winner`]: '',
+      [`matches/${matchId}/winnerName`]: '',
+    }
+
+    db.ref().update(updateObject)
   },
 }
 

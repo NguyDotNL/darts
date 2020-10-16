@@ -3,18 +3,18 @@
     <v-col>
       <v-row>
         <v-col>
+          <VTextField
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          />
+        </v-col>
+      </v-row>
+      <v-row class="overflow-y-auto" style="max-height: calc(100vh - 260px)">
+        <v-col>
           <v-row>
-            <v-col>
-              <VTextField
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              />
-            </v-col>
-          </v-row>
-          <v-row class="overflow-y-auto" style="max-height: calc(100vh - 260px)">
             <v-col>
               <VDataTable
                 data-testid="players-table"
@@ -36,28 +36,34 @@
           </v-row>
         </v-col>
       </v-row>
-      <DataTableFooter
-        :items-length="items.length"
-        :items-per-page="itemsPerPage"
-        :page="page"
-        @prev="getPage"
-        @next="getPage"
-        @changeItemsPerPage="itemsPerPage = $event"
-      />
     </v-col>
   </v-row>
 </template>
 
 <script>
-import PlayersClient from '@/clients/players.client'
-import DataTableFooter from '@/components/data-table-footer/data-table-footer'
 
 export default {
   name: 'PlayersTable',
-  components: {
-    DataTableFooter,
+  
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
+    loading: {
+      type: Boolean,
+      default: true,
+    },
+    page: {
+      type: Number,
+      required: true,
+    },
+    itemsPerPage: {
+      type: Number,
+      required: true,
+    },
   },
-  data: function () {
+  data() {
     return {
       headers: [
         {
@@ -70,59 +76,17 @@ export default {
           value: 'lastName',
         },
       ],
-      loading: true,
       search: '',
-      items: [],
       backup: {},
-      itemsPerPage: 10,
-      page: 1,
+
     }
   },
   watch: {
-    items() {
-      if(!this.items.length > 0 && this.search) return
-      this.backup = {
-        FirstArrayName: this.items[0].firstName.toString(),
-        LastArrayName: this.items[this.items.length - 1].firstName.toString(), 
-      }
-    },
     search() {
-      if(this.search.length > 0) this.searchPlayer()
-      else this.page = 1, this.getPage()
+      this.$emit('search', this.search)
     },
-    itemsPerPage() {
-      this.page = 1, this.getPage()
-    },
-  },
-  mounted() {
-    this.getPage()
   },
   methods: {
-    async getPage(obj = null) {
-      this.loading = true
-      if(obj == null) {
-        this.getPlayersData(obj).then(data => {
-          this.items = data
-          this.loading = false
-        })
-      } else {
-        this.page = obj.page
-        this.getPlayersData(obj).then(data => {
-          this.items = data
-          this.loading = false
-        })
-      }
-    },
-    async getPlayersData(obj = null) {
-      if(obj == null) return await PlayersClient.getPlayers(this.itemsPerPage)
-      else if(obj.page >= 1 && obj.type == 'prev') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.FirstArrayName, obj.type)
-      else if(obj.page > 0 && obj.type == 'next') return await PlayersClient.getPlayers(obj.itemsPerPage, this.backup.LastArrayName, obj.type)
-    },
-    async searchPlayer() {
-      await PlayersClient.searchPlayers(this.search).then(data => {
-        if(data) this.items = data
-      })
-    },
     rowLink(data) {
       this.$router.push('/spelers/' + data.playerId)
     },

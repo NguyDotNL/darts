@@ -95,4 +95,5 @@ module.exports = {
       },
     ],
   },
+  buttonChoiceProps: { title: 'leg', length: 3 },
 }

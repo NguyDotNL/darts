@@ -17,7 +17,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="matchStarted">
         <tr
           v-for="(turn, key) in turnData"
           :key="key"
@@ -45,11 +45,15 @@ export default {
   name: 'StatisticLegTable',
   props: {
     items: {
-      type: Array,
+      type: [Array, Object],
       required: true,
     },
     startPoints: {
       type: Number,
+      required: true,
+    },
+    matchStarted: {
+      type: Boolean,
       required: true,
     },
   },
@@ -71,6 +75,8 @@ export default {
   },
   methods: {
     calculateLegData() {
+      if(!this.matchStarted) return
+
       let remainingPoints = this.startPoints
       this.turnData = this.items.map(turn => {
         remainingPoints -= turn.total
