@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Appbar />
+    <AppBar />
     <v-container class="overflow-hidden pt-0">
       <CircularLoader v-if="loading" title="Wedstrijd wordt ingeladen..." />
       <MatchStatisticsHeader v-if="!loading && matchData.match && matchData.matchDetails" :match-data="matchData.match" :match-id="matchId" />
@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import Appbar from '@/components/app-bar/app-bar'
+import AppBar from '@/components/app-bar/app-bar'
 import MatchStatisticsHeader from '@/components/match/match-statistics-header'
 import MatchStatisticsContent from '@/components/match/match-statistics-content'
 import MatchClient from '@/clients/match.client'
@@ -24,7 +24,7 @@ import CircularLoader from '@/components/circular-loader/circular-loader'
 export default {
   name: 'MatchStatistics',
   components: {
-    Appbar,
+    AppBar,
     MatchStatisticsHeader,
     MatchStatisticsContent,
     CircularLoader,

@@ -8,9 +8,10 @@ const Players = () => import('../pages/players.vue')
 const PlayersStatistic = () => import('../pages/player-statistics.vue')
 const MatchStatistics = () => import('../pages/match-statistics.vue')
 const FillInMachPage = () => import('../pages/fill-in-match')
+const MatchAdd = () => import('../pages/match-add.vue')
 
 
-const routes = [
+export const routes = [
   {
     path: '/',
     exact: true,
@@ -40,6 +41,11 @@ const routes = [
       {
         path: ':id/invullen',
         component: FillInMachPage,
+      },
+      {
+        path: 'toevoegen',
+        name: 'MatchAdd',
+        component: MatchAdd,
       },
       {
         path: ':id',
