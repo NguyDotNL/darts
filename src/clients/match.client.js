@@ -1,4 +1,4 @@
-import { matches, matchDetails, db } from '@/plugins/firebase'
+import { matches, matchDetails, playerMatches, db } from '@/plugins/firebase'
 
 const MatchClient = {
   getMatch: async (matchId) => {
@@ -18,6 +18,46 @@ const MatchClient = {
     }
 
     await db.ref().update(updateObject)
+  },
+  createMatch: (data, matchId) => {
+    const playersId = Object.keys(data.players)
+    // Set Match
+    matches.child(matchId).set(data)
+
+    // Set Player Matches
+    for(const id of playersId) {
+      playerMatches.child(id).child(matchId).set(matchId)
+    }
+
+    // Set Match Details
+    matchDetails.child(matchId).set({
+      sets: {
+        0: {
+          legs: {
+            0: {
+              players: {
+                [playersId[0]]: {},
+                [playersId[1]]: {},
+              },
+              winner: '',
+            },
+          },
+          players: {
+            [playersId[0]]: {
+              '180': 0,
+              '9Dart': 0,
+              legsWon: 0,
+            },
+            [playersId[1]]: {
+              '180': 0,
+              '9Dart': 0,
+              legsWon: 0,
+            },
+          },
+          winner: '',
+        },
+      },
+    })
   },
   getRtMatch: (matchId, callback) => {
     matches.child(matchId).on('value', callback)

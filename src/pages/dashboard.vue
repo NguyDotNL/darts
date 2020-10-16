@@ -1,6 +1,6 @@
 <template>
   <div>
-    <appbar />
+    <AppBar />
     <v-container>
       <v-row>
         <v-col offset="1" cols="10">
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import Appbar from '@/components/app-bar/app-bar'
+import AppBar from '@/components/app-bar/app-bar'
 import MatchTable from '@/components/match-table/match-table'
 import DashboardClient from '@/clients/dashboard.client'
 
@@ -91,7 +91,7 @@ export default {
   name: 'Dashboard',
   components: {
     MatchTable,
-    Appbar,
+    AppBar,
   },
   data: function() {
     return {

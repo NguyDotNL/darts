@@ -7,6 +7,7 @@ const PassThrough = () => import('../pages/passthrough.vue')
 const Players = () => import('../pages/players.vue')
 const PlayersStatistic = () => import('../pages/player-statistics.vue')
 const MatchStatistics = () => import('../pages/match-statistics.vue')
+const MatchAdd = () => import('../pages/match-add.vue')
 
 
 export const routes = [
@@ -39,6 +40,11 @@ export const routes = [
       {
         path: '',
         component: MatchStatistics,
+      },
+      {
+        path: 'toevoegen',
+        name: 'MatchAdd',
+        component: MatchAdd,
       },
       {
         path: ':id',

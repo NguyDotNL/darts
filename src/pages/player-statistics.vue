@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Appbar />
+    <AppBar />
     <v-container class="overflow-hidden pt-0">
       <div v-if="loadingData">
         <v-row>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import Appbar from '@/components/app-bar/app-bar'
+import AppBar from '@/components/app-bar/app-bar'
 import PlayerPlayedMatches from '@/components/player-played-matches-chart/player-played-matches-chart'
 import MatchTable from '@/components/match-table/match-table'
 import PlayersClient from '@/clients/players.client'
@@ -50,7 +50,7 @@ import PlayersClient from '@/clients/players.client'
 export default {
   name: 'PlayerStatistics',
   components: {
-    Appbar,
+    AppBar,
     PlayerPlayedMatches,
     MatchTable,
   },
