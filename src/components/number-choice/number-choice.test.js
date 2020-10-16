@@ -17,9 +17,9 @@ test('Number choice options', async () => {
 
 test('Number choice active item', async () => {
   const { getByText } = render(NumberChoice, { props: MockData.buttonChoiceProps })
-  const button = getByText('2')
-  const buttonDefault = getByText('1')
+  const button = getByText('2').parentElement
+  const buttonDefault = getByText('1').parentElement
   await fireEvent.click(button)
-  expect(button).toHaveClass('v-pagination__item--active')
-  expect(buttonDefault).not.toHaveClass('v-pagination__item--active')
+  expect(button).toHaveClass('bg-primary')
+  expect(buttonDefault).not.toHaveClass('bg-primary')
 })
