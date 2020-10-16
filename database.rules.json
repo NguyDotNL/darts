@@ -18,7 +18,7 @@
     },
     "matchDetails": {
       "$matchId": {
-        ".validate": "!data.parent().child($matchId).exists() && $matchId.length === 36 && newData.hasChildren(['sets'])",
+        ".validate": "$matchId.length === 36 && newData.hasChildren(['sets'])",
         "sets": {
           "$set": {
             ".validate": "newData.hasChildren(['legs','players','winner'])",
