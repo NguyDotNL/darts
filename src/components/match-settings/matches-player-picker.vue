@@ -1,6 +1,6 @@
 <template>
   <v-col :cols="12" :md="cols">
-    <v-autocomplete
+    <v-combobox
       v-model="chosenPlayer"
       :items="computedItems"
       :loading="loading"
@@ -10,6 +10,7 @@
       :label="label"
       :rules="rules"
       :return-object="returnObject"
+      :error-messages="errorMessage"
       clearable
       hide-selected
       hide-no-data
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid'
+
 export default {
   name: 'MatchesPlayerPicker',
   props: {
@@ -53,8 +56,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    error: {
+      type: Boolean,
+      default: false,
+    },
+    errorMessage: {
+      type: [String, Array],
+    },
     rules: {
       type: Array,
+      default() {
+        return [
+          value => !!value || 'Dit veld is verplicht.',
+          value => (value instanceof Object || value && value.trim().split(' ').length > 1) || 'Een speler moet een voor en achternaam bevatten.',
+        ]
+      },
     },
     cols: {
       type: Number,
@@ -69,14 +85,34 @@ export default {
   },
   computed: {
     computedItems() {
-      const array = []
-      if(this.items) this.items.map(item => array.push(item.firstName && item.lastName ? Object.assign({}, item, { fullName: `${item.firstName} ${item.lastName}` }) : Object.assign({}, item)))
-      if(this.chosenPlayer) array.push(Object.assign({}, this.chosenPlayer, { fullName: `${this.chosenPlayer.firstName} ${this.chosenPlayer.lastName}` }))
-      return array
+      if(this.items) return this.items
+      if(this.chosenPlayer instanceof Object) return this.chosenPlayer
+      return []
     },
   },
   watch: {
     chosenPlayer() {
+      if(typeof this.chosenPlayer === 'string') {
+        if(this.chosenPlayer.split(' ').length > 1) {
+          let obj = {}
+          const fullName = this.chosenPlayer.trim().split(' ')
+          const uniqueId = uuidv4()
+
+          obj.firstName = fullName[0] && fullName[0].charAt(0).toUpperCase() + fullName[0].slice(1)
+          const lastName = this.chosenPlayer.substring(fullName[0].length).trim().split(' ')
+          obj.lastName = lastName.map((word, index) => index == (lastName.length - 1) ? word[0] && word[0].toUpperCase() + word.slice(1) : word).join(' ')
+
+          if(obj.firstName && obj.lastName) { 
+            this.chosenPlayer = {
+              firstName: obj?.firstName,
+              lastName: obj?.lastName,
+              fullName: `${obj.firstName} ${obj.lastName}`,
+              fullNameLower: `${obj.firstName.toLowerCase()} ${obj.lastName.toLowerCase()}`,
+              playerId: uniqueId,
+            }
+          }
+        }
+      }
       this.$emit('input', this.chosenPlayer)
     },
     search() {

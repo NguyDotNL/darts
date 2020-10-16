@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Appbar />
+    <AppBar />
     <v-container class="overflow-hidden pt-0">
       <v-row>
         <v-col>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Appbar from '@/components/app-bar/app-bar'
+import AppBar from '@/components/app-bar/app-bar'
 import PlayersClient from '@/clients/players.client'
 import PlayersTable from '@/components/players-table/players-table'
 import DataTableFooter from '@/components/data-table-footer/data-table-footer'
@@ -35,7 +35,7 @@ import DataTableFooter from '@/components/data-table-footer/data-table-footer'
 export default {
   name: 'Players',
   components: {
-    Appbar,
+    AppBar,
     PlayersTable,
     DataTableFooter,
   },
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     search(val) {
-      if(val) this.searchPlayer()
+      if(val) this.searchPlayer(val)
       else this.page = 1, this.getPage()
     },
     async getPage(obj = null) {
@@ -93,8 +93,8 @@ export default {
 
       return await PlayersClient.getPlayers(itemsPerPage, location, type)
     },
-    async searchPlayer() {
-      await PlayersClient.searchPlayers(this.search).then(data => {
+    async searchPlayer(val) {
+      await PlayersClient.searchPlayers(val.toLowerCase()).then(data => {
         if(data) this.items = data
       })
     },

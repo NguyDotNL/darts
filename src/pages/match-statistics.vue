@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Appbar />
+    <AppBar />
     <v-container class="overflow-hidden pt-0">
       <v-row v-if="loading">
         <v-col>
@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import Appbar from '@/components/app-bar/app-bar'
+import AppBar from '@/components/app-bar/app-bar'
 import MatchStatisticsHeader from '@/components/match/match-statistics-header'
 import MatchStatisticsContent from '@/components/match/match-statistics-content'
 import MatchClient from '@/clients/match.client'
@@ -41,7 +41,7 @@ import MatchClient from '@/clients/match.client'
 export default {
   name: 'MatchStatistics',
   components: {
-    Appbar,
+    AppBar,
     MatchStatisticsHeader,
     MatchStatisticsContent,
   },

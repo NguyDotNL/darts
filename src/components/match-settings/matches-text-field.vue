@@ -22,6 +22,9 @@ export default {
     },
     rules: {
       type: Array,
+      default() {
+        return [value => !!value || 'Dit veld is verplicht.']
+      },
     },
     hint: {
       type: String,

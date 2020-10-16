@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Appbar />
+    <AppBar />
     <v-container class="overflow-hidden pt-0">
       <v-row>
         <v-col>
@@ -13,7 +13,6 @@
             <MatchesTextField
               v-model="matchName"
               label="Wedstrijd naam"
-              :rules="rules"
               :cols="6"
             />
             <MatchesDateTime @date="date = $event" @time="time = $event" />
@@ -25,9 +24,9 @@
               item-value="playerId"
               item-text="fullName"
               label="Speler 1"
-              :rules="rules"
               :loading="false"
               :cols="6"
+              :error-message="message"
               @search="getPlayers"
             />
             <MatchesPlayerPicker
@@ -36,9 +35,9 @@
               item-value="playerId"
               item-text="fullName"
               label="Speler 2"
-              :rules="rules"
               :loading="false"
               :cols="6"
+              :error-message="message"
               @search="getPlayers"
             />
           </v-row>
@@ -70,6 +69,7 @@
                 depressed
                 tile
                 color="primary"
+                :disabled="disabled"
                 @click="createMatch"
               >
                 Wedstrijd toevoegen en starten
@@ -82,18 +82,20 @@
   </div>
 </template>
 <script>
-import Appbar from '@/components/app-bar/app-bar'
+import AppBar from '@/components/app-bar/app-bar'
 import MatchesRadioButtons from '@/components/match-settings/matches-radio-buttons'
 import MatchesTextField from '@/components/match-settings/matches-text-field'
 import MatchesDateTime from '@/components/match-settings/matches-date-time'
 import MatchesPlayerPicker from '@/components/match-settings/matches-player-picker'
-import playersClient from '@/clients/players.client'
+import PlayersClient from '@/clients/players.client'
+import MatchClient from '@/clients/match.client'
+import moment from 'moment-timezone'
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
   name: 'MatchAdd',
   components: {
-    Appbar,
+    AppBar,
     MatchesRadioButtons,
     MatchesTextField,
     MatchesDateTime,
@@ -111,51 +113,76 @@ export default {
       bestOfLegs: 1,
       startPoints: 501,
       items: [],
-      rules: [
-        value => !!value || 'Verplicht.',
-      ],
+      error: false,
+      message: [],
     }
   },
-  methods: {
-    createMatch() {
-      const uniqueId = uuidv4()
-      return {
-        [uniqueId]: {
-          bestOfLegs: this.bestOfLegs,
-          bestOfSets: this.bestOfSets,
-          date: this.date,
-          matchId: uniqueId,
-          matchName: this.matchName,
-          players: {
-            player1Id: {
-              playerName: this.player1,
-              statistics: {
-                '180': 0,
-                '9Dart': 0,
-                legsWon: 0,
-                setsWon: 0,
-              },
-            },
-            player2Id: {
-              playerName: this.player2,
-              statistics: {
-                '180': 0,
-                '9Dart': 0,
-                legsWon: 0,
-                setsWon: 0,
-              },
-            },
-          },
-          startPonts: this.startPoints,
-          winner: '',
-          winnerName: '',
-        },
+  computed: {
+    disabled() {
+      return ((this.matchName != '') && (this.date != '') && (this.time != '') && (this.player1 && typeof this.player1 === 'object') && (this.player2 && typeof this.player2 === 'object') && !this.error) ? false : true
+    },
+  },
+  watch: {
+    player1() {
+      if(this.player1 && this.player2 && this.player1?.fullName == this.player2?.fullName) {
+        this.error = true
+        return this.message = 'Spelernaam is al in gebruik.'
       }
+      this.error = false
+      return this.message = []
+    },
+    player2() {
+      if(this.player1 && this.player2 && this.player2?.fullName == this.player1?.fullName) {
+        this.error = true
+        return this.message = 'Spelernaam is al in gebruik.'
+      }
+      this.error = false
+      return this.message = []
+    },
+  },
+  methods: {
+    async createMatch() {
+      await PlayersClient.addPlayers([this.player1, this.player2]).then(result => {
+        const uniqueId = uuidv4()
+        MatchClient.createMatch(
+          {
+            bestOfLegs: this.bestOfLegs,
+            bestOfSets: this.bestOfSets,
+            date: parseInt(moment(`${this.date} ${this.time}`, 'DD/MM/YYYY HH:mm').tz('Europe/Amsterdam').format('X')),
+            matchId: uniqueId,
+            matchName: this.matchName,
+            players: {
+              [result.player1.playerId]: {
+                playerName: this.player1.fullName,
+                statistics: {
+                  '180': 0,
+                  '9Dart': 0,
+                  legsWon: 0,
+                  setsWon: 0,
+                },
+              },
+              [result.player2.playerId]: {
+                playerName: this.player2.fullName,
+                statistics: {
+                  '180': 0,
+                  '9Dart': 0,
+                  legsWon: 0,
+                  setsWon: 0,
+                },
+              },
+            },
+            startPoints: this.startPoints,
+            winner: '',
+            winnerName: '',
+          },
+          uniqueId,
+        )
+      })
     },
     async getPlayers(name) {
       if(name && name.length > 0) {
-        name = name.charAt(0).toUpperCase() + name.slice(1)
-        return await playersClient.searchPlayers(name).then((res) => this.items = res)
+        name = name.toLowerCase()
+        return await PlayersClient.searchPlayers(name).then((res) => this.items = res)
       }
     },
   },
