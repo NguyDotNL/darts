@@ -36,8 +36,8 @@ const MatchClient = {
           legs: {
             0: {
               players: {
-                [playersId[0]]: {},
-                [playersId[1]]: {},
+                [playersId[0]]: '',
+                [playersId[1]]: '',
               },
               winner: '',
             },
