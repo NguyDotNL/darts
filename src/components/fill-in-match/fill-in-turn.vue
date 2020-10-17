@@ -115,6 +115,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    playerHasTurn: {
+      type: Boolean,
+      required: false,
+    },
+    legWinner: {
+      type: Boolean,
+      required: false,
+    },
   },
   data: function () {
     return {
@@ -123,7 +131,7 @@ export default {
         { text: 'Worp', value: 'throw', width: 50 },
         { text: 'Type', value: 'multiplier', width: 270 },
         { text: 'Beurt punten', value: 'points' },
-        { text: 'Totaal', value: 'total' },
+        { text: `Totaal ${this.turnData.remainingPoints}`, value: 'total' },
       ],
       bust: false,
       allThrows: [],
@@ -134,10 +142,24 @@ export default {
       immediate: true,
       handler: 'initThrows',
     },
+    'playerHasTurn': {
+      immediate: true,
+      handler: 'initThrows',
+    },
+
   },
   methods: {
     initThrows() {
       const throwData = this.turnData.throws
+      this.allThrows =  this.playerHasTurn ? [{
+        multiplier: 3,
+        points: 0,
+        throw: 1,
+        total: this.turnData.remainingPoints,
+      }] : []
+
+      if(!Object.keys(throwData).length) return
+
       this.allThrows = []
       let points = this.turnData.remainingPoints
       this.headers[3].text = `Totaal ${points}`
@@ -152,6 +174,10 @@ export default {
         this.allThrows.push({ ...dart, throw: +dartKey+1, total: points })
       }
       this.bust = bust
+      
+      if(!bust && this.allThrows.length < 3 && this.playerHasTurn && !this.legWinner) {
+        this.allThrows.push({ multiplier: 3, points: 0, throw: this.allThrows.length+1, total: points })
+      }
     },
     total(type, points) {
       return type < 4 ? type * points : points
@@ -192,6 +218,7 @@ export default {
         points: item.points,
       }
 
+      const oldTurnPoints = this.turnData.total
       let newTurnPoints = this.allThrows.reduce((total, dart) => total += this.total(dart.multiplier, dart.points), 0)
       const newRemainingPoints = this.turnData.remainingPoints - newTurnPoints
       const lastThrow = this.allThrows[this.allThrows.length-1]
@@ -208,10 +235,15 @@ export default {
       } else if(this.winner && newRemainingPoints > 0) {
         legWinChange = 'remove'
       }
+      
+      let change180 = false
+      if(oldTurnPoints === 180 && newTurnPoints !== 180) {
+        change180 = 'remove'
+      } else if(oldTurnPoints !== 180 && newTurnPoints === 180) {
+        change180 = 'add'
+      }
 
-
-
-      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints, legWinChange })
+      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints, legWinChange, change180 })
     },
   },
 }
