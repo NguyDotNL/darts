@@ -69,7 +69,7 @@ const MatchClient = {
     matches.child(matchId).off()
     matchDetails.child(matchId).off()
   },
-  updateThrow: (newData, newLeg, newSet, playerKeys = []) => {
+  updateThrow: (newData, newLeg, newSet, playerKeys) => {
     const { matchId, setKey, legKey, playerKey, turn, throwKey, throwData, newTurnPoints } = newData
     const otherPlayerKey = playerKeys[0] === playerKey ? playerKeys[1] : playerKeys[0]
 
