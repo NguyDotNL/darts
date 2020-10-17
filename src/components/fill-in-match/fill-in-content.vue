@@ -26,14 +26,20 @@
           @update="updateThrow"
         />
       </v-row>
+      <v-row v-if="isLastSetAndLeg && matchData.match.winner !== ''">
+        <v-col class="text-center text-2xl">
+          - Wedstrijd is afgelopen -
+        </v-col>
+      </v-row>
       <v-row>
         <v-col class="d-flex align-end flex-column">
           <v-btn
             elevation="2"
             tile
-            dark
+            :dark="!(!legWinner || (isLastSetAndLeg && matchData.match.winner !== ''))"
             class="bg-primary"
-            disabled
+            :disabled="!legWinner || (isLastSetAndLeg && matchData.match.winner !== '')"
+            @click="$emit('nextLeg')"
           >
             Volgende leg
           </v-btn>
@@ -121,12 +127,30 @@ export default {
       this.startPoints = match.startPoints
 
       const sets = this.matchData.matchDetails.sets
+      let setsKeys = []
+      let legs = []
+      let legsKeys = []
+      
+      if(this.set > sets.length) {
+        console.log('err')
+      } else {
+        setsKeys = Object.keys(sets)
+        legs = sets[setsKeys[this.set-1]].legs
+        legsKeys = Object.keys(legs)
+      }
 
-      const setsKeys = Object.keys(sets)
-      const legs = sets[setsKeys[this.set-1]].legs
-      const legsKeys = Object.keys(legs)
+      if(this.leg > legs.length) {
+        this.legData = {
+          players: {
+            [playerKeys[0]]: '',
+            [playerKeys[1]]: '',
+          },
+          winner: '',
+        }
+      } else{
+        this.legData = legs[legsKeys[this.leg-1]]
+      }
 
-      this.legData = legs[legsKeys[this.leg-1]]
       const legWinner = playerKeys.indexOf(this.legData.winner)
       this.legWinner = legWinner > -1 ? legWinner : false
 
@@ -139,7 +163,10 @@ export default {
       const player1Turns = playersData[player1Key]
       const player2Turns = playersData[player2Key]
 
-      if(player1Turns === '' && player2Turns === '') return
+      if(player1Turns === '' && player2Turns === '') {
+        this.turn = false
+        return
+      }
 
       const lastTurnPlayer1 = player1Turns !== '' ? player1Turns[player1Turns.length - 1] : false
       const lastTurnPlayer2 = player2Turns !== '' ? player2Turns[player2Turns.length - 1] : false

@@ -111,6 +111,8 @@ export default {
           throws: {},
           total: 0,
         })
+      } else {
+        this.lastTurnToNotCount = 0
       }
       
     },
@@ -120,7 +122,23 @@ export default {
           this.lastTurnToNotCount = 0
         }
       }
-      this.$emit('update', { ...data, playerKey: this.playerKey })
+
+      let change9Dart = false
+      if(this.winner && this.startPoints === 501 && this.turnData.length === 3) {
+        const oldTurnDataTotal = this.turnData[data.turn].total
+        if(data.newTurnPoints < oldTurnDataTotal) {
+          change9Dart = 'remove'
+        }
+      }
+      
+      if(data.turn === 2 && this.startPoints === 501) {
+        const oldTurnRemaining = this.turns[data.turn].remainingPoints
+        if(oldTurnRemaining === data.newTurnPoints) {
+          change9Dart = 'add'
+        }
+      }
+      
+      this.$emit('update', { ...data, playerKey: this.playerKey, change9Dart })
     },
   },
 }

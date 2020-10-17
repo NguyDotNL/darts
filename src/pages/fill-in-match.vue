@@ -26,8 +26,9 @@
               :match-id="matchId"
               :set="set"
               :leg="leg"
-              :is-last-set-and-leg="playedSets === set && playedLegs === leg"
+              :is-last-set-and-leg="(playedSets === set && playedLegs === leg) || (playedSetsDB === set && playedLegsDB === leg)"
               @update="updateThrow"
+              @nextLeg="nextLeg"
             />
           </v-col>
         </v-row>
@@ -66,11 +67,19 @@ export default {
       leg: 1,
       playedSets: 0,
       playedLegs: 0,
+      playedLegsDB: 0,
+      playedSetsDB: 0,
     }
   },
   watch: {
     'set': {
       handler: 'setChanged',
+    },
+    'matchData.match': {
+      handler: 'updatePlayedSetsLegs',
+    },
+    'matchData.matchDetails': {
+      handler: 'updatePlayedSetsLegs',
     },
   },
   mounted() {
@@ -80,6 +89,44 @@ export default {
     this.destroyRtMatchData(this.matchId)
   },
   methods: {
+    nextLeg() {
+      this.leg++
+      
+      if(this.leg > this.playedLegs) {
+        this.set++
+        this.leg = 1
+      }
+    },
+    updatePlayedSetsLegs() {
+      if(this.loadingMatch || this.loadingMatchDetails) return
+
+      const matchWinner = this.matchData.match.winner !== ''
+      const sets = this.matchData.matchDetails.sets
+      const lastSet = sets[sets.length - 1]
+
+      this.playedSets = sets.length
+      this.playedSetsDB = sets.length
+      this.set = this.playedSets
+
+      const legs = sets[this.set-1].legs
+      const lastLeg = legs[legs.length - 1]
+      const setWinner = sets[this.set-1].winner !== ''
+      this.playedLegs = legs.length
+      this.playedLegsDB = legs.length
+      this.leg = this.playedLegs
+
+      if(!matchWinner) {
+        if(lastSet.winner !== '') {
+          this.playedSets += 1
+        }
+      }
+      
+      if(!setWinner) {
+        if(lastLeg.winner !== '') {
+          this.playedLegs += 1
+        }
+      }
+    },
     destroyRtMatchData(id) {
       MatchClient.rtMatchAndDetailsOff(id)
     },
@@ -92,29 +139,62 @@ export default {
       MatchClient.getRtMatchDetails(id, snapshot => {
         this.loadingMatchDetails = false
         this.matchData.matchDetails = snapshot.val()
-
-        const sets = this.matchData.matchDetails.sets
-        const setKeys = Object.keys(sets)
-        this.playedSets = setKeys.length
-        this.set = this.playedSets
-        this.playedLegs = Object.keys(sets[setKeys[this.set-1]].legs).length
-        this.leg = this.playedLegs
       })
     },
     setChanged() {
       const sets = this.matchData.matchDetails.sets
-      const setKeys = Object.keys(sets)
-      this.playedLegs = Object.keys(sets[setKeys[this.set-1]].legs).length
+
+      if(this.set > sets.length) {
+        this.playedLegs = 1
+        this.playedLegsDB = 1
+        this.leg = 1
+        return
+      }
+
+      const legs = sets[this.set-1].legs
+      const lastLeg = legs[legs.length - 1]
+      const setWinner = sets[this.set-1].winner !== ''
+
+      this.playedLegs = legs.length
+      this.playedLegsDB = legs.length
+
+      if(!setWinner) {
+        if(lastLeg.winner !== '') {
+          this.playedLegs += 1
+        }
+      }
     },
     updateThrow(data) {
       const setKey = this.set - 1
       const legKey = this.leg - 1
       const newData = { ...data, matchId: this.matchId, setKey, legKey }
 
-      console.log(newData)
+      const sets = this.matchData.matchDetails.sets[setKey]
+      const legs = sets ? this.matchData.matchDetails.sets[setKey].legs[legKey] : false
+      const playerKeys = Object.keys(this.matchData.match.players)
 
-      MatchClient.updateThrow(newData)
+      MatchClient.updateThrow(newData, !legs, !sets, playerKeys)
       this.updateWinners(newData)
+      this.updateStats(newData)
+    },
+    updateStats(data) {
+      switch (data.change180) {
+      case 'remove':
+        MatchClient.increaseStats(data.matchId, data.setKey, data.playerKey, -1, '180')
+        break
+      case 'add':
+        MatchClient.increaseStats(data.matchId, data.setKey, data.playerKey, 1, '180')
+        break
+      }
+
+      switch (data.change9Dart) {
+      case 'remove':
+        MatchClient.increaseStats(data.matchId, data.setKey, data.playerKey, -1, '9Dart')
+        break
+      case 'add':
+        MatchClient.increaseStats(data.matchId, data.setKey, data.playerKey, 1, '9Dart')
+        break
+      }
     },
     updateWinners(data) {
       const legWinnerUpdate = this.updateLegWin(data)
@@ -136,11 +216,11 @@ export default {
       switch (data.legWinChange) {
       case 'remove':
         MatchClient.removeLegWinner(data.matchId, data.setKey, data.legKey)
-        MatchClient.increaseLegsWon(data.matchId, data.setKey, data.playerKey, -1)
+        MatchClient.increaseStats(data.matchId, data.setKey, data.playerKey, -1, 'legsWon')
         return true
       case 'add':
         MatchClient.addLegWinner(data.matchId, data.setKey, data.legKey, data.playerKey)
-        MatchClient.increaseLegsWon(data.matchId, data.setKey, data.playerKey, 1)
+        MatchClient.increaseStats(data.matchId, data.setKey, data.playerKey, 1, 'legsWon')
         return true
       default:
         return false

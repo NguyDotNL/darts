@@ -218,6 +218,7 @@ export default {
         points: item.points,
       }
 
+      const oldTurnPoints = this.turnData.total
       let newTurnPoints = this.allThrows.reduce((total, dart) => total += this.total(dart.multiplier, dart.points), 0)
       const newRemainingPoints = this.turnData.remainingPoints - newTurnPoints
       const lastThrow = this.allThrows[this.allThrows.length-1]
@@ -234,8 +235,15 @@ export default {
       } else if(this.winner && newRemainingPoints > 0) {
         legWinChange = 'remove'
       }
+      
+      let change180 = false
+      if(oldTurnPoints === 180 && newTurnPoints !== 180) {
+        change180 = 'remove'
+      } else if(oldTurnPoints !== 180 && newTurnPoints === 180) {
+        change180 = 'add'
+      }
 
-      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints, legWinChange })
+      this.$emit('update', { turn: this.turn - 1, throwKey: item.throw - 1, throwData,  newTurnPoints, legWinChange, change180 })
     },
   },
 }
