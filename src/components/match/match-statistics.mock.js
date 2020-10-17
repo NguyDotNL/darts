@@ -95,5 +95,5 @@ module.exports = {
       },
     ],
   },
-  buttonChoiceProps: { title: 'leg', length: 3 },
+  buttonChoiceProps: { title: 'leg', length: 3, active: 1, choiceEnabled: 1 },
 }
