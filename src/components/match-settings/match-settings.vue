@@ -99,10 +99,10 @@
 </template>
 
 <script>
-import MatchRadioButtons from '@/components/match-settings/matches-radio-buttons'
-import MatchTextField from '@/components/match-settings/matches-text-field'
-import MatchDateTime from '@/components/match-settings/matches-date-time'
-import MatchPlayerPicker from '@/components/match-settings/matches-player-picker'
+import MatchRadioButtons from '@/components/match-settings/match-radio-buttons'
+import MatchTextField from '@/components/match-settings/match-text-field'
+import MatchDateTime from '@/components/match-settings/match-date-time'
+import MatchPlayerPicker from '@/components/match-settings/match-player-picker'
 import moment from 'moment-timezone'
 
 export default {
