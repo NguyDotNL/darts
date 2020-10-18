@@ -11,6 +11,7 @@
       :rules="rules"
       :return-object="returnObject"
       :error-messages="errorMessage"
+      :disabled="disabled"
       clearable
       hide-selected
       hide-no-data
@@ -22,7 +23,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
-  name: 'MatchesPlayerPicker',
+  name: 'MatchPlayerPicker',
   props: {
     items: {
       type: Array,
@@ -62,6 +63,11 @@ export default {
     },
     errorMessage: {
       type: [String, Array],
+    },
+    disabled: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
     rules: {
       type: Array,

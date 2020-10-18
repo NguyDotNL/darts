@@ -12,14 +12,13 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="dateFormatted"
+              :value="formattedDate"
               label="Datum"
               hint="DD/MM/YYYY"
               persistent-hint
               prepend-icon="mdi-calendar"
               v-bind="attrs"
               v-on="on"
-              @blur="date = parseDate(dateFormatted)"
             />
           </template>
           <v-date-picker
@@ -61,54 +60,51 @@
 </template>
 
 <script>
+import moment from 'moment-timezone'
 
 export default {
   name: 'MatchDateTime',
   props: {
     defaultDate: {
       type: String,
-      default: new Date().toISOString().substr(0, 10),
+      default: moment().tz('Europe/Amsterdam').format('YYYY-MM-DD'),
     },
     defaultTime: {
       type: String,
-      default: '12:34',
+      default: moment().tz('Europe/Amsterdam').format('HH:mm'),
     },
   },
   data() {
     return {
-      date: this.defaultDate,
+      date: '',
       dateMenu: false,
       timeMenu: false,
-      time: this.defaultTime,
+      time: '',
+      formattedDate: '',
     }
   },
-  computed: {
-    dateFormatted () {
-      return this.formatDate(this.date)
-    },
-  },
   watch: {
-    dateFormatted() {
-      this.$emit('date', this.dateFormatted)
+    defaultDate: {
+      immediate: true,
+      handler: 'setDate',
+    },
+    date: {
+      immediate: true,
+      handler: 'setDate',
+    },
+    defaultTime: {
+      immediate: true,
+      handler(val) { this.time = val },
     },
     time() {
       this.$emit('time', this.time)
     },
   },
-  mounted() {
-    this.$emit('date', this.dateFormatted)
-    this.$emit('time', this.time)
-  },
   methods: {
-    formatDate(date) {
-      if(!date) return null
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    },
-    parseDate(date) {
-      if(!date) return null
-      const [day, month, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    setDate(val) {
+      this.formattedDate = moment(val, 'YYYY-MM-DD').format('DD/MM/YYYY')
+      this.date = val
+      this.$emit('date', this.date)
     },
   },
 }
