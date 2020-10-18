@@ -75,7 +75,7 @@ export default {
       legItems: [],
       legPlayer1: {},
       legPlayer2: {},
-      matchStarted: !!this.setData[0].legs[0].players,
+      matchStarted: false,
     }
   },
   watch: {
@@ -98,6 +98,10 @@ export default {
   },
   methods: {
     setLegData() {
+      const firstLegPlayers = this.setData[0].legs[0].players
+      const legKeys = Object.keys(firstLegPlayers)
+      this.matchStarted = firstLegPlayers[legKeys[1]] !== ''
+
       if(!this.matchStarted) return
 
       const setDataKeys = Object.keys(this.setData)
