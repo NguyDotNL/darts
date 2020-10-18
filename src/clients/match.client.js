@@ -59,11 +59,22 @@ const MatchClient = {
       },
     })
   },
+  updateMatch: async (data, matchId) => {
+    const updateObject = {
+      [`matches/${matchId}/matchName`]: data.matchName,
+      [`matches/${matchId}/date`]: data.date,
+    }
+
+    await db.ref().update(updateObject)
+  },
   getRtMatch: (matchId, callback) => {
     matches.child(matchId).on('value', callback)
   },
   getRtMatchDetails: (matchId, callback) => {
     matchDetails.child(matchId).on('value', callback)
+  },
+  rtMatchOff: (matchId) => {
+    matches.child(matchId).off()
   },
   rtMatchAndDetailsOff: (matchId) => {
     matches.child(matchId).off()

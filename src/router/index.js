@@ -9,6 +9,7 @@ const PlayersStatistic = () => import('../pages/player-statistics.vue')
 const MatchStatistics = () => import('../pages/match-statistics.vue')
 const FillInMachPage = () => import('../pages/fill-in-match')
 const MatchAdd = () => import('../pages/match-add.vue')
+const MatchEdit = () => import('../pages/match-edit.vue')
 
 
 export const routes = [
@@ -39,13 +40,23 @@ export const routes = [
     component: PassThrough,
     children: [
       {
-        path: ':id/invullen',
-        component: FillInMachPage,
+        path: '',
+        redirect: '/',
       },
       {
         path: 'toevoegen',
         name: 'MatchAdd',
         component: MatchAdd,
+      },
+      {
+        path: ':id/instellingen',
+        name: 'MatchEdit',
+        component: MatchEdit,
+      },
+      {
+        path: ':id/invullen',
+        name: 'MatchFillIn',
+        component: FillInMachPage,
       },
       {
         path: ':id',

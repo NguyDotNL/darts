@@ -3,6 +3,7 @@
     <p class="font-medium">{{ title }}</p>
     <v-radio-group
       v-model="choice"
+      :disabled="disabled"
       row
     >
       <VRadio
@@ -18,7 +19,7 @@
 <script>
 
 export default {
-  name: 'MatchesRadioButtons',
+  name: 'MatchRadioButtons',
   props: {
     title: {
       type: String,
@@ -32,10 +33,15 @@ export default {
       type: Number,
       default: 12,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    value: Number,
   },
   data() {
     return {
-      choice: this.items[0],
+      choice: this.value || this.items[0],
     }
   },
   watch: {

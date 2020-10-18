@@ -11,24 +11,20 @@
 <script>
 
 export default {
-  name: 'MatchesTextField',
+  name: 'MatchTextField',
   props: {
     label: {
       type: String,
       required: true,
     },
-    icon: {
-      type: String,
-    },
+    icon: String,
     rules: {
       type: Array,
       default() {
         return [value => !!value || 'Dit veld is verplicht.']
       },
     },
-    hint: {
-      type: String,
-    },
+    hint: String,
     persistentHint: {
       type: Boolean,
       default: true,
@@ -37,6 +33,7 @@ export default {
       type: Number,
       default: 12,
     },
+    value: String,
   },
   data() {
     return {
@@ -44,6 +41,10 @@ export default {
     }
   },
   watch: {
+    value: {
+      immediate: true,
+      handler(val) {this.inputModel = val},
+    },
     inputModel() {
       this.$emit('input', this.inputModel)
     },
