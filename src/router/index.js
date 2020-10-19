@@ -20,7 +20,7 @@ export const routes = [
     component: Dashboard,
   },
   {
-    path: '/spelers/',
+    path: '/spelers',
     component: PassThrough,
     children: [
       {
@@ -36,7 +36,7 @@ export const routes = [
     ],
   },
   {
-    path: '/wedstrijd/',
+    path: '/wedstrijd',
     component: PassThrough,
     children: [
       {
