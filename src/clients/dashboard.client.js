@@ -1,4 +1,4 @@
-import { matches, matchDetails, db, players } from '@/plugins/firebase'
+import { matches, matchDetails, db, players, matchSearches } from '@/plugins/firebase'
 import { saveAs } from 'file-saver'
 
 const DashboardClient = {
@@ -15,10 +15,19 @@ const DashboardClient = {
 
     return query.once('value').then(snapshot => snapshot.val() ? Object.values(snapshot.val()).sort((a, b) => b.date - a.date) : [])
   },
-  searchMatchesByName: (queryText, itemsPerPage) => matches.orderByChild('matchName').startAt(queryText).endAt(queryText+'\uf8ff').limitToFirst(itemsPerPage)
-    .once('value').then(snapshot => snapshot.val() ? Object.values(snapshot.val()).sort((a,b) => (
-      a.matchName < b.matchName ? -1 : a.matchName > b.matchName ? 1 : 0
-    )) : []),
+  searchMatchesPerPage: async (queryText, itemsPerPage, page) => {
+    const matchSearchKeys = await db.ref('matchSearches').once('value').then(snap => snap.val())
+    const searchResults = Object.entries(matchSearchKeys).filter(([, val]) => val.includes(queryText))
+      .sort(([, aVal],[, bVal]) => aVal < bVal ? -1 : aVal > bVal ? 1 : 0)
+    const searchPerPage = itemsPerPage > searchResults.length 
+      ? searchResults
+      : page === 1 
+        ? searchResults.slice(0, itemsPerPage)
+        : searchResults.slice(0 + (itemsPerPage * page - 1), itemsPerPage * page)
+    return await Promise.all(searchPerPage.map(async ([matchId]) => (
+      await matches.child(matchId).once('value').then(snap => snap.val())
+    )))
+  },
   exportMatches: async (matchIds) => {
     const playersArray = []
     const matchesData = await Promise.all(matchIds.map(async matchId => {

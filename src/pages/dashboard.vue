@@ -17,11 +17,11 @@
               Wedstrijden
               <v-spacer />
               <v-text-field
-                v-model="search"
+                v-model="searchString"
                 append-icon="mdi-magnify"
                 label="Zoeken"
                 single-line
-                hide-details
+                :error-messages="searchErrorMessages"
               />
             </v-card-title>
             <v-row>
@@ -86,6 +86,7 @@
 import AppBar from '@/components/app-bar/app-bar'
 import MatchTable from '@/components/match-table/match-table'
 import DashboardClient from '@/clients/dashboard.client'
+import debounce from 'lodash/debounce'
 
 export default {
   name: 'Dashboard',
@@ -95,7 +96,9 @@ export default {
   },
   data: function() {
     return {
-      search: '',
+      searchString: '',
+      isSearching: false,
+      searchErrorMessages: '',
       matches: [],
       loading: true,
       itemsPerPage: 0,
@@ -113,10 +116,21 @@ export default {
         lastArrayMatch: this.matches[this.matches.length - 1].date,
       }
     },
-    search() {
-      if(this.search.length > 3)  this.searchMatch()
-      if(this.search.length === 0) this.page = 1, this.getPage()
+    searchString(newValue) {
+      this.debouncedSearch.cancel()
+      
+      if(newValue === '') {
+        this.searchErrorMessages = ''
+        this.isSearching = false
+        this.getPage()
+        return
+      }
+
+      this.debouncedSearch()
     },
+  },
+  created: function() {
+    this.debouncedSearch = debounce(this.searchMatches, 230)
   },
   methods: {
     async uploadMatches(event) {
@@ -169,12 +183,19 @@ export default {
 
       return await DashboardClient.getMatchesPerPage(itemsPerPage, location, type)
     },
-    async searchMatch() {
-      this.matches = []
+    async searchMatches(page = 1) {
+      if(this.searchString.length <= 3) {
+        this.searchErrorMessages = 'Minimaal 3 karakters nodig om te zoeken'
+        return
+      }
+
       this.loading = true
-      await DashboardClient.searchMatchesByName(this.search, this.itemsPerPage).then(data => {
-        if(data.length > 0) this.matches = data
-        else this.matches = []
+      this.matches = []
+      this.isSearching = true
+      this.searchErrorMessages = ''
+
+      await DashboardClient.searchMatchesPerPage(this.searchString, this.itemsPerPage, page).then(data => {
+        this.matches = data
         this.loading = false
       })
     },
