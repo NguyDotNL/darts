@@ -20,25 +20,29 @@ export const routes = [
     component: Dashboard,
   },
   {
-    path: '/spelers',
+    path: '/spelers/',
     component: PassThrough,
     children: [
-      {
-        path: ':player_id',
-        name: 'PlayerStatistic',
-        component: PlayersStatistic,
-      },
       {
         path: '',
         name: 'Players',
         component: Players,
       },
+      {
+        path: ':player_id',
+        name: 'PlayerStatistic',
+        component: PlayersStatistic,
+      },
     ],
   },
   {
-    path: '/wedstrijd',
+    path: '/wedstrijd/',
     component: PassThrough,
     children: [
+      {
+        path: '',
+        redirect: '/',
+      },
       {
         path: 'toevoegen',
         name: 'MatchAdd',
@@ -59,10 +63,7 @@ export const routes = [
         name: 'MatchStatistics',
         component: MatchStatistics,
       },
-      {
-        path: '',
-        redirect: '/',
-      },
+
     ],
   },
 ]
