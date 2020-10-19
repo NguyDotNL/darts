@@ -24,14 +24,14 @@ export const routes = [
     component: PassThrough,
     children: [
       {
-        path: '',
-        name: 'Players',
-        component: Players,
-      },
-      {
         path: ':player_id',
         name: 'PlayerStatistic',
         component: PlayersStatistic,
+      },
+      {
+        path: '',
+        name: 'Players',
+        component: Players,
       },
     ],
   },
@@ -39,10 +39,6 @@ export const routes = [
     path: '/wedstrijd',
     component: PassThrough,
     children: [
-      {
-        path: '',
-        redirect: '/',
-      },
       {
         path: 'toevoegen',
         name: 'MatchAdd',
@@ -62,6 +58,10 @@ export const routes = [
         path: ':id',
         name: 'MatchStatistics',
         component: MatchStatistics,
+      },
+      {
+        path: '',
+        redirect: '/',
       },
     ],
   },
