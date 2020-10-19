@@ -1,8 +1,6 @@
 name: Continuous Integration Continuous Deployment
 
 on:
-  create:
-    branches: [ release/* ]
   push:
     branches: [ feature/*, main, dev, release/*]
   pull_request:
