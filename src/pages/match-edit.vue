@@ -9,7 +9,7 @@
       </v-row>
       <CircularLoader v-if="loading" title="Match data ophalen..." />
       <MatchSettings
-        v-if="!loading"
+        v-if="!loading && matchData"
         button-text="Wedstrijd opslaan"
         :match-name="matchData.matchName"
         :players="players"
@@ -21,6 +21,11 @@
         :disable-edit="true"
         @click="updateMatch"
       />
+      <v-row v-if="!loading && !matchData" class="text-center font-weight-bold text-xl">
+        <v-col>
+          Geen wedstrijd gevonden met dit ID
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -41,7 +46,7 @@ export default {
   data() {
     return {
       matchId: this.$route.params.id,
-      matchData: {},
+      matchData: false,
       loading: true,
       date: '',
       time: '',
@@ -64,13 +69,14 @@ export default {
     },
     getMatchData() {
       MatchClient.getRtMatch(this.matchId, (data) => {
+        this.loading = false
+        if(!data.val()) return
         this.matchData = data.val()
         this.date = moment(this.matchData.date, 'X').format('YYYY-MM-DD')
         this.time = moment(this.matchData.date, 'X').format('HH:mm')
         const players = this.matchData.players
         const playerKeys = Object.keys(players)
         this.players = [players[playerKeys[0]].playerName, players[playerKeys[1]].playerName]
-        this.loading = false
       })
     },
   },
