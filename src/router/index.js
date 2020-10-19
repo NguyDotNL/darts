@@ -63,6 +63,7 @@ export const routes = [
         name: 'MatchStatistics',
         component: MatchStatistics,
       },
+
     ],
   },
 ]
