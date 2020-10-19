@@ -28,14 +28,48 @@
     </v-list>
     <template v-slot:append>
       <div>
-        <v-btn
-          block
-          depressed
-          tile
-          color="error"
+        <v-dialog
+          v-model="dialog"
+          persistent
+          max-width="500"
         >
-          Reset applicatie
-        </v-btn>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="error"
+              block
+              depressed
+              tile
+              v-bind="attrs"
+              v-on="on"
+            >
+              Reset applicatie
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title class="headline">
+              Weet je zeker het zeker?
+            </v-card-title>
+            <v-card-text>Dit zorgt ervoor dat de data wordt verwijderd. <b>Dit kan niet worden teruggedraaid!</b></v-card-text>
+            <v-card-actions>
+              <VSpacer />
+              <v-btn
+                color="red"
+                text
+                @click="dialog = false"
+              >
+                Nee
+              </v-btn>
+              <v-btn
+                color="primary"
+                text
+                @click="resetApplication"
+              >
+                Ja
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
     </template>
   </v-navigation-drawer>
@@ -51,7 +85,14 @@ export default {
   data: function () {
     return {
       group: false,
+      dialog: false,
     }
+  },
+  methods: {
+    resetApplication() {
+      this.dialog = false
+      console.log('Applicatie gereset.')
+    },
   },
 }
 </script>
