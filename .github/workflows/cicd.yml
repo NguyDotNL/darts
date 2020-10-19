@@ -1,8 +1,6 @@
 name: Continuous Integration Continuous Deployment
 
 on:
-  create:
-    branches: [ release/* ]
   push:
     branches: [ feature/*, main, dev, release/*]
   pull_request:
@@ -66,7 +64,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/dev')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting,database
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: darts-dev
@@ -74,7 +72,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/release/')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting,database
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: darts-qa
@@ -82,7 +80,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/main')
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:darts-prod
+          args: deploy --only hosting,database
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: darts-prod

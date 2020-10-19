@@ -10,6 +10,7 @@
         <v-col sm="6" md="1" cols="12">
           <v-select
             v-model="selectedSet"
+            :disabled="!matchStarted"
             :items="setItems"
             label="Set"
           />
@@ -17,6 +18,7 @@
         <v-col sm="6" md="1" cols="12">
           <v-select
             v-model="selectedLeg"
+            :disabled="!matchStarted"
             :items="legItems"
             label="Leg"
           />
@@ -34,10 +36,10 @@
       </v-row>
       <v-row>
         <v-col>
-          <StatisticLegTable :items="legPlayer1" :start-points="startPoints" />
+          <StatisticLegTable :items="legPlayer1" :start-points="startPoints" :match-started="matchStarted" />
         </v-col>
         <v-col>
-          <StatisticLegTable :items="legPlayer2" :start-points="startPoints" />
+          <StatisticLegTable :items="legPlayer2" :start-points="startPoints" :match-started="matchStarted" />
         </v-col>
       </v-row>
     </v-col>
@@ -73,12 +75,13 @@ export default {
       legItems: [],
       legPlayer1: {},
       legPlayer2: {},
+      matchStarted: false,
     }
   },
   watch: {
     selectedSet: {
       immediate: true,
-      handler: 'setLegData',
+      handler: 'changeSet',
     },
     selectedLeg: {
       immediate: true,
@@ -95,8 +98,13 @@ export default {
   },
   methods: {
     setLegData() {
-      const setDataKeys = Object.keys(this.setData)
+      const firstLegPlayers = this.setData[0].legs[0].players
+      const legKeys = Object.keys(firstLegPlayers)
+      this.matchStarted = firstLegPlayers[legKeys[1]] !== ''
 
+      if(!this.matchStarted) return
+
+      const setDataKeys = Object.keys(this.setData)
       this.setItems = [...Array(setDataKeys.length+1).keys()].slice(1)
 
       const currentSetKey = setDataKeys[this.selectedSet-1]
@@ -105,10 +113,14 @@ export default {
       const currentLeg = this.setData[currentSetKey].legs[currentLegKey]
 
       this.legItems = [...Array(legDataKeys.length+1).keys()].slice(1)
-      this.winner = this.matchPlayers[currentLeg.winner].playerName
+      this.winner = currentLeg.winner ? this.matchPlayers[currentLeg.winner].playerName : ''
 
       this.legPlayer1 = currentLeg.players[Object.keys(currentLeg.players)[0]]
       this.legPlayer2 = currentLeg.players[Object.keys(currentLeg.players)[1]]
+    },
+    changeSet() {
+      this.selectedLeg = 1
+      this.setLegData()
     },
   },
 }

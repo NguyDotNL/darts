@@ -19,7 +19,7 @@
         style="max-height: calc(100vh - 350px);"
       >
         <template v-slot:item="row">
-          <tr>
+          <tr style="cursor: pointer">
             <td v-if="matchExport">
               <v-checkbox
                 :key="row.item.matchId"
@@ -83,8 +83,8 @@
         :items-length="matches.length"
         :items-per-page="itemsPerPage"
         :page="page"
-        @prev="$emit('change-page', $event)"
-        @next="$emit('change-page', $event)"
+        @prev="$emit('change-page', $event); page = $event.page"
+        @next="$emit('change-page', $event); page = $event.page"
         @changeItemsPerPage="itemsPerPage = $event"
       />
     </v-col>
@@ -113,6 +113,7 @@ export default {
       type: Boolean,
     },
     reset: Boolean,
+    resetToStartPage: Boolean,
   },
   data: function () {
     return {
@@ -141,6 +142,10 @@ export default {
     reset () {
       this.selected = []
       this.$emit('reset-finished')
+    },
+    resetToStartPage () {
+      this.page = 1
+      this.$emit('reset-to-start-page')
     },
   },
   methods: {

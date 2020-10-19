@@ -84,7 +84,11 @@ export default {
       for(let setKey in matchDetails.sets) {
         const set = matchDetails.sets[setKey]
         for(let legKey in set.legs) {
+
           const leg = set.legs[legKey]
+
+          if(!leg.players) continue
+
           const pl1Key = Object.keys(leg.players)[0]
           const pl2Key = Object.keys(leg.players)[1]
 
@@ -117,8 +121,10 @@ export default {
         '9Total': player1.statistics['9Dart'] + player2.statistics['9Dart'],
         '9Player1': player1.statistics['9Dart'],
         '9Player2': player2.statistics['9Dart'],
-        avgPlayer1: Math.round(totalPointPlayer1/turnCountPlayer1) ,
-        avgPlayer2: Math.round(totalPointPlayer2/turnCountPlayer2),
+        avgPlayer1: totalPointPlayer1 > 0 && turnCountPlayer1 > 0
+          ? Math.round(totalPointPlayer1/turnCountPlayer1) : 0,
+        avgPlayer2: turnCountPlayer2 > 0 && totalPointPlayer2 > 0
+          ? Math.round(totalPointPlayer2/turnCountPlayer2) : 0,
       }
     },
   },

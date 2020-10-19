@@ -9,7 +9,11 @@
       >
         <VAppBarNavIcon data-testid="AppBarBtn" @click.stop="toggleDrawer" />
 
-        <v-toolbar-title>Dashboard</v-toolbar-title>
+        <v-toolbar-title>
+          <router-link to="/" class="text-white">
+            Dashboard
+          </router-link>
+        </v-toolbar-title>
 
         <VSpacer />
       </v-app-bar>

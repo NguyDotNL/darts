@@ -85,7 +85,7 @@ export default {
   methods: {
     setStatisticsData() {
       const set = this.setData[Object.keys(this.setData)[this.selectedSet-1]]
-      this.winner = this.matchPlayers[set.winner].playerName
+      this.winner = set.winner ? this.matchPlayers[set.winner].playerName : ''
       this.setStatistics = set.players
 
       const player1Stats = set.players[Object.keys(set.players)[0]]

@@ -7,6 +7,9 @@ const PassThrough = () => import('../pages/passthrough.vue')
 const Players = () => import('../pages/players.vue')
 const PlayersStatistic = () => import('../pages/player-statistics.vue')
 const MatchStatistics = () => import('../pages/match-statistics.vue')
+const FillInMachPage = () => import('../pages/fill-in-match')
+const MatchAdd = () => import('../pages/match-add.vue')
+const MatchEdit = () => import('../pages/match-edit.vue')
 
 
 export const routes = [
@@ -38,13 +41,29 @@ export const routes = [
     children: [
       {
         path: '',
-        component: MatchStatistics,
+        redirect: '/',
+      },
+      {
+        path: 'toevoegen',
+        name: 'MatchAdd',
+        component: MatchAdd,
+      },
+      {
+        path: ':id/instellingen',
+        name: 'MatchEdit',
+        component: MatchEdit,
+      },
+      {
+        path: ':id/invullen',
+        name: 'MatchFillIn',
+        component: FillInMachPage,
       },
       {
         path: ':id',
         name: 'MatchStatistics',
         component: MatchStatistics,
       },
+
     ],
   },
 ]
