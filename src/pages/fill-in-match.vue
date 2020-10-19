@@ -143,6 +143,7 @@ export default {
     },
     setChanged() {
       const sets = this.matchData.matchDetails.sets
+      this.leg = 1
 
       if(this.set > sets.length) {
         this.playedLegs = 1
