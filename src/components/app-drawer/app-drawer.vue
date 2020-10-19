@@ -101,7 +101,7 @@ export default {
       await ApplicationClient.resetApplication()
       this.dialog = false
       this.setOpen = false
-      this.$router.push('/')
+      this.$router.go()
     },
   },
 }
