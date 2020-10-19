@@ -5,7 +5,7 @@
       <v-container class="overflow-hidden pt-0 ">
         <PageTitle title="Wedstrijd invullen" />
         <CircularLoader v-if="loadingMatch && loadingMatchDetails" title="Wedstrijd wordt ingeladen..." />
-        <v-row v-if="!loadingMatch && !loadingMatchDetails">
+        <v-row v-if="!loadingMatch && !loadingMatchDetails && matchData.match">
           <v-col>
             <NumberChoice
               v-model="set"
@@ -30,6 +30,11 @@
               @update="updateThrow"
               @nextLeg="nextLeg"
             />
+          </v-col>
+        </v-row>
+        <v-row v-if="!loadingMatch && !loadingMatchDetails && !matchData.match" class="text-center font-weight-bold text-xl">
+          <v-col>
+            Geen wedstrijd gevonden met dit ID
           </v-col>
         </v-row>
       </v-container>
