@@ -67,6 +67,11 @@ export default {
       itemsPerPageValue: this.itemsPerPage,
     }
   },
+  watch: {
+    page(newValue) {
+      this.currentPage = newValue
+    },
+  },
   methods: {
     prevPage: function () {
       if(this.currentPage > 1) {

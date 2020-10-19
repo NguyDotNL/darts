@@ -1,4 +1,4 @@
-import { matches, matchDetails, db, players, matchSearches } from '@/plugins/firebase'
+import { matches, matchDetails, db, players } from '@/plugins/firebase'
 import { saveAs } from 'file-saver'
 
 const DashboardClient = {
@@ -17,13 +17,13 @@ const DashboardClient = {
   },
   searchMatchesPerPage: async (queryText, itemsPerPage, page) => {
     const matchSearchKeys = await db.ref('matchSearches').once('value').then(snap => snap.val())
-    const searchResults = Object.entries(matchSearchKeys).filter(([, val]) => val.includes(queryText))
-      .sort(([, aVal],[, bVal]) => aVal < bVal ? -1 : aVal > bVal ? 1 : 0)
+    const searchResults = Object.entries(matchSearchKeys).filter(([, val]) => val.includes(queryText.toLowerCase()))
+      .sort(([, aVal],[, bVal]) => aVal > bVal ? -1 : aVal < bVal ? 1 : 0)
     const searchPerPage = itemsPerPage > searchResults.length 
       ? searchResults
       : page === 1 
         ? searchResults.slice(0, itemsPerPage)
-        : searchResults.slice(0 + (itemsPerPage * page - 1), itemsPerPage * page)
+        : searchResults.slice(0 + (itemsPerPage * (page - 1)), itemsPerPage * page)
     return await Promise.all(searchPerPage.map(async ([matchId]) => (
       await matches.child(matchId).once('value').then(snap => snap.val())
     )))
@@ -64,12 +64,16 @@ const DashboardClient = {
           name: value?.playerName, 
         }))
 
+        // Search string for the match based on match name and player names
+        const matchSearchString = `${match.match.matchName}_${playersData[0].name}_${playersData[1].name}`.toLowerCase()
+
         // Store all match data in batch
         await db.ref().update({
           [`matches/${match.matchId}`]: match.match,
           [`matchDetails/${match.matchId}`]: match.matchDetails,
           [`playerMatches/${playersData[0].playerId}/${match.matchId}`]: match.matchId,
           [`playerMatches/${playersData[1].playerId}/${match.matchId}`]: match.matchId,
+          [`matchSearches/${match.matchId}`]: matchSearchString,
         }).catch(err => reject(err))
 
         // Create new player if player doesn't exist yet

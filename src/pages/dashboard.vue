@@ -45,12 +45,12 @@
               </v-col>
               <v-col cols="5" sm="2" class="pl-0">
                 <v-btn
-                  :class=" selectedMatches.length < 1 ? 'bg-buttongray' : 'bg-primary'"
                   class="rounded-0 text-white"
+                  :class="{'bg-primary': selectedMatches.length}"
                   style="margin-left: 1px"
                   block
                   depressed
-                  :disabled="selectedMatches.length < 1"
+                  :disabled="!selectedMatches.length"
                   :loading="exportingMatches"
                   @click="exportMatches"
                 >
@@ -59,17 +59,17 @@
               </v-col>
               <v-spacer />
               <router-link to="/wedstrijd/toevoegen">
-                <v-icon
-                  x-large
-                >
+                <v-icon x-large>
                   mdi-plus
                 </v-icon>
               </router-link>
             </v-row>
-            <match-table
+            <MatchTable
               :matches="matches"
               :loading="loading"
               :reset="resetSelection"
+              :reset-to-start-page="resetToStartPage"
+              @reset-to-start-page="resetToStartPage = false"
               @change-page="getPage($event)"
               @items-per-page="changeItemsPerPage"
               @selected-matches="selectedMatches = $event"
@@ -96,6 +96,7 @@ export default {
   },
   data: function() {
     return {
+      resetToStartPage: false,
       searchString: '',
       isSearching: false,
       searchErrorMessages: '',
@@ -120,6 +121,7 @@ export default {
       this.debouncedSearch.cancel()
       
       if(newValue === '') {
+        this.resetToStartPage = true
         this.searchErrorMessages = ''
         this.isSearching = false
         this.getPage()
@@ -144,9 +146,7 @@ export default {
       }
     },
     exportMatches() {
-      if(this.selectedMatches.length < 1) {
-        return
-      }
+      if(this.selectedMatches.length < 1) return
       this.exportingMatches = true
       DashboardClient.exportMatches(this.selectedMatches).then(() => { 
         this.resetSelection = true
@@ -159,19 +159,20 @@ export default {
       this.getPage()
     },
     async getPage(obj = null) {
+      this.page = obj?.page || 1
+      this.itemsPerPage = obj?.itemsPerPage || this.itemsPerPage
+
+      if(this.isSearching) {
+        this.searchMatches(this.page)
+        return
+      }
+
       this.matches = []
       this.loading = true
-      if(obj == null) {
-        this.getMatchData().then(data => {
-          this.matches = data
-          this.loading = false
-        })
-      } else {
-        this.getMatchData(obj).then(data => {
-          this.matches = data
-          this.loading = false
-        })
-      }
+      this.getMatchData(obj || null).then(data => {
+        this.matches = data
+        this.loading = false
+      })
     },
     async getMatchData(obj = null) {
       const type = (obj === null) ? false : obj.type
@@ -187,6 +188,11 @@ export default {
       if(this.searchString.length <= 3) {
         this.searchErrorMessages = 'Minimaal 3 karakters nodig om te zoeken'
         return
+      }
+
+      // SearchString was empty before this search
+      if(!this.isSearching) {
+        this.resetToStartPage = true
       }
 
       this.loading = true
