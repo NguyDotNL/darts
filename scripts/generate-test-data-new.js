@@ -9,6 +9,7 @@ const dartsDev = {
   matches: {},
   playerMatches: {},
   players: {},
+  matchSearches: {},
 }
 
 for (let i = 0; i < playerNames.names.length; i++) {
@@ -86,6 +87,8 @@ for (let i = 0; i < 200; i++) {
   const matchDetail = {
     sets: {},
   }
+
+  dartsDev.matchSearches[matchId] = `${matchName}_${players[player1Key].playerName}_${players[player2Key].playerName}`.toLowerCase()
 
   let setsWinPlayer1 = 0
   let setsWinPlayer2 = 0
@@ -348,6 +351,7 @@ const test = async () => {
   await db.ref('players').set(dartsDev.players)
   await db.ref('matchDetails').set(dartsDev.matchDetails)
   await db.ref('playerMatches').set(dartsDev.playerMatches)
+  await db.ref('matchSearches').set(dartsDev.matchSearches)
 
   console.log('Done')
   process.exit(0)

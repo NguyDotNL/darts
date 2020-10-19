@@ -18,6 +18,7 @@ const db = firebase.database()
 // Database references
 const matches = db.ref('matches')
 const matchDetails = db.ref('matchDetails')
+const matchSearches = db.ref('matchSearches')
 const playerMatches = db.ref('playerMatches')
 const players = db.ref('players')
 
@@ -26,6 +27,7 @@ module.exports = {
   db,
   matches,
   matchDetails,
+  matchSearches,
   playerMatches,
   players,
 }
