@@ -12,7 +12,7 @@
         >
           Bust
         </v-chip>
-        <span class="flex justify-end align-center align-end">Totaal: {{ turnData.total }}</span>
+        <span class="flex justify-end align-center align-end">Beurt totaal: {{ turnData.total }}</span>
       </div>
       <v-data-table
         :headers="headers"
