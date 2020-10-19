@@ -113,6 +113,7 @@ export default {
       type: Boolean,
     },
     reset: Boolean,
+    resetToStartPage: Boolean,
   },
   data: function () {
     return {
@@ -141,6 +142,10 @@ export default {
     reset () {
       this.selected = []
       this.$emit('reset-finished')
+    },
+    resetToStartPage () {
+      this.page = 1
+      this.$emit('reset-to-start-page')
     },
   },
   methods: {

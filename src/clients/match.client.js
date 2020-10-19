@@ -1,4 +1,4 @@
-import { matches, matchDetails, playerMatches, db } from '@/plugins/firebase'
+import { matches, matchDetails, matchSearches, playerMatches, db } from '@/plugins/firebase'
 
 const MatchClient = {
   getMatch: async (matchId) => {
@@ -15,6 +15,7 @@ const MatchClient = {
       [`matchDetails/${matchId}`]: null,
       [`playerMatches/${playerKeys[0]}/${matchId}`]: null,
       [`playerMatches/${playerKeys[1]}/${matchId}`]: null,
+      [`matchSearches/${matchId}`]: null,
     }
 
     await db.ref().update(updateObject)
@@ -58,6 +59,9 @@ const MatchClient = {
         },
       },
     })
+
+    // Set match search key
+    matchSearches.child(matchId).set(`${data.matchName}_${data.players[playersId[0]].playerName}_${data.players[playersId[1]].playerName}`.toLowerCase())
   },
   updateMatch: async (data, matchId) => {
     const updateObject = {
