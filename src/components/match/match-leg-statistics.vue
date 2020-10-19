@@ -81,7 +81,7 @@ export default {
   watch: {
     selectedSet: {
       immediate: true,
-      handler: 'setLegData',
+      handler: 'changeSet',
     },
     selectedLeg: {
       immediate: true,
@@ -117,6 +117,10 @@ export default {
 
       this.legPlayer1 = currentLeg.players[Object.keys(currentLeg.players)[0]]
       this.legPlayer2 = currentLeg.players[Object.keys(currentLeg.players)[1]]
+    },
+    changeSet() {
+      this.selectedLeg = 1
+      this.setLegData()
     },
   },
 }
