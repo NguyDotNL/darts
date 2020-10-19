@@ -9,6 +9,7 @@ Vue.use(Vuetify)
 jest.mock('@/clients/dashboard.client', () => require('@/clients/dashboard.mock.js').default)
 jest.mock('@/clients/match.client', () => require('@/clients/match.mock.js').default)
 jest.mock('@/clients/players.client', () => require('@/clients/players.mock.js').default)
+jest.mock('@/clients/application.client', () => require('@/clients/application.mock.js').default)
 
 const renderWithVuetify = (component, options, cb) => {
   const root = document.createElement('div')

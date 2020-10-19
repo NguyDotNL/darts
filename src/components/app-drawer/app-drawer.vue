@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import ApplicationClient from '@/clients/application.client'
 
 export default {
   name: 'AppDrawer',
@@ -96,10 +97,10 @@ export default {
     },
   },
   methods: {
-    resetApplication() {
+    async resetApplication() {
+      await ApplicationClient.resetApplication()
       this.dialog = false
       this.setOpen = false
-      console.log('Applicatie gereset.')
     },
   },
 }
