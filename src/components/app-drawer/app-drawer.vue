@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     data-testid="app-drawer"
-    :value="open"
+    :value="setOpen"
     temporary
     app
     @input="(value) => !value && $emit('toggle')"
@@ -28,20 +28,55 @@
     </v-list>
     <template v-slot:append>
       <div>
-        <v-btn
-          block
-          depressed
-          tile
-          color="error"
+        <v-dialog
+          v-model="dialog"
+          persistent
+          max-width="500"
         >
-          Reset applicatie
-        </v-btn>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="error"
+              block
+              depressed
+              tile
+              v-bind="attrs"
+              v-on="on"
+            >
+              Reset applicatie
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title class="headline">
+              Weet je zeker het zeker?
+            </v-card-title>
+            <v-card-text>Dit zorgt ervoor dat de data wordt verwijderd. <b>Dit kan niet worden teruggedraaid!</b></v-card-text>
+            <v-card-actions>
+              <VSpacer />
+              <v-btn
+                color="red"
+                text
+                @click="dialog = false"
+              >
+                Nee
+              </v-btn>
+              <v-btn
+                color="primary"
+                text
+                @click="resetApplication"
+              >
+                Ja
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
     </template>
   </v-navigation-drawer>
 </template>
 
 <script>
+import ApplicationClient from '@/clients/application.client'
 
 export default {
   name: 'AppDrawer',
@@ -51,7 +86,22 @@ export default {
   data: function () {
     return {
       group: false,
+      dialog: false,
+      setOpen: false,
     }
+  },
+  watch: {
+    open: {
+      immediate: true,
+      handler(val) {this.setOpen = val},
+    },
+  },
+  methods: {
+    async resetApplication() {
+      await ApplicationClient.resetApplication()
+      this.dialog = false
+      this.setOpen = false
+    },
   },
 }
 </script>
