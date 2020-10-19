@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     data-testid="app-drawer"
-    :value="open"
+    :value="setOpen"
     temporary
     app
     @input="(value) => !value && $emit('toggle')"
@@ -86,11 +86,19 @@ export default {
     return {
       group: false,
       dialog: false,
+      setOpen: false,
     }
+  },
+  watch: {
+    open: {
+      immediate: true,
+      handler(val) {this.setOpen = val},
+    },
   },
   methods: {
     resetApplication() {
       this.dialog = false
+      this.setOpen = false
       console.log('Applicatie gereset.')
     },
   },
