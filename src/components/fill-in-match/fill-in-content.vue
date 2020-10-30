@@ -36,9 +36,9 @@
           <v-btn
             elevation="2"
             tile
-            :dark="!(!legWinner || (isLastSetAndLeg && matchData.match.winner !== ''))"
+            :dark="!(legWinner === false || (isLastSetAndLeg && matchData.match.winner !== ''))"
             class="bg-primary"
-            :disabled="!legWinner || (isLastSetAndLeg && matchData.match.winner !== '')"
+            :disabled="legWinner === false || (isLastSetAndLeg && matchData.match.winner !== '')"
             @click="$emit('nextLeg')"
           >
             Volgende leg
