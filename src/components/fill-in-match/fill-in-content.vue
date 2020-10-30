@@ -89,6 +89,8 @@ export default {
       legData: false,
       legWinner: false,
       turn: false,
+      lastThrowUpdatedPlayer: false,
+      turnSwitched: false,
     }
   },
   watch: {
@@ -183,7 +185,8 @@ export default {
         const player1LastTurnNotActive = this.playersTurnIsNotActive(lastTurnPlayer1)
         const player2LastTurnNotActive = this.playersTurnIsNotActive(lastTurnPlayer2)
         
-        if(player1LastTurnNotActive && player2LastTurnNotActive) {
+        if(player1LastTurnNotActive && player2LastTurnNotActive && !this.turnSwitched) {
+          this.turnSwitched = true
           this.turn = this.turn === 1 ? 2 : this.turn === 2 ? 1 : false
         } else if (!player1LastTurnNotActive) {
           this.turn = 1
@@ -202,6 +205,9 @@ export default {
       return throwsIs3AndNoWinner || lastTurnBust
     },
     updateThrow(data) {
+      if(data.turn === this.legData.players[data.playerKey].length && this.turnSwitched) {
+        this.turnSwitched = false
+      }
       this.$emit('update', data)
     },
     getTurnData(playerKey) {
