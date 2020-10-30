@@ -89,7 +89,6 @@ export default {
       legData: false,
       legWinner: false,
       turn: false,
-      lastThrowUpdatedPlayer: false,
       turnSwitched: false,
     }
   },
