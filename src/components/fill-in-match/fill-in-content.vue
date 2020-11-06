@@ -36,9 +36,9 @@
           <v-btn
             elevation="2"
             tile
-            :dark="!(!legWinner || (isLastSetAndLeg && matchData.match.winner !== ''))"
+            :dark="!(legWinner === false || (isLastSetAndLeg && matchData.match.winner !== ''))"
             class="bg-primary"
-            :disabled="!legWinner || (isLastSetAndLeg && matchData.match.winner !== '')"
+            :disabled="legWinner === false || (isLastSetAndLeg && matchData.match.winner !== '')"
             @click="$emit('nextLeg')"
           >
             Volgende leg
@@ -89,6 +89,7 @@ export default {
       legData: false,
       legWinner: false,
       turn: false,
+      turnSwitched: false,
     }
   },
   watch: {
@@ -183,7 +184,8 @@ export default {
         const player1LastTurnNotActive = this.playersTurnIsNotActive(lastTurnPlayer1)
         const player2LastTurnNotActive = this.playersTurnIsNotActive(lastTurnPlayer2)
         
-        if(player1LastTurnNotActive && player2LastTurnNotActive) {
+        if(player1LastTurnNotActive && player2LastTurnNotActive && !this.turnSwitched) {
+          this.turnSwitched = true
           this.turn = this.turn === 1 ? 2 : this.turn === 2 ? 1 : false
         } else if (!player1LastTurnNotActive) {
           this.turn = 1
@@ -202,6 +204,9 @@ export default {
       return throwsIs3AndNoWinner || lastTurnBust
     },
     updateThrow(data) {
+      if(data.turn === this.legData.players[data.playerKey].length && this.turnSwitched) {
+        this.turnSwitched = false
+      }
       this.$emit('update', data)
     },
     getTurnData(playerKey) {
